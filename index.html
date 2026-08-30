@@ -526,6 +526,42 @@
             </div>
         </div>
     </div>
+
+    <!-- PHOTOGRAPHER PORTAL MODAL -->
+    <div id="modal-pro-auth" class="modal">
+        <div class="modal-content auth-box">
+            <span class="close-btn" onclick="closeModal('modal-pro-auth')">&times; Close</span>
+            
+            <!-- Pro Login Form -->
+            <div id="pro-login-section">
+                <h2>Photographer Portal</h2>
+                <input type="email" id="pro-login-email" placeholder="Email Address" class="auth-input">
+                <input type="password" id="pro-login-password" placeholder="Password" class="auth-input">
+                <button class="btn-view-all" onclick="loginPro()" style="width: 100%; margin-top: 10px; background: var(--primary-color); color: white;">Access Dashboard</button>
+                <p class="auth-switch">Partner with us? <a href="#" onclick="switchProAuth('register')">Apply Now</a></p>
+            </div>
+
+            <!-- Pro Registration Form (Step 1) -->
+            <div id="pro-register-section" style="display: none;">
+                <h2>Join as Partner</h2>
+                <input type="text" id="pro-reg-name" placeholder="Full Name / Studio Name" class="auth-input">
+                <input type="tel" id="pro-reg-phone" placeholder="Phone Number" class="auth-input">
+                <input type="email" id="pro-reg-email" placeholder="Email Address" class="auth-input">
+                <input type="password" id="pro-reg-password" placeholder="Create Password" class="auth-input">
+                <button class="btn-view-all" onclick="sendProOtp()" style="width: 100%; margin-top: 10px; background: var(--primary-color); color: white;">Send Verification</button>
+                <p class="auth-switch">Already a partner? <a href="#" onclick="switchProAuth('login')">Login</a></p>
+            </div>
+
+            <!-- Pro OTP Verification (Step 2) -->
+            <div id="pro-otp-section" style="display: none;">
+                <h2>Verify Email</h2>
+                <p style="margin-bottom: 15px; opacity: 0.8;">We sent a 4-digit code to your email.</p>
+                <input type="text" id="pro-reg-otp" placeholder="Enter 4-Digit OTP" class="auth-input" maxlength="4" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
+                <button class="btn-view-all" onclick="registerPro()" style="width: 100%; margin-top: 10px; background: var(--primary-color); color: white;">Create Profile</button>
+                <p class="auth-switch"><a href="#" onclick="switchProAuth('register')">Back</a></p>
+            </div>
+        </div>
+    </div>
     
     <script src="script.js"></script>
 
