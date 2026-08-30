@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 5. AUTHENTICATION LOGIC (API INTEGRATION)
 // ==========================================
 // This points directly to your live Railway server
-const API_BASE_URL = "https://momento-backend-production-182a.up.railway.app/api/auth";
+const API_BASE_URL = "https://momento-backend-production-8b55.up.railway.app/api/auth";
 
 // Open Auth Modal when "Sign In" is clicked in Navbar
 const signInBtn = document.querySelector('.btn-login');
@@ -396,7 +396,7 @@ async function submitBooking() {
     submitBtn.disabled = true;
 
     try {
-        const res = await fetch('https://momento-backend-production-182a.up.railway.app/api/bookings', {
+        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
