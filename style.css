@@ -565,96 +565,88 @@ textarea.auth-input {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.mobile-nav-toggle { display: none; }
+
 /* =========================================================
    13. PRO DASHBOARD MOBILE RESPONSIVENESS (APP VIEW)
 ========================================================= */
 @media (max-width: 850px) {
-    .dashboard-body {
-        flex-direction: column;
-    }
+    .dashboard-body { flex-direction: column; }
 
-    /* Transform Sidebar into a Bottom App Navigation */
-    .sidebar {
-        width: 100%;
-        height: 70px;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        top: auto;
-        display: flex;
-        align-items: center;
-        padding: 0;
-        z-index: 2000;
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-    }
+    /* Remove bottom padding since the bottom bar is gone */
+    .dashboard-main { margin-left: 0; padding: 20px 15px; }
 
-    /* Hide the brand logo on mobile to save space */
-    .sidebar-brand {
-        display: none; 
-    }
-
-    .sidebar-menu {
-        display: flex;
-        width: 100%;
-        justify-content: space-around;
-        align-items: center;
-        margin: 0;
-        padding: 0;
-    }
-
-    .sidebar-menu li {
-        padding: 10px 5px;
-        font-size: 0.7rem; 
-        text-align: center;
-        white-space: nowrap;
-        border-left: none;
-        border-bottom: 4px solid transparent;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    /* Remove the huge top margin from the Logout button on mobile */
-    .sidebar-menu li:last-child {
-        margin-top: 0 !important; 
-    }
-
-    .sidebar-menu li:hover, .sidebar-menu li.active {
-        border-left: none;
-        border-bottom: 4px solid var(--accent-color);
-        background: transparent;
-    }
-
-    /* Adjust Main Content Area so it doesn't hide behind the bottom nav */
-    .dashboard-main {
-        margin-left: 0;
-        padding: 20px 15px 90px 15px; 
-    }
-
+    /* Keep header items in a row so 3-dots stay on the right */
     .dashboard-header {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
-        gap: 15px;
+        justify-content: space-between;
         margin-bottom: 25px;
     }
 
-    #dashboard-title {
-        font-size: 1.8rem;
+    .header-left { display: flex; flex-direction: column; gap: 12px; }
+
+    #dashboard-title { font-size: 1.8rem; margin: 0; }
+
+    /* Show the 3-dot icon */
+    .mobile-nav-toggle {
+        display: block;
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        cursor: pointer;
+        line-height: 0.8;
+        padding: 5px 10px;
     }
 
-    /* Stack Grids vertically for phone screens */
-    .stats-grid, .upload-grid, .form-grid {
-        grid-template-columns: 1fr;
+    /* Transform Sidebar into a Top-Right Dropdown Menu */
+    .sidebar {
+        display: none; /* Hidden until 3-dots are clicked */
+        width: 220px;
+        height: auto;
+        position: absolute;
+        top: 80px; /* Sits right below the header */
+        right: 20px;
+        left: auto;
+        background: white;
+        padding: 10px 0;
+        z-index: 2000;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
-    .form-grid {
-        padding: 20px;
+    /* JavaScript will add this class when toggled */
+    .sidebar.show-menu { display: block; }
+
+    .sidebar-brand { display: none; }
+
+    .sidebar-menu { display: flex; flex-direction: column; }
+
+    /* Style the dropdown links */
+    .sidebar-menu li {
+        padding: 15px 20px;
+        font-size: 1rem; 
+        text-align: left;
+        color: var(--primary-color);
+        border-bottom: 1px solid #f0f0f0;
+        border-left: none;
     }
-    
-    .setup-alert {
-        font-size: 0.9rem;
+
+    .sidebar-menu li:last-child {
+        border-bottom: none;
+        color: var(--accent-color) !important;
+        margin-top: 5px !important;
     }
+
+    .sidebar-menu li:hover, .sidebar-menu li.active {
+        border-left: 4px solid var(--accent-color);
+        background: var(--bg-color);
+        color: var(--accent-color);
+    }
+
+    /* Stack Grids vertically */
+    .stats-grid, .upload-grid, .form-grid { grid-template-columns: 1fr; }
+    .form-grid { padding: 20px; }
+    .setup-alert { font-size: 0.9rem; }
 }
 
 /* =========================================================
@@ -776,3 +768,4 @@ textarea.auth-input {
     .pro-gallery-area { padding: 0 20px 20px 20px !important; }
     .pro-gallery-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
