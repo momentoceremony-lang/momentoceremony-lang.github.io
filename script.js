@@ -273,7 +273,7 @@ async function registerUser() {
     }
 }
 
-// Login Existing User
+// Login Existing User (With Debugging)
 async function loginUser() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -286,19 +286,27 @@ async function loginUser() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+        
+        // If server returns HTML instead of JSON, catch the exact message
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const errorText = await res.text();
+            throw new Error(`Server returned HTML (Status ${res.status}): ` + errorText.substring(0, 100));
+        }
+
         const data = await res.json();
 
         if (data.success) {
             alert(`Welcome back, ${data.user.name}!`);
-            // Store session securely in browser
             localStorage.setItem('momentoToken', data.token);
             localStorage.setItem('momentoUser', JSON.stringify(data.user));
             closeModal('modal-auth');
+            checkLoginState();
         } else {
             alert(data.error);
         }
     } catch (error) {
-        alert("Login failed. Please check your connection.");
+        alert("Login Error: " + error.message);
     }
 }
 
@@ -509,6 +517,7 @@ async function registerPro() {
     }
 }
 
+// Photographer Login (With Debugging)
 async function loginPro() {
     const email = document.getElementById('pro-login-email').value;
     const password = document.getElementById('pro-login-password').value;
@@ -521,6 +530,13 @@ async function loginPro() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+        
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const errorText = await res.text();
+            throw new Error(`Server returned HTML (Status ${res.status}): ` + errorText.substring(0, 100));
+        }
+
         const data = await res.json();
 
         if (data.success) {
@@ -533,6 +549,6 @@ async function loginPro() {
             alert(data.error);
         }
     } catch (error) {
-        alert("Login failed. Please check your connection.");
+        alert("Pro Login Error: " + error.message);
     }
 }
