@@ -293,30 +293,40 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     /* Replace the .wedding-section mobile rules with this: */
     .wedding-section { 
         flex-direction: row; 
-        flex-wrap: wrap; 
-        padding: 50px 15px 30px 15px; 
+        flex-wrap: nowrap; /* Forces them to stay on one line */
+        padding: 40px 10px; 
         min-height: auto !important; /* Removes the huge vertical space */
         height: auto; 
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
+        gap: 5px;
     }
     
-    /* Place images side-by-side */
-    .wedding-upper-left { width: 48%; order: 1; margin: 0; display: flex; flex-direction: column; align-items: center; }
-    .wedding-bottom-right { width: 48%; order: 2; margin: 0; display: flex; flex-direction: column; align-items: center; }
+    /* Give each of the 3 elements an equal third of the screen */
+    .wedding-upper-left, .wedding-center-quote, .wedding-bottom-right { 
+        width: 32%; 
+        margin: 0; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        order: initial; /* Resets to default left-to-right order */
+    }
     
-    /* Push quote full-width below the images */
-    .wedding-center-quote { width: 100%; order: 3; padding: 10px; margin-top: 25px; text-align: center; }
-    .wedding-center-quote p { font-size: 1.15rem; min-height: auto; }
+    /* Format the middle text to fit beautifully */
+    .wedding-center-quote { padding: 0 2px; margin-top: 0; text-align: center; }
+    .wedding-center-quote p { font-size: 0.75rem; min-height: auto; line-height: 1.3; }
     
-    /* Scale images to fit side-by-side gracefully */
-    .arch-photo-mask { width: 100%; max-width: 160px; height: 220px; border-radius: 100px 100px 100px 0px; }
-    .card-stack { width: 100%; max-width: 160px; height: 220px; }
+    /* Scale images to fit perfectly on a phone screen */
+    .arch-photo-mask { width: 100%; height: 140px; border-radius: 70px 70px 70px 0px; }
+    .card-stack { width: 100%; height: 140px; }
     
-    .section-tag-title { font-size: 1.5rem; text-align: center; margin-top: 10px; }
-    .professionals-label { font-size: 1.2rem; text-align: center; margin-bottom: 10px; }
-    .btn-view-all { font-size: 0.8rem; padding: 6px 12px; margin-top: 15px; }
-
+    /* Adjust the tiny profile picture on the stack cards */
+    .dp-wrapper { width: 35px; height: 35px; bottom: 5px; right: 5px; border-width: 2px; }
+    
+    .section-tag-title { font-size: 0.9rem; text-align: center; margin-top: 10px; }
+    .professionals-label { font-size: 0.9rem; text-align: center; margin-bottom: 10px; }
+    .btn-view-all { font-size: 0.6rem; padding: 4px 8px; margin-top: 10px; }
+   
    /*footer brand*/
    
     .footer-brand { width: 100%; text-align: center; }
