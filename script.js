@@ -183,3 +183,110 @@ document.addEventListener("DOMContentLoaded", () => {
         '"Before the vows, there is the romance. Let us capture the pure excitement of your journey together."'
     );
 });
+
+// ==========================================
+// 5. AUTHENTICATION LOGIC (API INTEGRATION)
+// ==========================================
+// This points directly to your live Railway server
+const API_BASE_URL = "https://momento-backend-production-182a.up.railway.app/api/auth";
+
+// Open Auth Modal when "Sign In" is clicked in Navbar
+const signInBtn = document.querySelector('.btn-login');
+if(signInBtn) {
+    signInBtn.addEventListener('click', () => {
+        openModal('modal-auth');
+        switchAuth('login');
+    });
+}
+
+// Toggle between Login, Register, and OTP screens
+function switchAuth(section) {
+    document.getElementById('login-section').style.display = section === 'login' ? 'block' : 'none';
+    document.getElementById('register-section').style.display = section === 'register' ? 'block' : 'none';
+    document.getElementById('otp-section').style.display = section === 'otp' ? 'block' : 'none';
+}
+
+// Step 1: Send OTP to Email
+async function sendOtp() {
+    const email = document.getElementById('reg-email').value;
+    if(!email) return alert("Please enter your email address.");
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            alert("OTP sent to your email!");
+            switchAuth('otp');
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        alert("Error sending OTP. Please try again.");
+    }
+}
+
+// Step 2: Verify OTP and Register
+async function registerUser() {
+    const name = document.getElementById('reg-name').value;
+    const phone = document.getElementById('reg-phone').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const otp = document.getElementById('reg-otp').value;
+
+    if(!otp) return alert("Please enter the 4-digit OTP.");
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, phone, email, password, otp })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Registration successful! Welcome to Momento.");
+            // Store session securely in browser
+            localStorage.setItem('momentoToken', data.token);
+            localStorage.setItem('momentoUser', JSON.stringify(data.user));
+            closeModal('modal-auth');
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        alert("Registration failed. Please check your connection.");
+    }
+}
+
+// Login Existing User
+async function loginUser() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    if(!email || !password) return alert("Please enter email and password.");
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            alert(`Welcome back, ${data.user.name}!`);
+            // Store session securely in browser
+            localStorage.setItem('momentoToken', data.token);
+            localStorage.setItem('momentoUser', JSON.stringify(data.user));
+            closeModal('modal-auth');
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        alert("Login failed. Please check your connection.");
+    }
+}
