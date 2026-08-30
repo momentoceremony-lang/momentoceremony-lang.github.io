@@ -32,6 +32,12 @@ function checkProAuth() {
 
 // 2. TAB SWITCHING LOGIC
 function switchTab(tabName) {
+    // Close the mobile menu if it is open
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar.classList.contains('show-menu')) {
+        sidebar.classList.remove('show-menu');
+    }
+    
     // Hide all tabs
     document.querySelectorAll('.dashboard-tab').forEach(tab => {
         tab.classList.remove('active-tab');
@@ -60,3 +66,10 @@ function logoutPro() {
 function saveProfileDetails() {
     alert("Profile details saved securely! (Backend connection coming next)");
 }
+
+// Toggle mobile dropdown menu
+function toggleProNav() {
+    document.querySelector('.sidebar').classList.toggle('show-menu');
+}
+
+
