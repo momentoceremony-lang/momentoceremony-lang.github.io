@@ -272,3 +272,51 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     .footer-links, .footer-contact { width: 100%; text-align: center; }
     .social-links { justify-content: center; }
 }
+
+/* =========================================================
+   10. AUTHENTICATION MODAL STYLES
+========================================================= */
+.auth-box { 
+    max-width: 450px !important; 
+    padding: 50px 40px !important; 
+}
+
+.auth-box h2 { 
+    font-size: 2.2rem; 
+    color: var(--primary-color); 
+    margin-bottom: 25px; 
+}
+
+.auth-input { 
+    width: 100%; 
+    padding: 14px 15px; 
+    margin-bottom: 15px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    font-family: 'Lato', sans-serif; 
+    font-size: 1rem; 
+    outline: none; 
+    transition: border 0.3s ease; 
+    background: #fff;
+}
+
+.auth-input:focus { 
+    border-color: var(--accent-color); 
+    box-shadow: 0 0 8px rgba(209, 154, 138, 0.3);
+}
+
+.auth-switch { 
+    margin-top: 25px; 
+    font-size: 0.95rem; 
+}
+
+.auth-switch a { 
+    color: var(--accent-color); 
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.3s;
+}
+
+.auth-switch a:hover { 
+    color: var(--primary-color); 
+}
