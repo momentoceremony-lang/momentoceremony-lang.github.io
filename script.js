@@ -396,3 +396,114 @@ async function submitBooking() {
         submitBtn.disabled = false;
     }, 1500);
 }
+
+// ==========================================
+// 8. PHOTOGRAPHER GATEWAY (PRO AUTH)
+// ==========================================
+const joinProBtn = document.querySelector('.btn-signup');
+if(joinProBtn) {
+    // If user is already logged in as a customer, don't let them open the pro modal blindly
+    joinProBtn.addEventListener('click', () => {
+        if (localStorage.getItem('momentoUser') && !localStorage.getItem('isPro')) {
+            alert("You are currently logged in as a Customer. Please logout first to access the Photographer Portal.");
+            return;
+        }
+        openModal('modal-pro-auth');
+        switchProAuth('login');
+    });
+}
+
+function switchProAuth(section) {
+    document.getElementById('pro-login-section').style.display = section === 'login' ? 'block' : 'none';
+    document.getElementById('pro-register-section').style.display = section === 'register' ? 'block' : 'none';
+    document.getElementById('pro-otp-section').style.display = section === 'otp' ? 'block' : 'none';
+}
+
+async function sendProOtp() {
+    const email = document.getElementById('pro-reg-email').value.trim();
+    if (!email) return alert("Please enter your email address.");
+
+    const sendBtn = document.querySelector('#pro-register-section button');
+    const originalText = sendBtn.innerText;
+    sendBtn.innerText = "Sending...";
+    sendBtn.disabled = true;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+            alert("Verification code sent to your email!");
+            switchProAuth('otp');
+        } else {
+            alert("Error: " + (data.error || "Failed to send OTP"));
+        }
+    } catch (error) {
+        alert("Connection Error. Please try again.");
+    } finally {
+        sendBtn.innerText = originalText;
+        sendBtn.disabled = false;
+    }
+}
+
+async function registerPro() {
+    const name = document.getElementById('pro-reg-name').value;
+    const phone = document.getElementById('pro-reg-phone').value;
+    const email = document.getElementById('pro-reg-email').value;
+    const password = document.getElementById('pro-reg-password').value;
+    const otp = document.getElementById('pro-reg-otp').value;
+
+    if(!otp) return alert("Please enter the 4-digit OTP.");
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/pro-register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, phone, email, password, otp })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Welcome to Momento Photography! Your partner account is created.");
+            localStorage.setItem('momentoToken', data.token);
+            localStorage.setItem('momentoUser', JSON.stringify(data.user));
+            localStorage.setItem('isPro', 'true'); // Flag to separate pro from customer
+            window.location.reload();
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        alert("Registration failed. Please check your connection.");
+    }
+}
+
+async function loginPro() {
+    const email = document.getElementById('pro-login-email').value;
+    const password = document.getElementById('pro-login-password').value;
+
+    if(!email || !password) return alert("Please enter email and password.");
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/pro-login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            alert(`Welcome back, ${data.user.name}!`);
+            localStorage.setItem('momentoToken', data.token);
+            localStorage.setItem('momentoUser', JSON.stringify(data.user));
+            localStorage.setItem('isPro', 'true');
+            window.location.reload();
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        alert("Login failed. Please check your connection.");
+    }
+}
