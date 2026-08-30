@@ -531,3 +531,95 @@ textarea.auth-input {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================================
+   13. PRO DASHBOARD MOBILE RESPONSIVENESS (APP VIEW)
+========================================================= */
+@media (max-width: 850px) {
+    .dashboard-body {
+        flex-direction: column;
+    }
+
+    /* Transform Sidebar into a Bottom App Navigation */
+    .sidebar {
+        width: 100%;
+        height: 70px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        top: auto;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        z-index: 2000;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Hide the brand logo on mobile to save space */
+    .sidebar-brand {
+        display: none; 
+    }
+
+    .sidebar-menu {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar-menu li {
+        padding: 10px 5px;
+        font-size: 0.7rem; 
+        text-align: center;
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 4px solid transparent;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    /* Remove the huge top margin from the Logout button on mobile */
+    .sidebar-menu li:last-child {
+        margin-top: 0 !important; 
+    }
+
+    .sidebar-menu li:hover, .sidebar-menu li.active {
+        border-left: none;
+        border-bottom: 4px solid var(--accent-color);
+        background: transparent;
+    }
+
+    /* Adjust Main Content Area so it doesn't hide behind the bottom nav */
+    .dashboard-main {
+        margin-left: 0;
+        padding: 20px 15px 90px 15px; 
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    #dashboard-title {
+        font-size: 1.8rem;
+    }
+
+    /* Stack Grids vertically for phone screens */
+    .stats-grid, .upload-grid, .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        padding: 20px;
+    }
+    
+    .setup-alert {
+        font-size: 0.9rem;
+    }
+}
