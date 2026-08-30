@@ -555,3 +555,41 @@ async function loginPro() {
         alert("Pro Login Error: " + error.message);
     }
 }
+
+// ==========================================
+// 9. DETAILED PROFILE LOGIC
+// ==========================================
+let currentViewedPro = "";
+
+function viewProProfile(proName) {
+    currentViewedPro = proName;
+    
+    // Close the list modal and open the detailed profile
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    document.getElementById('detail-pro-name').innerText = proName;
+    openModal('modal-pro-details');
+}
+
+function toggleProMenu() {
+    document.getElementById("pro-dropdown").classList.toggle("show-dropdown");
+}
+
+function triggerBookingFromProfile() {
+    // Hide the dropdown menu
+    document.getElementById("pro-dropdown").classList.remove("show-dropdown");
+    // Trigger the booking flow
+    handleBookNow(currentViewedPro);
+}
+
+// Close the dropdown if the user clicks anywhere else
+window.addEventListener('click', function(event) {
+    if (!event.target.matches('.dot-menu-icon')) {
+        var dropdowns = document.getElementsByClassName("pro-dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show-dropdown')) {
+                openDropdown.classList.remove('show-dropdown');
+            }
+        }
+    }
+});
