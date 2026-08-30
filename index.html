@@ -485,6 +485,47 @@
             </div>
         </div>
     </div>
+
+    <!-- BOOKING CALENDAR MODAL -->
+    <div id="modal-booking" class="modal">
+        <div class="modal-content auth-box" style="max-width: 500px !important;">
+            <span class="close-btn" onclick="closeModal('modal-booking')">&times; Close</span>
+            
+            <h2>Book Photographer</h2>
+            <p id="booking-photographer-name" style="margin-bottom: 20px; font-weight: bold; color: var(--accent-color); font-size: 1.1rem;"></p>
+            
+            <div id="booking-form-section">
+                <!-- Date Selection -->
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85rem; opacity: 0.8;">Start Date</label>
+                        <input type="date" id="book-start" class="auth-input" style="margin-bottom: 0;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85rem; opacity: 0.8;">End Date</label>
+                        <input type="date" id="book-end" class="auth-input" style="margin-bottom: 0;">
+                    </div>
+                </div>
+
+                <!-- Event Category -->
+                <select id="book-category" class="auth-input">
+                    <option value="" disabled selected>Select Event Category</option>
+                    <option value="Wedding">Wedding</option>
+                    <option value="Pre-Wedding">Pre-Wedding</option>
+                    <option value="Birthday">Birthday</option>
+                    <option value="Anniversary">Anniversary</option>
+                    <option value="Baby Shoot">Baby Photo Shoot</option>
+                    <option value="Other">Other Event</option>
+                </select>
+
+                <!-- Event Details -->
+                <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (location, timings, specific requirements...)" rows="4" style="resize: none;"></textarea>
+
+                <button class="btn-book-now" onclick="submitBooking()" style="width: 100%; margin-top: 10px;">Request Quotation</button>
+                <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">No payment required yet. Our team will confirm availability and send you a custom Razorpay quotation.</p>
+            </div>
+        </div>
+    </div>
     
     <script src="script.js"></script>
 
