@@ -334,3 +334,28 @@ function logoutUser() {
 function openDashboard() {
     alert("Dashboard coming soon! Here you will see your active bookings.");
 }
+
+// ==========================================
+// 7. BOOKING ENGINE GATEKEEPER
+// ==========================================
+function handleBookNow(photographerName) {
+    const userString = localStorage.getItem('momentoUser');
+    
+    if (userString) {
+        // User is logged in! (Next step: Open the booking date selector)
+        alert(`Booking process initiated for ${photographerName}. The full booking calendar popup will go here next!`);
+    } else {
+        // User is NOT logged in. Force them to authenticate.
+        alert("Please Sign In or Create an Account to book a photographer.");
+        
+        // Close all currently open modals (like the photographer list)
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.style.display = 'none';
+        });
+        document.body.style.overflow = 'hidden';
+        
+        // Open the Auth modal directly to the login screen
+        openModal('modal-auth');
+        switchAuth('login');
+    }
+}
