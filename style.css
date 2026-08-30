@@ -213,6 +213,35 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     color: white; 
 }
 
+/* Button Group for Profile & Booking */
+.btn-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+/* Book Now Button Styling */
+.btn-book-now {
+    padding: 10px 25px;
+    background: var(--accent-color);
+    border: 2px solid var(--accent-color);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(209, 154, 138, 0.3);
+}
+
+.btn-book-now:hover {
+    background: transparent;
+    color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(209, 154, 138, 0.5);
+}
+
 /* =========================================================
    8. FOOTER STYLES
 ========================================================= */
