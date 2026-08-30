@@ -315,21 +315,32 @@ async function loginUser() {
 // ==========================================
 function checkLoginState() {
     const userString = localStorage.getItem('momentoUser');
+    const isPro = localStorage.getItem('isPro');
     const authContainer = document.querySelector('.auth-buttons');
     
     if (userString && authContainer) {
         const user = JSON.parse(userString);
-        // Get the first name
         const firstName = user.name.split(' ')[0];
         
-        // Replace Sign In/Join buttons with User Dashboard buttons
-        authContainer.innerHTML = `
-            <span style="margin-right: 20px; font-weight: bold; color: var(--primary-color); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic;">
-                Welcome, ${firstName}
-            </span>
-            <button class="btn-signup" style="margin-right: 10px;" onclick="openDashboard()">My Bookings</button>
-            <button class="btn-login" onclick="logoutUser()">Logout</button>
-        `;
+        if (isPro === 'true') {
+            // Photographer State
+            authContainer.innerHTML = `
+                <span style="margin-right: 20px; font-weight: bold; color: var(--primary-color); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic;">
+                    Pro: ${firstName}
+                </span>
+                <button class="btn-signup" style="margin-right: 10px;" onclick="window.location.href='pro-dashboard.html'">Dashboard</button>
+                <button class="btn-login" onclick="logoutUser()">Logout</button>
+            `;
+        } else {
+            // Customer State
+            authContainer.innerHTML = `
+                <span style="margin-right: 20px; font-weight: bold; color: var(--primary-color); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic;">
+                    Welcome, ${firstName}
+                </span>
+                <button class="btn-signup" style="margin-right: 10px;" onclick="openDashboard()">My Bookings</button>
+                <button class="btn-login" onclick="logoutUser()">Logout</button>
+            `;
+        }
     }
 }
 
@@ -493,7 +504,7 @@ async function registerPro() {
     const password = document.getElementById('pro-reg-password').value;
     const otp = document.getElementById('pro-reg-otp').value;
 
-    if(!otp) return alert("Please enter the 4-digit OTP.");
+    if (!otp) return alert("Please enter the 4-digit OTP.");
 
     try {
         const res = await fetch(`${API_BASE_URL}/pro-register`, {
@@ -504,11 +515,11 @@ async function registerPro() {
         const data = await res.json();
 
         if (data.success) {
-            alert("Welcome to Momento Photography! Your partner account is created.");
+            alert("Welcome to Momento Photography! Redirecting to your dashboard...");
             localStorage.setItem('momentoToken', data.token);
             localStorage.setItem('momentoUser', JSON.stringify(data.user));
-            localStorage.setItem('isPro', 'true'); // Flag to separate pro from customer
-            window.location.reload();
+            localStorage.setItem('isPro', 'true');
+            window.location.href = "pro-dashboard.html"; // Direct redirect
         } else {
             alert(data.error);
         }
@@ -517,12 +528,11 @@ async function registerPro() {
     }
 }
 
-// Photographer Login (With Debugging)
 async function loginPro() {
     const email = document.getElementById('pro-login-email').value;
     const password = document.getElementById('pro-login-password').value;
 
-    if(!email || !password) return alert("Please enter email and password.");
+    if (!email || !password) return alert("Please enter email and password.");
 
     try {
         const res = await fetch(`${API_BASE_URL}/pro-login`, {
@@ -530,21 +540,14 @@ async function loginPro() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
-        
-        const contentType = res.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-            const errorText = await res.text();
-            throw new Error(`Server returned HTML (Status ${res.status}): ` + errorText.substring(0, 100));
-        }
 
         const data = await res.json();
 
         if (data.success) {
-            alert(`Welcome back, ${data.user.name}!`);
             localStorage.setItem('momentoToken', data.token);
             localStorage.setItem('momentoUser', JSON.stringify(data.user));
             localStorage.setItem('isPro', 'true');
-            window.location.reload();
+            window.location.href = "pro-dashboard.html"; // Direct redirect
         } else {
             alert(data.error);
         }
