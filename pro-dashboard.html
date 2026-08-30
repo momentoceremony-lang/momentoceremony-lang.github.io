@@ -72,6 +72,10 @@
                     <label>Specialties (e.g., Weddings, Babies)</label>
                     <input type="text" id="pro-specialties" class="auth-input" placeholder="Comma separated...">
                 </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Bio / About Me</label>
+                    <textarea id="pro-bio" class="auth-input" rows="3" placeholder="Tell customers about your style and experience..." style="resize: none;"></textarea>
+                </div>
                 <div class="form-group">
                     <label>Bank Account Number</label>
                     <input type="password" id="pro-bank-acc" class="auth-input" placeholder="For customer payouts">
@@ -104,6 +108,10 @@
                     <h3>Best Shots (Top 3)</h3>
                     <p>Your absolute best work to show on the main page.</p>
                     <button class="btn-view-all">Upload Best Shots</button>
+                </div>
+                <div class="upload-card" style="border: 2px dashed var(--accent-color); background: transparent; display: flex; flex-direction: column; justify-content: center; cursor: pointer;" onclick="alert('Gallery upload opening...')">
+                    <h3 style="font-size: 3rem; margin: 0;">+</h3>
+                    <p style="font-weight: bold;">Post to Gallery</p>
                 </div>
             </div>
         </section>
