@@ -290,12 +290,35 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     .hero-text-area h1 { font-size: 2.2rem; }
     .typing-container { font-size: 1.2rem; min-height: 60px; }
 
-    .wedding-section { flex-direction: column; padding: 80px 20px; height: auto; }
-    .wedding-upper-left, .wedding-center-quote, .wedding-bottom-right { width: 100%; position: relative; left: 0; right: 0; top: 0; bottom: 0; margin: 20px 0; align-items: center; }
-    .arch-photo-mask { width: 100%; max-width: 320px; height: 350px; border-radius: 150px 150px 150px 0px; }
-    .wedding-center-quote { padding: 20px 10px; }
-    .wedding-center-quote p { font-size: 1.3rem; min-height: auto; }
+    /* Replace the .wedding-section mobile rules with this: */
+    .wedding-section { 
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        padding: 50px 15px 30px 15px; 
+        min-height: auto !important; /* Removes the huge vertical space */
+        height: auto; 
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    
+    /* Place images side-by-side */
+    .wedding-upper-left { width: 48%; order: 1; margin: 0; display: flex; flex-direction: column; align-items: center; }
+    .wedding-bottom-right { width: 48%; order: 2; margin: 0; display: flex; flex-direction: column; align-items: center; }
+    
+    /* Push quote full-width below the images */
+    .wedding-center-quote { width: 100%; order: 3; padding: 10px; margin-top: 25px; text-align: center; }
+    .wedding-center-quote p { font-size: 1.15rem; min-height: auto; }
+    
+    /* Scale images to fit side-by-side gracefully */
+    .arch-photo-mask { width: 100%; max-width: 160px; height: 220px; border-radius: 100px 100px 100px 0px; }
+    .card-stack { width: 100%; max-width: 160px; height: 220px; }
+    
+    .section-tag-title { font-size: 1.5rem; text-align: center; margin-top: 10px; }
+    .professionals-label { font-size: 1.2rem; text-align: center; margin-bottom: 10px; }
+    .btn-view-all { font-size: 0.8rem; padding: 6px 12px; margin-top: 15px; }
 
+   /*footer brand*/
+   
     .footer-brand { width: 100%; text-align: center; }
     .footer-logo { margin: 0 auto 15px; border-radius: 50%; object-fit: cover; }
     .footer-links, .footer-contact { width: 100%; text-align: center; }
