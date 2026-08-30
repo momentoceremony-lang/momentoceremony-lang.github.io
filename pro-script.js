@@ -2,6 +2,8 @@
 // PHOTOGRAPHER DASHBOARD LOGIC
 // ==========================================
 
+const API_BASE_URL = "https://momento-backend-production-182a.up.railway.app/api/auth";
+
 document.addEventListener("DOMContentLoaded", () => {
     checkProAuth();
 });
