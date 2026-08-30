@@ -579,6 +579,52 @@
             <button class="btn-book-now" onclick="closeModal('modal-booking-success')" style="width: 100%;">Done</button>
         </div>
     </div>
+
+    <!-- DETAILED PHOTOGRAPHER PROFILE MODAL -->
+    <div id="modal-pro-details" class="modal">
+        <div class="modal-content" style="padding: 0; overflow: hidden; max-width: 800px; text-align: left;">
+            
+            <!-- Back Button -->
+            <span class="close-btn" onclick="closeModal('modal-pro-details')" style="top: 15px; left: 15px; right: auto; background: rgba(255,255,255,0.9); z-index: 10;">&larr; Back</span>
+
+            <!-- 3-Dot Menu (Top Right) -->
+            <div class="pro-profile-menu">
+                <span class="dot-menu-icon" onclick="toggleProMenu()">&#8942;</span>
+                <div id="pro-dropdown" class="pro-dropdown-content">
+                    <a href="#" onclick="triggerBookingFromProfile(); return false;" style="font-weight: bold; color: var(--accent-color);">📅 Book Now</a>
+                    <a href="#" onclick="alert('Link copied!'); return false;">🔗 Share Profile</a>
+                </div>
+            </div>
+
+            <!-- Banner & DP Area -->
+            <div class="pro-banner-area">
+                <img src="Stock/wedding-banner-1.jpeg" alt="Banner" class="pro-banner-img">
+            </div>
+            
+            <div class="pro-info-area">
+                <img src="Stock/pro-dp-1.jpeg" alt="DP" class="pro-details-dp">
+                <h2 id="detail-pro-name" style="margin-top: 10px; font-size: 2.2rem; color: var(--primary-color);">Aarav Mehta</h2>
+                <p style="font-style: italic; color: var(--accent-color); font-weight: bold; margin-bottom: 15px;">Wedding • Candid • Pre-Wedding</p>
+                <p style="opacity: 0.8; line-height: 1.6; font-size: 1rem;">Capturing the raw, unfiltered moments of your special day. With over 5 years of experience in cinematic wedding storytelling, I ensure every memory is frozen in time beautifully.</p>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eaddd7; margin: 25px 40px;">
+
+            <!-- Photographer's Gallery -->
+            <div class="pro-gallery-area" style="padding: 0 40px 40px 40px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--primary-color);">Portfolio</h3>
+                <div class="pro-gallery-grid">
+                    <img src="Stock/pro-shot-1.jpeg" alt="Gallery">
+                    <img src="Stock/pro-shot-2.jpeg" alt="Gallery">
+                    <img src="Stock/bday-shot-1.jpeg" alt="Gallery">
+                    <img src="Stock/anni-shot-2.jpeg" alt="Gallery">
+                    <img src="Stock/prewed-shot-1.jpeg" alt="Gallery">
+                    <img src="Stock/prewed-shot-3.jpeg" alt="Gallery">
+                </div>
+            </div>
+
+        </div>
+    </div>
     
     <script src="script.js"></script>
 
