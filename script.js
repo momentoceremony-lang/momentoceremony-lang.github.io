@@ -206,10 +206,15 @@ function switchAuth(section) {
     document.getElementById('otp-section').style.display = section === 'otp' ? 'block' : 'none';
 }
 
-// Step 1: Send OTP to Email
+// Step 1: Send OTP to Email (With Visual Feedback & Error Handling)
 async function sendOtp() {
-    const email = document.getElementById('reg-email').value;
-    if(!email) return alert("Please enter your email address.");
+    const email = document.getElementById('reg-email').value.trim();
+    if (!email) return alert("Please enter your email address.");
+
+    const sendBtn = document.querySelector('#register-section button');
+    const originalText = sendBtn.innerText;
+    sendBtn.innerText = "Sending OTP...";
+    sendBtn.disabled = true;
 
     try {
         const res = await fetch(`${API_BASE_URL}/send-otp`, {
@@ -217,16 +222,21 @@ async function sendOtp() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
         });
+
         const data = await res.json();
         
-        if (data.success) {
-            alert("OTP sent to your email!");
+        if (res.ok && data.success) {
+            alert("OTP sent successfully! Please check your email inbox (and spam folder).");
             switchAuth('otp');
         } else {
-            alert(data.error);
+            alert("Server Error: " + (data.error || "Failed to send OTP"));
         }
     } catch (error) {
-        alert("Error sending OTP. Please try again.");
+        console.error("Network / Fetch Error:", error);
+        alert("Connection Error: Could not connect to backend server. Details: " + error.message);
+    } finally {
+        sendBtn.innerText = originalText;
+        sendBtn.disabled = false;
     }
 }
 
