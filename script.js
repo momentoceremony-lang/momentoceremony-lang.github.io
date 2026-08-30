@@ -336,26 +336,63 @@ function openDashboard() {
 }
 
 // ==========================================
-// 7. BOOKING ENGINE GATEKEEPER
+// 7. BOOKING ENGINE 
 // ==========================================
+let currentSelectedPhotographer = "";
+
 function handleBookNow(photographerName) {
     const userString = localStorage.getItem('momentoUser');
     
     if (userString) {
-        // User is logged in! (Next step: Open the booking date selector)
-        alert(`Booking process initiated for ${photographerName}. The full booking calendar popup will go here next!`);
-    } else {
-        // User is NOT logged in. Force them to authenticate.
-        alert("Please Sign In or Create an Account to book a photographer.");
+        // User is logged in. Open the booking popup.
+        currentSelectedPhotographer = photographerName;
+        document.getElementById('booking-photographer-name').innerText = `Requesting: ${photographerName}`;
         
-        // Close all currently open modals (like the photographer list)
+        // Close photographer list, open booking form
+        closeModal('modal-all-photographers');
+        openModal('modal-booking');
+    } else {
+        // User is NOT logged in. Force authentication.
+        alert("Please Sign In or Create an Account to book a photographer.");
         document.querySelectorAll('.modal').forEach(modal => {
             modal.style.display = 'none';
         });
         document.body.style.overflow = 'hidden';
         
-        // Open the Auth modal directly to the login screen
         openModal('modal-auth');
         switchAuth('login');
     }
+}
+
+async function submitBooking() {
+    const startDate = document.getElementById('book-start').value;
+    const endDate = document.getElementById('book-end').value;
+    const category = document.getElementById('book-category').value;
+    const details = document.getElementById('book-details').value.trim();
+
+    if (!startDate || !endDate || !category) {
+        return alert("Please fill in the dates and select an event category.");
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+        return alert("End Date cannot be before Start Date.");
+    }
+
+    const submitBtn = document.querySelector('#modal-booking .btn-book-now');
+    submitBtn.innerText = "Processing...";
+    submitBtn.disabled = true;
+
+    // Simulate sending to backend (We will connect this to Railway next)
+    setTimeout(() => {
+        alert(`Success! Booking request sent for ${currentSelectedPhotographer}. You will receive a quotation via email shortly.`);
+        closeModal('modal-booking');
+        
+        // Reset form
+        document.getElementById('book-start').value = "";
+        document.getElementById('book-end').value = "";
+        document.getElementById('book-category').value = "";
+        document.getElementById('book-details').value = "";
+        submitBtn.innerText = "Request Quotation";
+        submitBtn.disabled = false;
+    }, 1500);
 }
