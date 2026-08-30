@@ -182,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Pre-Weddings", 
         '"Before the vows, there is the romance. Let us capture the pure excitement of your journey together."'
     );
+    checkLoginState();
 });
 
 // ==========================================
@@ -299,4 +300,37 @@ async function loginUser() {
     } catch (error) {
         alert("Login failed. Please check your connection.");
     }
+}
+
+// ==========================================
+// 6. SESSION MANAGEMENT (KEEP USER LOGGED IN)
+// ==========================================
+function checkLoginState() {
+    const userString = localStorage.getItem('momentoUser');
+    const authContainer = document.querySelector('.auth-buttons');
+    
+    if (userString && authContainer) {
+        const user = JSON.parse(userString);
+        // Get the first name
+        const firstName = user.name.split(' ')[0];
+        
+        // Replace Sign In/Join buttons with User Dashboard buttons
+        authContainer.innerHTML = `
+            <span style="margin-right: 20px; font-weight: bold; color: var(--primary-color); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic;">
+                Welcome, ${firstName}
+            </span>
+            <button class="btn-signup" style="margin-right: 10px;" onclick="openDashboard()">My Bookings</button>
+            <button class="btn-login" onclick="logoutUser()">Logout</button>
+        `;
+    }
+}
+
+function logoutUser() {
+    localStorage.removeItem('momentoToken');
+    localStorage.removeItem('momentoUser');
+    window.location.reload(); // Refresh the page to reset the UI
+}
+
+function openDashboard() {
+    alert("Dashboard coming soon! Here you will see your active bookings.");
 }
