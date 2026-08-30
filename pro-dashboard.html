@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photographer Portal | Momento</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <img src="Stock/1000272025.png" alt="Momento" class="sidebar-logo">
+            <h3>Momento Pro</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active" onclick="switchTab('overview')">📊 Overview</li>
+            <li onclick="switchTab('profile')">👤 My Profile</li>
+            <li onclick="switchTab('portfolio')">📸 Portfolio Images</li>
+            <li onclick="switchTab('bookings')">📅 Active Bookings</li>
+            <li onclick="logoutPro()" style="color: #d19a8a; margin-top: 50px;">🚪 Logout</li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="dashboard-main">
+        <header class="dashboard-header">
+            <h1 id="dashboard-title">Welcome, Partner</h1>
+            <div class="pro-status">
+                <span class="status-indicator"></span> 
+                <span id="pro-verification-status">Status: Pending Verification</span>
+            </div>
+        </header>
+
+        <!-- 1. OVERVIEW TAB -->
+        <section id="tab-overview" class="dashboard-tab active-tab">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>0</h3>
+                    <p>Total Bookings</p>
+                </div>
+                <div class="stat-card">
+                    <h3>₹0</h3>
+                    <p>Pending Payouts</p>
+                </div>
+                <div class="stat-card">
+                    <h3>0</h3>
+                    <p>Profile Views</p>
+                </div>
+            </div>
+            <div class="setup-alert">
+                <p>⚠️ <strong>Complete Your Profile:</strong> You need to upload your Portfolio and add Bank Details before you can receive bookings.</p>
+                <button class="btn-book-now" onclick="switchTab('profile')" style="margin-top: 10px;">Setup Now</button>
+            </div>
+        </section>
+
+        <!-- 2. PROFILE TAB (Bank details & Specialties) -->
+        <section id="tab-profile" class="dashboard-tab">
+            <h2>Business Details</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Studio / Brand Name</label>
+                    <input type="text" id="pro-name" class="auth-input" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Registered Phone</label>
+                    <input type="text" id="pro-phone" class="auth-input" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Specialties (e.g., Weddings, Babies)</label>
+                    <input type="text" id="pro-specialties" class="auth-input" placeholder="Comma separated...">
+                </div>
+                <div class="form-group">
+                    <label>Bank Account Number</label>
+                    <input type="password" id="pro-bank-acc" class="auth-input" placeholder="For customer payouts">
+                </div>
+                <div class="form-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="pro-ifsc" class="auth-input" placeholder="e.g., SBIN0001234">
+                </div>
+            </div>
+            <button class="btn-book-now" onclick="saveProfileDetails()">Save Details</button>
+        </section>
+
+        <!-- 3. PORTFOLIO TAB (Image Uploads) -->
+        <section id="tab-portfolio" class="dashboard-tab">
+            <h2>Portfolio Uploads</h2>
+            <p style="margin-bottom: 20px; opacity: 0.8;">Upload your best work to attract customers. High-quality images only.</p>
+            
+            <div class="upload-grid">
+                <div class="upload-card">
+                    <h3>Display Picture (DP)</h3>
+                    <p>A professional headshot or clear studio logo.</p>
+                    <button class="btn-view-all">Upload DP</button>
+                </div>
+                <div class="upload-card">
+                    <h3>Profile Banner</h3>
+                    <p>The wide cover image for your Momento profile.</p>
+                    <button class="btn-view-all">Upload Banner</button>
+                </div>
+                <div class="upload-card">
+                    <h3>Best Shots (Top 3)</h3>
+                    <p>Your absolute best work to show on the main page.</p>
+                    <button class="btn-view-all">Upload Best Shots</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. BOOKINGS TAB -->
+        <section id="tab-bookings" class="dashboard-tab">
+            <h2>Your Bookings</h2>
+            <div class="bookings-list">
+                <p style="opacity: 0.6; text-align: center; padding: 40px 0;">No active bookings yet. Complete your profile to get listed!</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="pro-script.js"></script>
+</body>
+</html>
