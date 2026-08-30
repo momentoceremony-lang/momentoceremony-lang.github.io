@@ -562,6 +562,23 @@
             </div>
         </div>
     </div>
+
+    <!-- BOOKING SUCCESS MODAL -->
+    <div id="modal-booking-success" class="modal">
+        <div class="modal-content auth-box" style="max-width: 450px !important; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 10px;">✨</div>
+            <h2 style="color: var(--accent-color); margin-bottom: 10px;">Booking Requested!</h2>
+            
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 5px;">Your unique Ticket ID is:</p>
+            <h1 id="success-ticket-id" style="background: #fcf9f6; border: 2px dashed var(--accent-color); padding: 15px; border-radius: 10px; letter-spacing: 3px; margin: 15px 0 25px 0; color: var(--primary-color);"></h1>
+            
+            <p style="opacity: 0.8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px;">
+                We have sent a confirmation email to your inbox. Our team will review availability and send you a custom Razorpay quotation shortly.
+            </p>
+            
+            <button class="btn-book-now" onclick="closeModal('modal-booking-success')" style="width: 100%;">Done</button>
+        </div>
+    </div>
     
     <script src="script.js"></script>
 
