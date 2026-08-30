@@ -378,23 +378,50 @@ async function submitBooking() {
         return alert("End Date cannot be before Start Date.");
     }
 
+    const userString = localStorage.getItem('momentoUser');
+    if (!userString) return alert("Session expired. Please log in again.");
+    const user = JSON.parse(userString);
+
     const submitBtn = document.querySelector('#modal-booking .btn-book-now');
+    const originalText = submitBtn.innerText;
     submitBtn.innerText = "Processing...";
     submitBtn.disabled = true;
 
-    // Simulate sending to backend (We will connect this to Railway next)
-    setTimeout(() => {
-        alert(`Success! Booking request sent for ${currentSelectedPhotographer}. You will receive a quotation via email shortly.`);
-        closeModal('modal-booking');
-        
-        // Reset form
-        document.getElementById('book-start').value = "";
-        document.getElementById('book-end').value = "";
-        document.getElementById('book-category').value = "";
-        document.getElementById('book-details').value = "";
-        submitBtn.innerText = "Request Quotation";
+    try {
+        // Send data to the Railway backend
+        const res = await fetch('https://momento-backend-production-182a.up.railway.app/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                customerId: user.id,
+                photographerName: currentSelectedPhotographer,
+                startDate: startDate,
+                endDate: endDate,
+                category: category,
+                details: details
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert(`Success! Booking request sent.\nYour Ticket ID is: ${data.ticketId}\n\nOur team will confirm availability and send you a quotation shortly.`);
+            closeModal('modal-booking');
+            
+            // Reset form
+            document.getElementById('book-start').value = "";
+            document.getElementById('book-end').value = "";
+            document.getElementById('book-category').value = "";
+            document.getElementById('book-details').value = "";
+        } else {
+            alert("Error: " + data.error);
+        }
+    } catch (error) {
+        alert("Failed to submit booking. Please check your connection.");
+    } finally {
+        submitBtn.innerText = originalText;
         submitBtn.disabled = false;
-    }, 1500);
+    }
 }
 
 // ==========================================
