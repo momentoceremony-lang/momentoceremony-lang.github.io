@@ -388,7 +388,6 @@ async function submitBooking() {
     submitBtn.disabled = true;
 
     try {
-        // Send data to the Railway backend
         const res = await fetch('https://momento-backend-production-182a.up.railway.app/api/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -405,8 +404,11 @@ async function submitBooking() {
         const data = await res.json();
 
         if (data.success) {
-            alert(`Success! Booking request sent.\nYour Ticket ID is: ${data.ticketId}\n\nOur team will confirm availability and send you a quotation shortly.`);
             closeModal('modal-booking');
+            
+            // Insert the ticket ID into our new premium modal and open it
+            document.getElementById('success-ticket-id').innerText = data.ticketId;
+            openModal('modal-booking-success');
             
             // Reset form
             document.getElementById('book-start').value = "";
