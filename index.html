@@ -389,6 +389,42 @@
             </div>
         </div>
     </div>
+
+    <!-- AUTHENTICATION MODAL (Login / Register / OTP) -->
+    <div id="modal-auth" class="modal">
+        <div class="modal-content auth-box">
+            <span class="close-btn" onclick="closeModal('modal-auth')">&times; Close</span>
+            
+            <!-- Login Form -->
+            <div id="login-section">
+                <h2>Sign In</h2>
+                <input type="email" id="login-email" placeholder="Email Address" class="auth-input">
+                <input type="password" id="login-password" placeholder="Password" class="auth-input">
+                <button class="btn-view-all" onclick="loginUser()" style="width: 100%; margin-top: 10px;">Sign In</button>
+                <p class="auth-switch">New here? <a href="#" onclick="switchAuth('register')">Create an account</a></p>
+            </div>
+
+            <!-- Registration Form (Step 1) -->
+            <div id="register-section" style="display: none;">
+                <h2>Create Account</h2>
+                <input type="text" id="reg-name" placeholder="Full Name" class="auth-input">
+                <input type="tel" id="reg-phone" placeholder="Phone Number" class="auth-input">
+                <input type="email" id="reg-email" placeholder="Email Address" class="auth-input">
+                <input type="password" id="reg-password" placeholder="Create Password" class="auth-input">
+                <button class="btn-view-all" onclick="sendOtp()" style="width: 100%; margin-top: 10px;">Send OTP</button>
+                <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuth('login')">Sign In</a></p>
+            </div>
+
+            <!-- OTP Verification (Step 2) -->
+            <div id="otp-section" style="display: none;">
+                <h2>Verify Email</h2>
+                <p style="margin-bottom: 15px; opacity: 0.8;">We sent a 4-digit code to your email.</p>
+                <input type="text" id="reg-otp" placeholder="Enter 4-Digit OTP" class="auth-input" maxlength="4" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
+                <button class="btn-view-all" onclick="registerUser()" style="width: 100%; margin-top: 10px;">Verify & Register</button>
+                <p class="auth-switch"><a href="#" onclick="switchAuth('register')">Back</a></p>
+            </div>
+        </div>
+    </div>
     
     <script src="script.js"></script>
 
