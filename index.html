@@ -11,10 +11,11 @@
 
     <!-- NAVBAR -->
     <nav>
+        <!-- Update your nav-links block to this: -->
         <div class="nav-links">
             <a href="#">Home</a>
             <a href="#category-wedding">Services</a>
-            <a href="#modal-wedding">Our Photographers</a>
+            <a href="#" onclick="openModal('modal-all-photographers'); return false;">Our Photographers</a>
         </div>
         <div class="auth-buttons">
             <button class="btn-login">Sign In</button>
@@ -422,6 +423,65 @@
                 <input type="text" id="reg-otp" placeholder="Enter 4-Digit OTP" class="auth-input" maxlength="4" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
                 <button class="btn-view-all" onclick="registerUser()" style="width: 100%; margin-top: 10px;">Verify & Register</button>
                 <p class="auth-switch"><a href="#" onclick="switchAuth('register')">Back</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALL PHOTOGRAPHERS MASTER MODAL -->
+    <div id="modal-all-photographers" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-all-photographers')">&times; Close</span>
+            <h2>Our Top Professionals</h2>
+            <div class="modal-card-grid">
+                
+                <!-- Professional 1 -->
+                <div class="modal-card-item">
+                    <div class="pro-card">
+                        <img src="Stock/pro-shot-1.jpeg" class="best-shot" alt="Shot">
+                        <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
+                        <div class="dp-overlay-text"><p>🏆 Wedding & Candid Expert</p></div>
+                    </div>
+                    <div class="modal-card-details">
+                        <h3>Aarav Mehta</h3>
+                        <div class="btn-group">
+                            <button class="btn-view-profile">View Profile</button>
+                            <button class="btn-book-now" onclick="handleBookNow('Aarav Mehta')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional 2 -->
+                <div class="modal-card-item">
+                    <div class="pro-card">
+                        <img src="Stock/bday-shot-2.jpeg" class="best-shot" alt="Shot">
+                        <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
+                        <div class="dp-overlay-text"><p>🏆 Birthday & Sweet Sixteen</p></div>
+                    </div>
+                    <div class="modal-card-details">
+                        <h3>Rohan Verma</h3>
+                        <div class="btn-group">
+                            <button class="btn-view-profile">View Profile</button>
+                            <button class="btn-book-now" onclick="handleBookNow('Rohan Verma')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional 3 -->
+                <div class="modal-card-item">
+                    <div class="pro-card">
+                        <img src="Stock/anni-shot-3.jpeg" class="best-shot" alt="Shot">
+                        <div class="dp-wrapper"><img src="Stock/pro-dp-3.jpeg" class="pro-dp" alt="DP"></div>
+                        <div class="dp-overlay-text"><p>🏆 Anniversary & Romantic Themes</p></div>
+                    </div>
+                    <div class="modal-card-details">
+                        <h3>Kabir Das</h3>
+                        <div class="btn-group">
+                            <button class="btn-view-profile">View Profile</button>
+                            <button class="btn-book-now" onclick="handleBookNow('Kabir Das')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
