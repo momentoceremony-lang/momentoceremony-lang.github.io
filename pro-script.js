@@ -72,4 +72,70 @@ function toggleProNav() {
     document.querySelector('.sidebar').classList.toggle('show-menu');
 }
 
+// ==========================================
+// 5. CLOUDINARY UPLOAD WIDGET
+// ==========================================
+
+const CLOUD_NAME = "uvj9mm54"; 
+const UPLOAD_PRESET = "momento_preset"; 
+
+// We will store the uploaded URLs here before sending them to Railway
+let uploadedImages = {
+    dp: "",
+    banner: "",
+    bestShots: [],
+    gallery: []
+};
+
+function openCloudinaryWidget(imageType, allowMultiple) {
+    let maxFiles = allowMultiple ? (imageType === 'best' ? 3 : 20) : 1;
+
+    cloudinary.openUploadWidget({
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        sources: ['local', 'camera', 'instagram'],
+        multiple: allowMultiple,
+        maxFiles: maxFiles,
+        folder: `momento_pro/${imageType}`, // Organizes files neatly in your Cloudinary dashboard
+        clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
+        maxFileSize: 5000000 // 5MB limit
+    }, (error, result) => {
+        if (!error && result && result.event === "success") {
+            const secureUrl = result.info.secure_url;
+            
+            // Handle DP Preview
+            if (imageType === 'dp') {
+                uploadedImages.dp = secureUrl;
+                const img = document.getElementById('preview-dp');
+                img.src = secureUrl;
+                img.style.display = 'block';
+            } 
+            // Handle Banner Preview
+            else if (imageType === 'banner') {
+                uploadedImages.banner = secureUrl;
+                const img = document.getElementById('preview-banner');
+                img.src = secureUrl;
+                img.style.display = 'block';
+            } 
+            // Handle Best Shots Preview
+            else if (imageType === 'best') {
+                if(uploadedImages.bestShots.length < 3) {
+                    uploadedImages.bestShots.push(secureUrl);
+                    const container = document.getElementById('preview-best');
+                    container.innerHTML += `<img src="${secureUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">`;
+                }
+            }
+            // Handle Gallery Uploads
+            else if (imageType === 'gallery') {
+                uploadedImages.gallery.push(secureUrl);
+                alert("Image added to gallery!");
+            }
+        }
+    });
+}
+
+function savePortfolioUrls() {
+    console.log("Current Uploaded Data:", uploadedImages);
+    alert("Portfolio images uploaded successfully! Next, we will connect this save button to your PostgreSQL database.");
+}
 
