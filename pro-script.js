@@ -62,10 +62,6 @@ function logoutPro() {
     window.location.href = "index.html";
 }
 
-// 4. SAVE PROFILE DETAILS (Placeholder for next step)
-function saveProfileDetails() {
-    alert("Profile details saved securely! (Backend connection coming next)");
-}
 
 // Toggle mobile dropdown menu
 function toggleProNav() {
@@ -140,9 +136,61 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
     });
 }
 
-function savePortfolioUrls() {
-    console.log("Current Uploaded Data:", uploadedImages);
-    alert("Portfolio images uploaded successfully! Next, we will connect this save button to your PostgreSQL database.");
+async function savePortfolioUrls() {
+    const userString = localStorage.getItem('momentoUser');
+    if (!userString) return alert("Session expired. Please log in again.");
+    const user = JSON.parse(userString);
+
+    // 1. Gather Bio
+    const bio = document.getElementById('pro-bio').value;
+
+    // 2. Gather Specialties & Pricing
+    const specialties = [];
+    const pricing = {};
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        const val = cb.value;
+        specialties.push(val);
+        const idSafe = val.replace(/\s+/g, '');
+        const costInput = document.getElementById(`cost-${idSafe}`);
+        if(costInput && costInput.value) {
+            pricing[val] = costInput.value;
+        }
+    });
+
+    if (!uploadedImages.dp) return alert("You must upload a Display Picture (DP) to save your profile.");
+
+    try {
+        const saveBtn = document.querySelector('.btn-book-now');
+        saveBtn.innerText = "Saving to Server...";
+        saveBtn.disabled = true;
+
+        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/pro/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                proId: user.id,
+                bio: bio,
+                dp_url: uploadedImages.dp,
+                banner_url: uploadedImages.banner,
+                specialties: specialties,
+                pricing: pricing,
+                best_shots: uploadedImages.bestShots,
+                gallery: uploadedImages.gallery
+            })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            alert("Profile successfully published! You are now live on Momento.");
+        } else {
+            alert("Error saving profile: " + data.error);
+        }
+        
+        saveBtn.innerText = "Save Portfolio";
+        saveBtn.disabled = false;
+    } catch (error) {
+        alert("Failed to connect to server. Please try again.");
+    }
 }
 
 // ==========================================
