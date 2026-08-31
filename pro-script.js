@@ -134,24 +134,57 @@ let uploadedImages = {
 function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
     let maxFiles = allowMultiple ? 20 : 1;
     let aspectRatio = null;
+    let requireCrop = false;
 
-    // Force specific aspect ratios for UI consistency
-    if (imageType === 'dp') aspectRatio = 1; // 1:1 Square
-    else if (imageType === 'banner') aspectRatio = 16/9; // Wide Banner
-    else if (imageType === 'best') aspectRatio = 2/3; // Vertical Card for Home Page
+    // Set aspect ratios only for specific UI elements
+    if (imageType === 'dp') { aspectRatio = 1; requireCrop = true; } 
+    else if (imageType === 'banner') { aspectRatio = 16/9; requireCrop = true; } 
+    else if (imageType === 'best') { aspectRatio = 2/3; requireCrop = true; }
 
     cloudinary.openUploadWidget({
         cloudName: CLOUD_NAME,
         uploadPreset: UPLOAD_PRESET,
-        sources: ['local', 'camera', 'instagram'],
+        
+        // 1. Skip the first screen by only allowing local files (opens phone gallery directly)
+        sources: ['local'], 
+        
         multiple: allowMultiple,
         maxFiles: maxFiles,
-        cropping: true, // ENABLES CROPPING
+        
+        // 2. Allow skipping the crop if the image is already perfect
+        cropping: requireCrop, 
         croppingAspectRatio: aspectRatio,
-        showSkipCropButton: false, // Forces them to crop
+        showSkipCropButton: true, 
+        
         folder: `momento_pro/${imageType}`, 
         clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
-        maxFileSize: 5000000 
+        maxFileSize: 5000000,
+        
+        // 3. Premium Theming: Recolor the widget to match Momento exactly
+        styles: {
+            palette: {
+                window: "#FAF6F3",       // Momento off-white background
+                windowBorder: "#D19A8A", // Rose Gold accent
+                tabIcon: "#5C4033",      // Dark brown text
+                menuIcons: "#5C4033",
+                textDark: "#5C4033",
+                textLight: "#FFFFFF",
+                link:  "#D19A8A",
+                action:  "#D19A8A",      // Buttons become Rose Gold instead of Blue
+                inactiveTabIcon: "#b5a39c",
+                error: "#e74c3c",
+                inProgress: "#D19A8A",
+                complete: "#27ae60",
+                sourceBg: "#FFFFFF"
+            },
+            fonts: {
+                default: null,
+                "'Lato', sans-serif": {
+                    url: "https://fonts.googleapis.com/css?family=Lato",
+                    active: true
+                }
+            }
+        }
     }, (error, result) => {
         if (!error && result && result.event === "success") {
             const secureUrl = result.info.secure_url;
@@ -169,7 +202,6 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
                 img.style.display = 'block';
             } 
             else if (imageType === 'best') {
-                // Save specific specialty shot
                 const idSafe = specialtyTag.replace(/\s+/g, '');
                 uploadedImages.bestShots[specialtyTag] = secureUrl;
                 const img = document.getElementById(`preview-best-${idSafe}`);
@@ -178,7 +210,7 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
             }
             else if (imageType === 'gallery') {
                 uploadedImages.gallery.push(secureUrl);
-                renderGalleryPreviews(); // Updates the UI instantly
+                renderGalleryPreviews(); 
             }
         }
     });
