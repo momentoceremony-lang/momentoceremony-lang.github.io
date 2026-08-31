@@ -134,25 +134,21 @@ let uploadedImages = {
 function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
     let maxFiles = allowMultiple ? 20 : 1;
     let aspectRatio = null;
-    let requireCrop = false;
 
-    // Set aspect ratios only for specific UI elements
-    if (imageType === 'dp') { aspectRatio = 1; requireCrop = true; } 
-    else if (imageType === 'banner') { aspectRatio = 16/9; requireCrop = true; } 
-    else if (imageType === 'best') { aspectRatio = 2/3; requireCrop = true; }
+    // Set aspect ratios only for specific UI elements. Gallery remains free-form.
+    if (imageType === 'dp') { aspectRatio = 1; } 
+    else if (imageType === 'banner') { aspectRatio = 16/9; } 
+    else if (imageType === 'best') { aspectRatio = 2/3; }
 
     cloudinary.openUploadWidget({
         cloudName: CLOUD_NAME,
         uploadPreset: UPLOAD_PRESET,
-        
-        // 1. Skip the first screen by only allowing local files (opens phone gallery directly)
         sources: ['local'], 
-        
         multiple: allowMultiple,
         maxFiles: maxFiles,
         
-        // 2. Allow skipping the crop if the image is already perfect
-        cropping: requireCrop, 
+        // Force the crop screen to appear, but always allow the user to skip it
+        cropping: true, 
         croppingAspectRatio: aspectRatio,
         showSkipCropButton: true, 
         
@@ -160,17 +156,17 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
         clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
         maxFileSize: 5000000,
         
-        // 3. Premium Theming: Recolor the widget to match Momento exactly
+        // Premium Theming: Recolor the widget to match Momento exactly
         styles: {
             palette: {
-                window: "#FAF6F3",       // Momento off-white background
-                windowBorder: "#D19A8A", // Rose Gold accent
-                tabIcon: "#5C4033",      // Dark brown text
+                window: "#FAF6F3",       
+                windowBorder: "#D19A8A", 
+                tabIcon: "#5C4033",      
                 menuIcons: "#5C4033",
                 textDark: "#5C4033",
                 textLight: "#FFFFFF",
                 link:  "#D19A8A",
-                action:  "#D19A8A",      // Buttons become Rose Gold instead of Blue
+                action:  "#D19A8A",      
                 inactiveTabIcon: "#b5a39c",
                 error: "#e74c3c",
                 inProgress: "#D19A8A",
