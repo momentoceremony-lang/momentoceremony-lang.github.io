@@ -164,6 +164,16 @@ document.addEventListener("DOMContentLoaded", () => {
         "Pre-Weddings", 
         '"Before the vows, there is the romance. Let us capture the pure excitement of your journey together."'
     );
+    // Initialize Baby Shoot
+    initCategorySection(
+        "category-baby", 
+        "baby-slideshow", 
+        "baby-stack", 
+        "baby-title-type", 
+        "baby-quote-type", 
+        "Baby Shoot", 
+        '"Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one\'s first milestones."'
+    );
     checkLoginState();
 });
 
