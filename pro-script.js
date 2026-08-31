@@ -8,26 +8,74 @@ document.addEventListener("DOMContentLoaded", () => {
     checkProAuth();
 });
 
-// 1. GATEKEEPER: Ensure only Photographers can view this page
+// 1. GATEKEEPER & DATA LOADER
 function checkProAuth() {
     const userString = localStorage.getItem('momentoUser');
     const isPro = localStorage.getItem('isPro');
 
     if (!userString || isPro !== 'true') {
         alert("Unauthorized access. Redirecting to home page.");
-        window.location.href = "index.html"; // Kick them out
+        window.location.href = "index.html"; 
         return;
     }
 
     const user = JSON.parse(userString);
-    
-    // Populate UI with user data
     document.getElementById('dashboard-title').innerText = `Welcome, ${user.name.split(' ')[0]}`;
-    
-    const nameInput = document.getElementById('pro-name');
-    const phoneInput = document.getElementById('pro-phone');
-    if (nameInput) nameInput.value = user.name;
-    if (phoneInput) phoneInput.value = user.phone;
+    if (document.getElementById('pro-name')) document.getElementById('pro-name').value = user.name;
+    if (document.getElementById('pro-phone')) document.getElementById('pro-phone').value = user.phone;
+
+    // Load saved data from database
+    loadProfileData(user.id);
+}
+
+async function loadProfileData(proId) {
+    try {
+        const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/profile/${proId}`);
+        const data = await res.json();
+        
+        if (data.success && data.data) {
+            const pro = data.data;
+            
+            // Restore Bio
+            if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
+            
+            // Restore Specialties & trigger dynamic inputs
+            if(pro.specialties) {
+                pro.specialties.forEach(spec => {
+                    const cb = document.querySelector(`input[value="${spec}"]`);
+                    if(cb) cb.checked = true;
+                });
+                updateDynamicFields(); 
+            }
+            
+            // Restore Pricing
+            if(pro.pricing) {
+                Object.keys(pro.pricing).forEach(spec => {
+                    const idSafe = spec.replace(/\s+/g, '');
+                    const input = document.getElementById(`cost-${idSafe}`);
+                    if(input) input.value = pro.pricing[spec];
+                });
+            }
+
+            // Restore Uploaded Images to memory and UI
+            if(pro.dp_url) { uploadedImages.dp = pro.dp_url; document.getElementById('preview-dp').src = pro.dp_url; document.getElementById('preview-dp').style.display = 'block'; }
+            if(pro.banner_url) { uploadedImages.banner = pro.banner_url; document.getElementById('preview-banner').src = pro.banner_url; document.getElementById('preview-banner').style.display = 'block'; }
+            if(pro.best_shots) {
+                uploadedImages.bestShots = pro.best_shots;
+                Object.keys(pro.best_shots).forEach(spec => {
+                    const idSafe = spec.replace(/\s+/g, '');
+                    const img = document.getElementById(`preview-best-${idSafe}`);
+                    if(img) { img.src = pro.best_shots[spec]; img.style.display = 'block'; }
+                });
+            }
+            if(pro.gallery) {
+                uploadedImages.gallery = pro.gallery;
+                renderGalleryPreviews();
+            }
+        }
+    } catch (e) { 
+        console.error("Failed to load profile data", e); 
+    }
 }
 
 // 2. TAB SWITCHING LOGIC
@@ -161,60 +209,63 @@ function removeGalleryImage(index) {
     renderGalleryPreviews(); // Re-draws the UI
 }
 
-async function savePortfolioUrls() {
+// UPGRADED SAVE FUNCTION WITH BUTTON ANIMATION
+async function savePortfolioUrls(btnElement) {
     const userString = localStorage.getItem('momentoUser');
     if (!userString) return alert("Session expired. Please log in again.");
     const user = JSON.parse(userString);
 
-    // 1. Gather Bio
     const bio = document.getElementById('pro-bio').value;
-
-    // 2. Gather Specialties & Pricing
     const specialties = [];
     const pricing = {};
+    
     document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
         const val = cb.value;
         specialties.push(val);
         const idSafe = val.replace(/\s+/g, '');
         const costInput = document.getElementById(`cost-${idSafe}`);
-        if(costInput && costInput.value) {
-            pricing[val] = costInput.value;
-        }
+        if(costInput && costInput.value) pricing[val] = costInput.value;
     });
 
     if (!uploadedImages.dp) return alert("You must upload a Display Picture (DP) to save your profile.");
 
-    try {
-        const saveBtn = document.querySelector('.btn-book-now');
-        saveBtn.innerText = "Saving to Server...";
-        saveBtn.disabled = true;
+    // Button Animation Start
+    const originalText = btnElement.innerText;
+    btnElement.innerText = "Saving...";
+    btnElement.disabled = true;
 
+    try {
         const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/pro/profile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                proId: user.id,
-                bio: bio,
-                dp_url: uploadedImages.dp,
-                banner_url: uploadedImages.banner,
-                specialties: specialties,
-                pricing: pricing,
-                best_shots: uploadedImages.bestShots,
-                gallery: uploadedImages.gallery
+                proId: user.id, bio: bio, dp_url: uploadedImages.dp, banner_url: uploadedImages.banner,
+                specialties: specialties, pricing: pricing, best_shots: uploadedImages.bestShots, gallery: uploadedImages.gallery
             })
         });
 
         const data = await res.json();
         if (data.success) {
-            alert("Profile successfully published! You are now live on Momento.");
+            // Success Animation
+            btnElement.innerText = "Saved! ✓";
+            btnElement.style.backgroundColor = "#27ae60"; // Success Green
+            btnElement.style.borderColor = "#27ae60";
+            
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.backgroundColor = ""; // Reset to default CSS
+                btnElement.style.borderColor = "";
+                btnElement.disabled = false;
+            }, 3000);
         } else {
             alert("Error saving profile: " + data.error);
+            btnElement.innerText = originalText;
+            btnElement.disabled = false;
         }
-        
-        saveBtn.innerText = "Save Portfolio";
-        saveBtn.disabled = false;
     } catch (error) {
-        alert("Failed to connect to server. Please try again.");
+        alert("Failed to connect to server.");
+        btnElement.innerText = originalText;
+        btnElement.disabled = false;
     }
 }
 
