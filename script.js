@@ -594,11 +594,93 @@ async function fetchAndRenderPhotographers() {
         if (data.success && data.data.length > 0) {
             allPhotographers = data.data;
             renderMasterPhotographerList();
-            renderCategoryStacks(); // NEW: Triggers the 3D card injection
+            renderCategoryStacks(); 
+            renderCategoryModals(); // NEW: Triggers dynamic lists for "View All Professionals"
         }
     } catch (error) {
         console.error("Failed to load photographers from DB:", error);
     }
+}
+
+// Inject profiles into the "Our Photographers" Master Modal
+function renderMasterPhotographerList() {
+    const grid = document.querySelector('#modal-all-photographers .modal-card-grid');
+    grid.innerHTML = ''; // Clear the dummy data
+
+    allPhotographers.forEach(pro => {
+        // FIX: Now strictly uses the Banner Image, falling back to DP if missing
+        const mainDisplayImg = pro.banner_url || pro.dp_url; 
+        const specsText = pro.specialties.join(' • ');
+
+        const cardHTML = `
+            <div class="modal-card-item">
+                <div class="pro-card" onclick="viewProProfile('${pro.id}')" style="cursor: pointer;">
+                    <img src="${mainDisplayImg}" class="best-shot" alt="Banner">
+                    <div class="dp-wrapper"><img src="${pro.dp_url}" class="pro-dp" alt="DP"></div>
+                    <div class="dp-overlay-text"><p>🏆 ${specsText}</p></div>
+                </div>
+                <div class="modal-card-details">
+                    <h3>${pro.name}</h3>
+                    <div class="btn-group">
+                        <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
+                        <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.innerHTML += cardHTML;
+    });
+}
+
+// NEW: Inject Dynamic Cards into Wedding, Birthday, Anni, Pre-Wed Modals
+function renderCategoryModals() {
+    const categories = [
+        { modalId: 'modal-wedding', name: 'Wedding' },
+        { modalId: 'modal-birthday', name: 'Birthday' },
+        { modalId: 'modal-anni', name: 'Anniversary' },
+        { modalId: 'modal-prewed', name: 'Pre-Wedding' }
+    ];
+
+    categories.forEach(cat => {
+        const grid = document.querySelector(`#${cat.modalId} .modal-card-grid`);
+        if (!grid) return;
+        
+        // Find pros who actually selected this specific specialty
+        const prosInCat = allPhotographers.filter(pro => 
+            pro.specialties && pro.specialties.includes(cat.name)
+        );
+        
+        grid.innerHTML = ''; // Erase the dummy HTML cards
+
+        if (prosInCat.length === 0) {
+            grid.innerHTML = '<p style="opacity:0.6; padding: 20px; text-align: center; width: 100%;">No professionals available for this category yet.</p>';
+            return;
+        }
+        
+        prosInCat.forEach(pro => {
+            // Uses the specific 'Best Shot' for this category, so a Wedding shot shows in the Wedding modal
+            const displayImg = (pro.best_shots && pro.best_shots[cat.name]) ? pro.best_shots[cat.name] : (pro.banner_url || pro.dp_url);
+            const specsText = pro.specialties.join(' • ');
+
+            const cardHTML = `
+                <div class="modal-card-item">
+                    <div class="pro-card" onclick="viewProProfile('${pro.id}')" style="cursor: pointer;">
+                        <img src="${displayImg}" class="best-shot" alt="Shot">
+                        <div class="dp-wrapper"><img src="${pro.dp_url}" class="pro-dp" alt="DP"></div>
+                        <div class="dp-overlay-text"><p>🏆 ${specsText}</p></div>
+                    </div>
+                    <div class="modal-card-details">
+                        <h3>${pro.name}</h3>
+                        <div class="btn-group">
+                            <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
+                            <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += cardHTML;
+        });
+    });
 }
 
 // INJECT DYNAMIC 3D CARDS ON HOMEPAGE
@@ -634,36 +716,6 @@ function renderCategoryStacks() {
                 `;
             });
         }
-    });
-}
-
-// Inject profiles into the "Our Photographers" Modal
-function renderMasterPhotographerList() {
-    const grid = document.querySelector('#modal-all-photographers .modal-card-grid');
-    grid.innerHTML = ''; // Clear the dummy data
-
-    allPhotographers.forEach(pro => {
-        // Fallback to a placeholder if they didn't upload a best shot
-        const mainDisplayImg = Object.values(pro.best_shots)[0] || pro.dp_url; 
-        const specsText = pro.specialties.join(' • ');
-
-        const cardHTML = `
-            <div class="modal-card-item">
-                <div class="pro-card">
-                    <img src="${mainDisplayImg}" class="best-shot" alt="Shot">
-                    <div class="dp-wrapper"><img src="${pro.dp_url}" class="pro-dp" alt="DP"></div>
-                    <div class="dp-overlay-text"><p>🏆 ${specsText}</p></div>
-                </div>
-                <div class="modal-card-details">
-                    <h3>${pro.name}</h3>
-                    <div class="btn-group">
-                        <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
-                        <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        grid.innerHTML += cardHTML;
     });
 }
 
