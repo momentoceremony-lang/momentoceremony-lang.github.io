@@ -50,26 +50,8 @@ function initCategorySection(sectionId, slideshowId, stackId, titleId, quoteId, 
         }, 4000); 
     }
 
-    // B. 3D CARD FLIPPER
-    const stack = document.getElementById(stackId);
-    if(stack) {
-        const cards = Array.from(stack.querySelectorAll('.stack-card'));
-        let isHovering = false;
-
-        stack.addEventListener('mouseenter', () => isHovering = true);
-        stack.addEventListener('mouseleave', () => isHovering = false);
-
-        setInterval(() => {
-            if (isHovering) return; 
-            cards.forEach(card => {
-                let currentPos = parseInt(card.getAttribute('data-pos'));
-                let newPos = currentPos - 1;
-                if (newPos < 0) { newPos = cards.length - 1; }
-                card.setAttribute('data-pos', newPos);
-            });
-        }, 3000); 
-    }
-
+    //B is deleted
+    
     // C. SCROLL OBSERVER & TYPING TEXT
     const section = document.getElementById(sectionId);
     const titleEl = document.getElementById(titleId);
@@ -683,7 +665,7 @@ function renderCategoryModals() {
     });
 }
 
-// INJECT DYNAMIC 3D CARDS ON HOMEPAGE
+// INJECT DYNAMIC 3D CARDS ON HOMEPAGE & START ANIMATION
 function renderCategoryStacks() {
     const categories = [
         { id: 'wedding-stack', name: 'Wedding' },
@@ -715,6 +697,30 @@ function renderCategoryStacks() {
                     </div>
                 `;
             });
+
+            // START 3D ANIMATION ONLY IF THERE ARE 2 OR MORE CARDS
+            if (prosInCat.length > 1) {
+                let isHovering = false;
+                stack.addEventListener('mouseenter', () => isHovering = true);
+                stack.addEventListener('mouseleave', () => isHovering = false);
+
+                // Ensure we don't accidentally start multiple intervals
+                if (stack.dataset.intervalId) clearInterval(stack.dataset.intervalId);
+
+                stack.dataset.intervalId = setInterval(() => {
+                    if (isHovering) return;
+                    
+                    // We must query the cards INSIDE the interval so it reads the live dynamic ones
+                    const activeCards = Array.from(stack.querySelectorAll('.stack-card'));
+                    
+                    activeCards.forEach(card => {
+                        let currentPos = parseInt(card.getAttribute('data-pos'));
+                        let newPos = currentPos - 1;
+                        if (newPos < 0) { newPos = activeCards.length - 1; }
+                        card.setAttribute('data-pos', newPos);
+                    });
+                }, 3000); // Rotates every 3 seconds
+            }
         }
     });
 }
