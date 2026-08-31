@@ -559,16 +559,6 @@ async function loginPro() {
 // ==========================================
 // 9. DETAILED PROFILE LOGIC
 // ==========================================
-let currentViewedPro = "";
-
-function viewProProfile(proName) {
-    currentViewedPro = proName;
-    
-    // Close the list modal and open the detailed profile
-    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-    document.getElementById('detail-pro-name').innerText = proName;
-    openModal('modal-pro-details');
-}
 
 function triggerBookingFromProfile() {
     // Hide the dropdown menu
@@ -588,4 +578,93 @@ window.addEventListener('click', function(event) {
             }
         }
     }
+});
+
+// ==========================================
+// 10. DYNAMIC PHOTOGRAPHER RENDERING
+// ==========================================
+let allPhotographers = [];
+
+// Fetch data from database on page load
+async function fetchAndRenderPhotographers() {
+    try {
+        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/photographers');
+        const data = await res.json();
+        
+        if (data.success && data.data.length > 0) {
+            allPhotographers = data.data;
+            renderMasterPhotographerList();
+        }
+    } catch (error) {
+        console.error("Failed to load photographers from DB:", error);
+    }
+}
+
+// Inject profiles into the "Our Photographers" Modal
+function renderMasterPhotographerList() {
+    const grid = document.querySelector('#modal-all-photographers .modal-card-grid');
+    grid.innerHTML = ''; // Clear the dummy data
+
+    allPhotographers.forEach(pro => {
+        // Fallback to a placeholder if they didn't upload a best shot
+        const mainDisplayImg = Object.values(pro.best_shots)[0] || pro.dp_url; 
+        const specsText = pro.specialties.join(' • ');
+
+        const cardHTML = `
+            <div class="modal-card-item">
+                <div class="pro-card">
+                    <img src="${mainDisplayImg}" class="best-shot" alt="Shot">
+                    <div class="dp-wrapper"><img src="${pro.dp_url}" class="pro-dp" alt="DP"></div>
+                    <div class="dp-overlay-text"><p>🏆 ${specsText}</p></div>
+                </div>
+                <div class="modal-card-details">
+                    <h3>${pro.name}</h3>
+                    <div class="btn-group">
+                        <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
+                        <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.innerHTML += cardHTML;
+    });
+}
+
+// Update the Detailed Profile view when "View Profile" is clicked
+function viewProProfile(proId) {
+    const pro = allPhotographers.find(p => p.id == proId);
+    if (!pro) return;
+
+    currentViewedPro = pro.name;
+    
+    // Inject Dynamic Data into Detailed Profile Modal
+    document.getElementById('detail-pro-name').innerText = pro.name;
+    document.querySelector('#modal-pro-details .pro-details-dp').src = pro.dp_url;
+    document.querySelector('#modal-pro-details .pro-banner-img').src = pro.banner_url || pro.dp_url;
+    document.querySelector('#modal-pro-details p:nth-of-type(1)').innerText = pro.specialties.join(' • ');
+    document.querySelector('#modal-pro-details p:nth-of-type(2)').innerText = pro.bio || "This professional is currently updating their bio.";
+
+    // Inject Dynamic Gallery
+    const galleryGrid = document.querySelector('.pro-gallery-grid');
+    galleryGrid.innerHTML = '';
+    
+    // Add Best Shots first, then standard gallery
+    const allGalleryImgs = [...Object.values(pro.best_shots), ...pro.gallery];
+    
+    if (allGalleryImgs.length > 0) {
+        allGalleryImgs.forEach(imgUrl => {
+            galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image">`;
+        });
+    } else {
+        galleryGrid.innerHTML = '<p style="opacity:0.6;">No portfolio images uploaded yet.</p>';
+    }
+
+    // Close all other modals and open details
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    openModal('modal-pro-details');
+}
+
+// Trigger the fetch exactly when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndRenderPhotographers();
 });
