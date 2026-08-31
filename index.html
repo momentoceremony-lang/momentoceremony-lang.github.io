@@ -584,27 +584,27 @@
     <div id="modal-pro-details" class="modal">
         <div class="modal-content" style="padding: 0; overflow: hidden; max-width: 800px; text-align: left;">
             
-            <!-- Back Button -->
             <span class="close-btn" onclick="closeModal('modal-pro-details')" style="top: 15px; left: 15px; right: auto; background: rgba(255,255,255,0.9); z-index: 10;">&larr; Back</span>
 
-            <!-- 3-Dot Menu (Top Right) -->
-            <div class="pro-profile-menu">
-                <span class="dot-menu-icon" onclick="toggleProMenu()">&#8942;</span>
-                <div id="pro-dropdown" class="pro-dropdown-content">
-                    <a href="#" onclick="triggerBookingFromProfile(); return false;" style="font-weight: bold; color: var(--accent-color);">📅 Book Now</a>
-                    <a href="#" onclick="alert('Link copied!'); return false;">🔗 Share Profile</a>
-                </div>
-            </div>
-
-            <!-- Banner & DP Area -->
+            <!-- Banner Area -->
             <div class="pro-banner-area">
                 <img src="Stock/wedding-banner-1.jpeg" alt="Banner" class="pro-banner-img">
             </div>
             
+            <!-- Info Area with DP and Action Buttons -->
             <div class="pro-info-area">
-                <img src="Stock/pro-dp-1.jpeg" alt="DP" class="pro-details-dp">
-                <h2 id="detail-pro-name" style="margin-top: 10px; font-size: 2.2rem; color: var(--primary-color);">Aarav Mehta</h2>
-                <p style="font-style: italic; color: var(--accent-color); font-weight: bold; margin-bottom: 15px;">Wedding • Candid • Pre-Wedding</p>
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-top: -60px; position: relative; z-index: 5; margin-bottom: 15px;">
+                    <img src="Stock/pro-dp-1.jpeg" alt="DP" class="pro-details-dp">
+                    
+                    <!-- NEW ACTION BUTTONS -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                        <button class="btn-view-profile" onclick="alert('Link copied!')" style="padding: 8px 18px; font-size: 0.95rem; background: white; border-color: #ddd;">Share</button>
+                        <button class="btn-book-now" onclick="triggerBookingFromProfile()" style="padding: 8px 18px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(209,154,138,0.4);">Book Now</button>
+                    </div>
+                </div>
+
+                <h2 id="detail-pro-name" style="font-size: 2.2rem; color: var(--primary-color);">Aarav Mehta</h2>
+                <p style="font-style: italic; color: var(--accent-color); font-weight: bold; margin-bottom: 10px;">Wedding • Candid • Pre-Wedding</p>
                 <p style="opacity: 0.8; line-height: 1.6; font-size: 1rem;">Capturing the raw, unfiltered moments of your special day. With over 5 years of experience in cinematic wedding storytelling, I ensure every memory is frozen in time beautifully.</p>
             </div>
 
