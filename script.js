@@ -570,10 +570,6 @@ function viewProProfile(proName) {
     openModal('modal-pro-details');
 }
 
-function toggleProMenu() {
-    document.getElementById("pro-dropdown").classList.toggle("show-dropdown");
-}
-
 function triggerBookingFromProfile() {
     // Hide the dropdown menu
     document.getElementById("pro-dropdown").classList.remove("show-dropdown");
