@@ -145,3 +145,37 @@ function savePortfolioUrls() {
     alert("Portfolio images uploaded successfully! Next, we will connect this save button to your PostgreSQL database.");
 }
 
+// ==========================================
+// 6. DYNAMIC SPECIALTY ENGINE
+// ==========================================
+function updateDynamicFields() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const pricingContainer = document.getElementById('pricing-container');
+    const bestShotsContainer = document.getElementById('dynamic-best-shots');
+    
+    pricingContainer.innerHTML = '';
+    bestShotsContainer.innerHTML = '';
+    
+    checkboxes.forEach(cb => {
+        const val = cb.value;
+        const idSafe = val.replace(/\s+/g, '');
+        
+        // 1. Generate Pricing Input
+        pricingContainer.innerHTML += `
+            <div class="form-group">
+                <label style="color: var(--accent-color);">${val} Cost (Per Day)</label>
+                <input type="number" id="cost-${idSafe}" class="auth-input" placeholder="₹ Amount">
+            </div>
+        `;
+        
+        // 2. Generate Best Shot Upload Card for the 3D Animation
+        bestShotsContainer.innerHTML += `
+            <div class="upload-card">
+                <h3>Best Shot: ${val}</h3>
+                <p>Displays in the ${val} 3D animation on the home page.</p>
+                <img id="preview-best-${idSafe}" src="${uploadedImages.bestShots[val] || ''}" style="${uploadedImages.bestShots[val] ? 'display:block;' : 'display:none;'} width: 100px; height: 140px; border-radius: 8px; margin: 15px auto; object-fit: cover; border: 2px solid var(--accent-color);">
+                <button class="btn-view-all" onclick="openCloudinaryWidget('best', false, '${val}')">Upload ${val} Shot</button>
+            </div>
+        `;
+    });
+}
