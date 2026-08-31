@@ -620,7 +620,8 @@ function renderCategoryModals() {
         { modalId: 'modal-wedding', name: 'Wedding' },
         { modalId: 'modal-birthday', name: 'Birthday' },
         { modalId: 'modal-anni', name: 'Anniversary' },
-        { modalId: 'modal-prewed', name: 'Pre-Wedding' }
+        { modalId: 'modal-prewed', name: 'Pre-Wedding' },
+        { modalId: 'modal-baby', name: 'Baby Shoot' }
     ];
 
     categories.forEach(cat => {
