@@ -189,25 +189,31 @@ function renderGalleryPreviews() {
     container.innerHTML = ''; // Clear current view
     
     if (uploadedImages.gallery.length === 0) {
-        container.innerHTML = '<p style="opacity: 0.6; font-size: 0.9rem; padding: 10px;">No gallery images uploaded yet.</p>';
+        container.innerHTML = '<p style="opacity: 0.6; font-size: 0.95rem; text-align: center; padding: 20px; background: #f9f9f9; border-radius: 10px; border: 1px dashed #ccc;">No gallery images uploaded yet. Click "+ Post" at the top to add some.</p>';
         return;
     }
 
-    // Generate a thumbnail with a red 'X' delete button for every image
+    // Generate a premium full-width card with a proper remove button
     uploadedImages.gallery.forEach((url, index) => {
         container.innerHTML += `
-            <div style="position: relative; min-width: 120px; flex-shrink: 0;">
-                <img src="${url}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <span onclick="removeGalleryImage(${index})" style="position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">✕</span>
+            <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center;">
+                <img src="${url}" style="width: 100%; max-height: 450px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                <button onclick="removeGalleryImage(${index})" style="background: white; color: #e74c3c; border: 1px solid #e74c3c; padding: 10px 25px; border-radius: 25px; font-family: 'Lato', sans-serif; font-weight: bold; cursor: pointer; width: 100%; max-width: 250px;">🗑️ Remove Image</button>
             </div>
         `;
     });
 }
 
 function removeGalleryImage(index) {
-    uploadedImages.gallery.splice(index, 1); // Removes it from the master array
-    renderGalleryPreviews(); // Re-draws the UI
+    // Premium safety confirmation prompt
+    const confirmDelete = confirm("Are you sure you want to remove this image from your portfolio?");
+    
+    if (confirmDelete) {
+        uploadedImages.gallery.splice(index, 1); // Removes it from the master array
+        renderGalleryPreviews(); // Re-draws the UI
+    }
 }
+
 
 // UPGRADED SAVE FUNCTION WITH BUTTON ANIMATION
 async function savePortfolioUrls(btnElement) {
