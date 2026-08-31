@@ -206,6 +206,43 @@
             <button class="btn-view-all" onclick="openModal('modal-prewed')">View All Professionals</button>
         </div>
     </section>
+
+    <!-- BABY SHOOT SECTION -->
+    <section id="category-baby" class="wedding-section hidden-section">
+        <div class="ambient-background">
+            <div class="glow-orb orb-1"></div>
+            <div class="glow-orb orb-2"></div>
+            <div class="glow-orb orb-3"></div>
+        </div>
+
+        <div class="wedding-upper-left breathing-anim">
+            <div class="arch-photo-mask" id="baby-slideshow">
+                <img src="Stock/baby-banner-1.jpeg" class="banner-img active" alt="Baby Shoot Banner 1">
+                <img src="Stock/baby-banner-2.jpeg" class="banner-img" alt="Baby Shoot Banner 2">
+            </div>
+            <h2 class="section-tag-title" id="baby-title-type">Baby Shoot</h2>
+        </div>
+
+        <div class="wedding-center-quote">
+            <p id="baby-quote-type">"Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one's first milestones."</p>
+        </div>
+
+        <div class="wedding-bottom-right breathing-anim">
+            <h3 class="professionals-label">Professionals</h3>
+            <div class="card-stack" id="baby-stack">
+                <!-- Dummy cards for layout; JS will replace these -->
+                <div class="pro-card stack-card" data-pos="0">
+                    <img src="Stock/baby-shot-1.jpeg" class="best-shot" alt="Best Shot">
+                    <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
+                </div>
+                <div class="pro-card stack-card" data-pos="1">
+                    <img src="Stock/baby-shot-2.jpeg" class="best-shot" alt="Best Shot">
+                    <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
+                </div>
+            </div>
+            <button class="btn-view-all" onclick="openModal('modal-baby')">View All Professionals</button>
+        </div>
+    </section>
     
     <!-- WEDDING MODAL -->
     <div id="modal-wedding" class="modal">
@@ -384,6 +421,28 @@
                     </div>
                     <div class="modal-card-details">
                         <h3>Kabir Das</h3>
+                        <button class="btn-view-profile">View Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BABY SHOOT MODAL -->
+    <div id="modal-baby" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-baby')">&times; Close</span>
+            <h2>Baby Shoot Professionals</h2>
+            <div class="modal-card-grid">
+                <!-- Dummy card; JS will wipe this and inject real profiles -->
+                <div class="modal-card-item">
+                    <div class="pro-card">
+                        <img src="Stock/baby-shot-1.jpeg" class="best-shot" alt="Shot">
+                        <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
+                        <div class="dp-overlay-text"><p>🏆 Newborn Expert</p></div>
+                    </div>
+                    <div class="modal-card-details">
+                        <h3>Aarav Mehta</h3>
                         <button class="btn-view-profile">View Profile</button>
                     </div>
                 </div>
