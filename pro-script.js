@@ -130,10 +130,35 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
             }
             else if (imageType === 'gallery') {
                 uploadedImages.gallery.push(secureUrl);
-                alert("Image added to gallery!");
+                renderGalleryPreviews(); // Updates the UI instantly
             }
         }
     });
+}
+
+function renderGalleryPreviews() {
+    const container = document.getElementById('gallery-preview-container');
+    container.innerHTML = ''; // Clear current view
+    
+    if (uploadedImages.gallery.length === 0) {
+        container.innerHTML = '<p style="opacity: 0.6; font-size: 0.9rem; padding: 10px;">No gallery images uploaded yet.</p>';
+        return;
+    }
+
+    // Generate a thumbnail with a red 'X' delete button for every image
+    uploadedImages.gallery.forEach((url, index) => {
+        container.innerHTML += `
+            <div style="position: relative; min-width: 120px; flex-shrink: 0;">
+                <img src="${url}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <span onclick="removeGalleryImage(${index})" style="position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; width: 25px; height: 25px; text-align: center; line-height: 25px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">✕</span>
+            </div>
+        `;
+    });
+}
+
+function removeGalleryImage(index) {
+    uploadedImages.gallery.splice(index, 1); // Removes it from the master array
+    renderGalleryPreviews(); // Re-draws the UI
 }
 
 async function savePortfolioUrls() {
