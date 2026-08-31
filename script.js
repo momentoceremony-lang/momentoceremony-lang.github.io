@@ -594,10 +594,47 @@ async function fetchAndRenderPhotographers() {
         if (data.success && data.data.length > 0) {
             allPhotographers = data.data;
             renderMasterPhotographerList();
+            renderCategoryStacks(); // NEW: Triggers the 3D card injection
         }
     } catch (error) {
         console.error("Failed to load photographers from DB:", error);
     }
+}
+
+// INJECT DYNAMIC 3D CARDS ON HOMEPAGE
+function renderCategoryStacks() {
+    const categories = [
+        { id: 'wedding-stack', name: 'Wedding' },
+        { id: 'birthday-stack', name: 'Birthday' },
+        { id: 'anni-stack', name: 'Anniversary' },
+        { id: 'prewed-stack', name: 'Pre-Wedding' }
+    ];
+
+    categories.forEach(cat => {
+        const stack = document.getElementById(cat.id);
+        if (!stack) return;
+        
+        // Find pros who selected this specialty AND uploaded a "Best Shot" for it
+        const prosInCat = allPhotographers.filter(pro => 
+            pro.specialties && pro.specialties.includes(cat.name) && 
+            pro.best_shots && pro.best_shots[cat.name]
+        );
+        
+        if (prosInCat.length > 0) {
+            stack.innerHTML = ''; // Erase the dummy HTML images
+            
+            // Inject up to 3 dynamic cards
+            prosInCat.slice(0, 3).forEach((pro, index) => {
+                stack.innerHTML += `
+                    <div class="pro-card stack-card" data-pos="${index}" onclick="viewProProfile('${pro.id}')" style="cursor: pointer;">
+                        <img src="${pro.best_shots[cat.name]}" class="best-shot" alt="${cat.name} Shot">
+                        <div class="dp-wrapper"><img src="${pro.dp_url}" class="pro-dp" alt="DP"></div>
+                        <div class="dp-overlay-text"><p>🏆 ${pro.name.split(' ')[0]}</p></div>
+                    </div>
+                `;
+            });
+        }
+    });
 }
 
 // Inject profiles into the "Our Photographers" Modal
