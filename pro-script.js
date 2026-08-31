@@ -83,12 +83,18 @@ const UPLOAD_PRESET = "momento_preset";
 let uploadedImages = {
     dp: "",
     banner: "",
-    bestShots: [],
+    bestShots: {}, // Now an object to map specialty to URL
     gallery: []
 };
 
-function openCloudinaryWidget(imageType, allowMultiple) {
-    let maxFiles = allowMultiple ? (imageType === 'best' ? 3 : 20) : 1;
+function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
+    let maxFiles = allowMultiple ? 20 : 1;
+    let aspectRatio = null;
+
+    // Force specific aspect ratios for UI consistency
+    if (imageType === 'dp') aspectRatio = 1; // 1:1 Square
+    else if (imageType === 'banner') aspectRatio = 16/9; // Wide Banner
+    else if (imageType === 'best') aspectRatio = 2/3; // Vertical Card for Home Page
 
     cloudinary.openUploadWidget({
         cloudName: CLOUD_NAME,
@@ -96,36 +102,36 @@ function openCloudinaryWidget(imageType, allowMultiple) {
         sources: ['local', 'camera', 'instagram'],
         multiple: allowMultiple,
         maxFiles: maxFiles,
-        folder: `momento_pro/${imageType}`, // Organizes files neatly in your Cloudinary dashboard
+        cropping: true, // ENABLES CROPPING
+        croppingAspectRatio: aspectRatio,
+        showSkipCropButton: false, // Forces them to crop
+        folder: `momento_pro/${imageType}`, 
         clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
-        maxFileSize: 5000000 // 5MB limit
+        maxFileSize: 5000000 
     }, (error, result) => {
         if (!error && result && result.event === "success") {
             const secureUrl = result.info.secure_url;
             
-            // Handle DP Preview
             if (imageType === 'dp') {
                 uploadedImages.dp = secureUrl;
                 const img = document.getElementById('preview-dp');
                 img.src = secureUrl;
                 img.style.display = 'block';
             } 
-            // Handle Banner Preview
             else if (imageType === 'banner') {
                 uploadedImages.banner = secureUrl;
                 const img = document.getElementById('preview-banner');
                 img.src = secureUrl;
                 img.style.display = 'block';
             } 
-            // Handle Best Shots Preview
             else if (imageType === 'best') {
-                if(uploadedImages.bestShots.length < 3) {
-                    uploadedImages.bestShots.push(secureUrl);
-                    const container = document.getElementById('preview-best');
-                    container.innerHTML += `<img src="${secureUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">`;
-                }
+                // Save specific specialty shot
+                const idSafe = specialtyTag.replace(/\s+/g, '');
+                uploadedImages.bestShots[specialtyTag] = secureUrl;
+                const img = document.getElementById(`preview-best-${idSafe}`);
+                img.src = secureUrl;
+                img.style.display = 'block';
             }
-            // Handle Gallery Uploads
             else if (imageType === 'gallery') {
                 uploadedImages.gallery.push(secureUrl);
                 alert("Image added to gallery!");
