@@ -21,7 +21,8 @@
             <li onclick="switchTab('profile')">👤 My Profile</li>
             <li onclick="switchTab('portfolio')">📸 Portfolio Images</li>
             <li onclick="switchTab('bookings')">📅 Active Bookings</li>
-            <li onclick="logoutPro()" style="color: #d19a8a; margin-top: 50px;">🚪 Logout</li>
+            <li onclick="initiateQuit()" style="color: #e74c3c; margin-top: 30px;">⚠️ Quit Platform</li>
+            <li onclick="logoutPro()" style="color: #d19a8a;">🚪 Logout</li>
         </ul>
     </nav>
 
@@ -154,6 +155,37 @@
             </div>
         </section>
     </main>
+
+    <!-- QUIT TERMS MODAL -->
+    <div id="modal-quit-terms" class="modal" style="z-index: 2000;">
+        <div class="modal-content auth-box" style="max-width: 600px !important; text-align: left;">
+            <span class="close-btn" onclick="document.getElementById('modal-quit-terms').style.display='none'">&times; Close</span>
+            <h2 style="color: #e74c3c; margin-bottom: 15px;">Account Deactivation Terms</h2>
+            
+            <div class="terms-scroll-box" style="max-height: 300px; overflow-y: auto; padding-right: 15px; font-size: 0.9rem; line-height: 1.6; opacity: 0.85;">
+                <p><strong>1. Pending Obligations:</strong> You cannot deactivate your account if you have pending, unfulfilled bookings. Leaving clients stranded will result in legal action and financial penalties.</p>
+                <p style="margin-top: 10px;"><strong>2. Content Usage Rights:</strong> Momento retains the perpetual right to display any portfolio images, branding, and past reviews uploaded during your tenure for historical record and marketing purposes.</p>
+                <p style="margin-top: 10px;"><strong>3. Final Payouts:</strong> Any outstanding payouts will be cleared within 30 business days following deactivation, provided no client disputes are active.</p>
+            </div>
+            
+            <button class="btn-book-now" onclick="acceptQuitTerms()" style="width: 100%; margin-top: 20px; background: #e74c3c; border-color: #e74c3c;">I Accept & Wish to Proceed</button>
+        </div>
+    </div>
+
+    <!-- QUIT OTP & REASON MODAL -->
+    <div id="modal-quit-otp" class="modal" style="z-index: 2000;">
+        <div class="modal-content auth-box" style="max-width: 450px !important; text-align: center;">
+            <span class="close-btn" onclick="document.getElementById('modal-quit-otp').style.display='none'">&times; Close</span>
+            <h2>Final Confirmation</h2>
+            <p style="opacity: 0.8; margin-bottom: 15px;">We have sent a final OTP to your registered email to confirm this action.</p>
+            
+            <input type="text" id="quit-otp" class="auth-input" placeholder="Enter 4-Digit OTP" maxlength="4" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
+            
+            <textarea id="quit-reason" class="auth-input" placeholder="Briefly tell us why you are leaving (Optional)" rows="3" style="resize: none;"></textarea>
+            
+            <button class="btn-book-now" onclick="confirmQuit(this)" style="width: 100%; margin-top: 10px; background: #e74c3c; border-color: #e74c3c;">Permanently Delete Account</button>
+        </div>
+    </div>
 
     <script src="pro-script.js"></script>
 </body>
