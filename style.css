@@ -138,19 +138,7 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     top: 0; left: 0; 
     width: 100%; height: 100%; 
     object-fit: cover; 
-    opacity: 0; 
-    z-index: 0; /* Hidden layer */
     transition: opacity 2s ease-in-out; 
-}
-
-.banner-img.previous {
-    opacity: 1;
-    z-index: 1; /* Base layer: Stays fully visible underneath */
-}
-
-.banner-img.active { 
-    opacity: 1; 
-    z-index: 2; /* Top layer: Slowly fades in over the base layer */
 }
 
 .section-tag-title { margin-top: 15px; font-family: 'Playfair Display', serif; font-size: 2.5rem; font-style: italic; color: var(--primary-color); min-height: 40px; }
