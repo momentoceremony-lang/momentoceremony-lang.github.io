@@ -927,3 +927,25 @@ textarea.auth-input {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================================
+   NEW OVERRIDES: Slide-in Banners & Stop Breathing on Left
+========================================================= */
+/* 1. Stop breathing on the left side banners & prepare for slide */
+.wedding-upper-left.breathing-anim {
+    animation: none !important; 
+    opacity: 0; 
+    transform: translateX(-100px); 
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* 2. The active class that JavaScript will add when scrolling */
+.wedding-upper-left.breathing-anim.slide-in-active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 3. Make sure the scroll zoom is buttery smooth */
+.arch-photo-mask {
+    transition: transform 0.1s linear !important; 
+}
