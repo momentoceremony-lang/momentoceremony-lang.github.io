@@ -553,9 +553,7 @@ async function loginPro() {
 // ==========================================
 
 function triggerBookingFromProfile() {
-    // Hide the dropdown menu
-    document.getElementById("pro-dropdown").classList.remove("show-dropdown");
-    // Trigger the booking flow
+    // Directly trigger the booking flow with the currently viewed professional
     handleBookNow(currentViewedPro);
 }
 
