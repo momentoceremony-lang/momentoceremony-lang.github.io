@@ -835,27 +835,43 @@ function handlePhoneClick(event, phoneNumber) {
 
 
 // ==========================================
-// SCROLL ZOOM EFFECT FOR BANNER IMAGES (MOBILE OPTIMIZED)
+// SCROLL ZOOM & SLIDE-IN EFFECT (STRONG & OPTIMIZED)
 // ==========================================
 let isZoomTicking = false;
 
 window.addEventListener('scroll', () => {
-    // Only run the math if the browser is ready for the next visual frame
     if (!isZoomTicking) {
         window.requestAnimationFrame(() => {
+            
+            // 1. TRIGGER THE SLIDE-IN FOR LEFT BANNERS
+            const leftBanners = document.querySelectorAll('.wedding-upper-left');
+            leftBanners.forEach(banner => {
+                const rect = banner.getBoundingClientRect();
+                // When banner enters the viewport, add the slide-in class
+                if (rect.top < window.innerHeight - 100) {
+                    banner.classList.add('slide-in-active');
+                }
+            });
+
+            // 2. STRONGER SCROLL ZOOM FOR BANNER IMAGES
             const masks = document.querySelectorAll('.arch-photo-mask');
             masks.forEach(mask => {
                 const rect = mask.getBoundingClientRect();
                 
                 if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    let scale = 1 + ((window.innerHeight - rect.top) * 0.0001);
-                    scale = Math.min(Math.max(scale, 1), 1.08); 
+                    // Increased multiplier to 0.0004 for a highly visible zoom effect
+                    let scale = 0.90 + ((window.innerHeight - rect.top) * 0.0004);
                     
-                    mask.style.setProperty('--scroll-zoom', scale);
+                    // Cap the zoom so it doesn't get too small or too large
+                    scale = Math.min(Math.max(scale, 0.95), 1.15); 
+                    
+                    // Apply the scale directly to the mask
+                    mask.style.transform = `scale(${scale})`;
                 }
             });
-            isZoomTicking = false; // Reset so the next frame can run
+            
+            isZoomTicking = false;
         });
-        isZoomTicking = true; // Lock it until the current frame finishes
+        isZoomTicking = true;
     }
 });
