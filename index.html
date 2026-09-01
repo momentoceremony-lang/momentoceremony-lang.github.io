@@ -615,7 +615,16 @@
                 <input type="tel" id="pro-reg-phone" placeholder="Phone Number" class="auth-input">
                 <input type="email" id="pro-reg-email" placeholder="Email Address" class="auth-input">
                 <input type="password" id="pro-reg-password" placeholder="Create Password" class="auth-input">
-                <button class="btn-view-all" onclick="sendProOtp()" style="width: 100%; margin-top: 10px; background: var(--primary-color); color: white;">Send Verification</button>
+                
+                <!-- NEW: Terms and Conditions Checkbox -->
+                <div style="display: flex; align-items: flex-start; gap: 10px; margin: 10px 0 15px 0; text-align: left;">
+                    <input type="checkbox" id="pro-terms-checkbox" style="margin-top: 4px; cursor: pointer; width: 18px; height: 18px;">
+                    <label for="pro-terms-checkbox" style="font-size: 0.85rem; opacity: 0.8; line-height: 1.4;">
+                        I have read and agree to the <a href="#" onclick="openModal('modal-terms'); return false;" style="color: var(--accent-color); font-weight: bold; text-decoration: underline;">Partner Terms & Conditions</a>.
+                    </label>
+                </div>
+
+                <button class="btn-view-all" onclick="sendProOtp()" style="width: 100%; background: var(--primary-color); color: white;">Send Verification</button>
                 <p class="auth-switch">Already a partner? <a href="#" onclick="switchProAuth('login')">Login</a></p>
             </div>
 
@@ -690,6 +699,33 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- TERMS AND CONDITIONS MODAL -->
+    <div id="modal-terms" class="modal" style="z-index: 1100;">
+        <div class="modal-content auth-box" style="max-width: 600px !important; padding: 30px !important; text-align: left;">
+            <span class="close-btn" onclick="closeModal('modal-terms')" style="top: 15px; right: 15px;">&times; Close</span>
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Partner Agreement</h2>
+            
+            <div class="terms-scroll-box" style="max-height: 350px; overflow-y: auto; padding-right: 15px; font-size: 0.9rem; line-height: 1.6; opacity: 0.85;">
+                <p><strong>1. Independent Contractor Status</strong></p>
+                <p style="margin-bottom: 15px;">By registering on Momento, you acknowledge that you are an Independent Business Partner / Freelance Contractor. You are <strong>not</strong> an employee of Momento Photography. Momento does not issue appointment letters, employment benefits, or salary. You are solely responsible for your own taxes, government compliances, equipment insurance, and business liabilities.</p>
+
+                <p><strong>2. Strict No-Show & Penalty Clause</strong></p>
+                <p style="margin-bottom: 15px;">Professionalism is strictly enforced. If you accept a client booking for a fixed date, and/or receive an advance payment, and fail to attend the event without valid, documented emergency justification, you will be subject to:<br>
+                a) Immediate and permanent ban from the Momento platform.<br>
+                b) Financial penalties equivalent to the total booking amount.<br>
+                c) Potential legal action initiated by the client or Momento for breach of contract and damages.</p>
+
+                <p><strong>3. Liability Shield</strong></p>
+                <p style="margin-bottom: 15px;">Momento acts solely as a technological marketplace connecting clients with photographers. Momento is not legally or financially liable for any disputes, damages to equipment, or misconduct that occurs between the client and the photographer during the event.</p>
+                
+                <p><strong>4. Payment & Quotations</strong></p>
+                <p style="margin-bottom: 15px;">All quotations sent to the client must be honored. Any attempt to extort higher fees from the client on the day of the event will result in immediate termination of this partnership.</p>
+            </div>
+            
+            <button class="btn-book-now" onclick="closeModal('modal-terms'); document.getElementById('pro-terms-checkbox').checked = true;" style="width: 100%; margin-top: 20px;">I Agree & Accept</button>
         </div>
     </div>
     
