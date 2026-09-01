@@ -39,42 +39,27 @@ function typeEffect() {
 // This single function handles the Slideshow, Flipper, and Typing for ANY category
 function initCategorySection(sectionId, slideshowId, stackId, titleId, quoteId, titleText, quoteText) {
     
-    // A. SILK FADE SLIDER (BULLETPROOF CROSSFADE)
+    // A. SILK FADE SLIDER (CLEAN CROSSFADE)
     const images = document.querySelectorAll(`#${slideshowId} .banner-img`);
     if(images.length > 1) {
         let currentIndex = 0;
-        
-        // 1. Initialize layers securely
-        images.forEach((img, i) => {
-            img.style.opacity = i === 0 ? '1' : '0';
-            img.style.zIndex = i === 0 ? '2' : '1';
-        });
+        images[0].classList.add('active'); // Ensure first is visible on load
 
         setInterval(() => {
             const prevIndex = currentIndex;
-            const nextIndex = (currentIndex + 1) % images.length;
+            currentIndex = (currentIndex + 1) % images.length;
             
-            const prevImg = images[prevIndex];
-            const nextImg = images[nextIndex];
+            // Keep the previous image completely solid in the background
+            images[prevIndex].classList.remove('active');
+            images[prevIndex].classList.add('last-active');
             
-            // 2. Prepare the next image directly behind the current one
-            nextImg.style.opacity = '0';
-            nextImg.style.zIndex = '3'; // Bring to absolute front
+            // Fade the new image in on top
+            images[currentIndex].classList.add('active');
             
-            // 3. Force browser reflow to guarantee it registers the 0 opacity
-            void nextImg.offsetWidth;
-            
-            // 4. Trigger the smooth fade-in
-            nextImg.style.opacity = '1';
-            
-            // 5. Clean up the old image ONLY after the 2-second fade completes
+            // After the 2-second fade finishes, silently reset the old image
             setTimeout(() => {
-                prevImg.style.opacity = '0';
-                prevImg.style.zIndex = '1';
-                nextImg.style.zIndex = '2'; // Reset next to standard layer
+                images[prevIndex].classList.remove('last-active');
             }, 2000);
-            
-            currentIndex = nextIndex;
         }, 4000); 
     }
     
