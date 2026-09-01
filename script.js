@@ -832,3 +832,24 @@ function handlePhoneClick(event, phoneNumber) {
         });
     }
 }
+
+
+// ==========================================
+// SCROLL ZOOM EFFECT FOR BANNER IMAGES
+// ==========================================
+window.addEventListener('scroll', () => {
+    const masks = document.querySelectorAll('.arch-photo-mask');
+    masks.forEach(mask => {
+        const rect = mask.getBoundingClientRect();
+        
+        // Ensure the element is currently visible in the viewport before applying zoom
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            // Calculate scale between 1.0 and a max of 1.08 based on how far the user scrolls
+            let scale = 1 + ((window.innerHeight - rect.top) * 0.0001);
+            scale = Math.min(Math.max(scale, 1), 1.08); 
+            
+            // Apply the custom CSS property we added in the updated stylesheet
+            mask.style.setProperty('--scroll-zoom', scale);
+        }
+    });
+});
