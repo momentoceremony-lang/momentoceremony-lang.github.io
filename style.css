@@ -769,3 +769,44 @@ textarea.auth-input {
     .pro-gallery-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* =========================================================
+   15. PREMIUM CALENDAR STYLING (FLATPICKR OVERRIDES)
+========================================================= */
+.flatpickr-calendar {
+    font-family: 'Lato', sans-serif !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding-bottom: 10px !important;
+}
+
+.flatpickr-months .flatpickr-month {
+    background: var(--primary-color) !important;
+    color: white !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 10px 0 !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months, 
+.flatpickr-current-month .numInputWrapper {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.2rem !important;
+}
+
+.flatpickr-weekday {
+    background: var(--primary-color) !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
+.flatpickr-day.selected:focus, .flatpickr-day.selected:hover {
+    background: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.flatpickr-day:hover {
+    background: #f4d5c2 !important;
+}
