@@ -571,17 +571,21 @@
                     </div>
                 </div>
                 
-                <!-- Event Category -->
-                <select id="book-category" class="auth-input">
-                    <option value="" disabled selected>Select Event Category</option>
-                    <option value="Wedding">Wedding</option>
-                    <option value="Pre-Wedding">Pre-Wedding</option>
-                    <option value="Birthday">Birthday</option>
-                    <option value="Anniversary">Anniversary</option>
-                    <option value="Baby Shoot">Baby Photo Shoot</option>
-                    <option value="Other">Other Event</option>
-                </select>
-
+                <!-- Premium Custom Event Category Dropdown -->
+                <div class="custom-select-wrapper" onclick="toggleCustomSelect()">
+                    <div class="custom-select-display auth-input" id="book-category-display" style="margin-bottom: 15px; text-align: left; opacity: 0.8;">Select Event Category</div>
+                    <div class="custom-select-options" id="book-category-options">
+                        <div class="custom-select-option" onclick="selectCategory('Wedding')">Wedding</div>
+                        <div class="custom-select-option" onclick="selectCategory('Pre-Wedding')">Pre-Wedding</div>
+                        <div class="custom-select-option" onclick="selectCategory('Birthday')">Birthday</div>
+                        <div class="custom-select-option" onclick="selectCategory('Anniversary')">Anniversary</div>
+                        <div class="custom-select-option" onclick="selectCategory('Baby Photo Shoot')">Baby Photo Shoot</div>
+                        <div class="custom-select-option" onclick="selectCategory('Other Event')">Other Event</div>
+                    </div>
+                </div>
+                <!-- Hidden input stores the actual value for the database -->
+                <input type="hidden" id="book-category" value="">
+                
                 <!-- Event Details -->
                 <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (location, timings, specific requirements...)" rows="4" style="resize: none;"></textarea>
 
