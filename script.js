@@ -174,6 +174,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "Baby Shoot", 
         '"Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one\'s first milestones."'
     );
+    // Initialize Custom Premium Date Pickers
+    flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" });
+    flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" });
+
     checkLoginState();
 });
 
@@ -355,15 +359,16 @@ function handleBookNow(photographerName) {
     const userString = localStorage.getItem('momentoUser');
     
     if (userString) {
-        // User is logged in. Open the booking popup.
         currentSelectedPhotographer = photographerName;
         document.getElementById('booking-photographer-name').innerText = `Requesting: ${photographerName}`;
         
-        // Close photographer list, open booking form
-        closeModal('modal-all-photographers');
+        // Force close ANY open modals (like the profile details window)
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.style.display = 'none';
+        });
+        
         openModal('modal-booking');
     } else {
-        // User is NOT logged in. Force authentication.
         alert("Please Sign In or Create an Account to book a photographer.");
         document.querySelectorAll('.modal').forEach(modal => {
             modal.style.display = 'none';
