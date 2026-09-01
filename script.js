@@ -39,23 +39,42 @@ function typeEffect() {
 // This single function handles the Slideshow, Flipper, and Typing for ANY category
 function initCategorySection(sectionId, slideshowId, stackId, titleId, quoteId, titleText, quoteText) {
     
-    // A. SILK FADE SLIDER (FLAWLESS CROSSFADE)
+    // A. SILK FADE SLIDER (BULLETPROOF CROSSFADE)
     const images = document.querySelectorAll(`#${slideshowId} .banner-img`);
     if(images.length > 1) {
         let currentIndex = 0;
-        images[currentIndex].classList.add('active');
+        
+        // 1. Initialize layers securely
+        images.forEach((img, i) => {
+            img.style.opacity = i === 0 ? '1' : '0';
+            img.style.zIndex = i === 0 ? '2' : '1';
+        });
 
         setInterval(() => {
-            // 1. Clear the old background layer
-            images.forEach(img => img.classList.remove('previous'));
-
-            // 2. The current image becomes the solid background layer
-            images[currentIndex].classList.remove('active');
-            images[currentIndex].classList.add('previous');
-
-            // 3. The next image comes to the front and fades in
-            currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].classList.add('active');
+            const prevIndex = currentIndex;
+            const nextIndex = (currentIndex + 1) % images.length;
+            
+            const prevImg = images[prevIndex];
+            const nextImg = images[nextIndex];
+            
+            // 2. Prepare the next image directly behind the current one
+            nextImg.style.opacity = '0';
+            nextImg.style.zIndex = '3'; // Bring to absolute front
+            
+            // 3. Force browser reflow to guarantee it registers the 0 opacity
+            void nextImg.offsetWidth;
+            
+            // 4. Trigger the smooth fade-in
+            nextImg.style.opacity = '1';
+            
+            // 5. Clean up the old image ONLY after the 2-second fade completes
+            setTimeout(() => {
+                prevImg.style.opacity = '0';
+                prevImg.style.zIndex = '1';
+                nextImg.style.zIndex = '2'; // Reset next to standard layer
+            }, 2000);
+            
+            currentIndex = nextIndex;
         }, 4000); 
     }
     
