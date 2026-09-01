@@ -311,18 +311,28 @@ function updateDynamicFields() {
     const pricingContainer = document.getElementById('pricing-container');
     const bestShotsContainer = document.getElementById('dynamic-best-shots');
     
+    // 1. SECURE STATE: Memorize existing inputs before wiping the DOM
+    const currentPricing = {};
+    pricingContainer.querySelectorAll('input').forEach(input => {
+        currentPricing[input.id] = input.value;
+    });
+    
     pricingContainer.innerHTML = '';
     bestShotsContainer.innerHTML = '';
     
     checkboxes.forEach(cb => {
         const val = cb.value;
         const idSafe = val.replace(/\s+/g, '');
+        const costId = `cost-${idSafe}`;
         
-        // 1. Generate Pricing Input
+        // Retrieve the memorized value, or leave blank if new
+        const existingValue = currentPricing[costId] || '';
+        
+        // 1. Generate Pricing Input (with preserved value)
         pricingContainer.innerHTML += `
             <div class="form-group">
                 <label style="color: var(--accent-color);">${val} Cost (Per Day)</label>
-                <input type="number" id="cost-${idSafe}" class="auth-input" placeholder="₹ Amount">
+                <input type="number" id="${costId}" class="auth-input" placeholder="₹ Amount" value="${existingValue}">
             </div>
         `;
         
