@@ -39,14 +39,30 @@ function typeEffect() {
 // This single function handles the Slideshow, Flipper, and Typing for ANY category
 function initCategorySection(sectionId, slideshowId, stackId, titleId, quoteId, titleText, quoteText) {
     
-    // A. SILK FADE SLIDER
+    // A. SILK FADE SLIDER (PREMIUM CROSSFADE)
     const images = document.querySelectorAll(`#${slideshowId} .banner-img`);
-    if(images.length > 0) {
+    if(images.length > 1) {
         let currentIndex = 0;
+        
+        // Ensure the first image starts on top
+        images[currentIndex].classList.add('active');
+        images[currentIndex].style.zIndex = "2";
+
         setInterval(() => {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].classList.add('active');
+            const prevIndex = currentIndex;
+            const nextIndex = (currentIndex + 1) % images.length;
+            
+            // 1. Bring the next image to the top and fade it in
+            images[nextIndex].style.zIndex = "3";
+            images[nextIndex].classList.add('active');
+            
+            // 2. Wait exactly 2 seconds for the fade to finish, then reset the old image underneath
+            setTimeout(() => {
+                images[prevIndex].classList.remove('active');
+                images[prevIndex].style.zIndex = "1";
+            }, 2000); 
+            
+            currentIndex = nextIndex;
         }, 4000); 
     }
 
