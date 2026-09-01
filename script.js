@@ -460,6 +460,15 @@ if(joinProBtn) {
     });
 }
 
+function openProModalFromFooter() {
+    if (localStorage.getItem('momentoUser') && !localStorage.getItem('isPro')) {
+        alert("You are currently logged in as a Customer. Please logout first to access the Photographer Portal.");
+        return;
+    }
+    openModal('modal-pro-auth');
+    switchProAuth('login');
+}
+
 function switchProAuth(section) {
     document.getElementById('pro-login-section').style.display = section === 'login' ? 'block' : 'none';
     document.getElementById('pro-register-section').style.display = section === 'register' ? 'block' : 'none';
