@@ -680,7 +680,8 @@ function renderCategoryStacks() {
         { id: 'wedding-stack', name: 'Wedding' },
         { id: 'birthday-stack', name: 'Birthday' },
         { id: 'anni-stack', name: 'Anniversary' },
-        { id: 'prewed-stack', name: 'Pre-Wedding' }
+        { id: 'prewed-stack', name: 'Pre-Wedding' },
+        { id: 'baby-stack', name: 'Baby Shoot' }
     ];
 
     categories.forEach(cat => {
