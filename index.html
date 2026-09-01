@@ -16,7 +16,6 @@
 
     <!-- NAVBAR -->
     <nav>
-        <!-- Update your nav-links block to this: -->
         <div class="nav-links">
             <a href="#">Home</a>
             <a href="#category-wedding">Services</a>
@@ -24,10 +23,10 @@
         </div>
         <div class="auth-buttons">
             <button class="btn-login">Sign In</button>
-            <button class="btn-signup">Join as Photographer</button>
+            <!-- Partner button moved to footer for a cleaner UX -->
         </div>
     </nav>
-
+    
     <!-- HERO SECTION -->
     <header class="hero">
         <video autoplay muted loop playsinline class="hero-bg-video">
@@ -696,22 +695,35 @@
     
     <script src="script.js"></script>
 
-    <!-- FOOTER WITH SMOOTH LOGO -->
+    <!-- FOOTER WITH SMOOTH LOGO & GRID LAYOUT -->
     <footer class="site-footer">
         <div class="footer-container">
+            <!-- Column 1: Brand -->
             <div class="footer-brand">
                 <img src="Stock/1000272025.png" alt="Momento Photography" class="footer-logo">
                 <p>Because every love story is beautiful, but yours should be a masterpiece.</p>
             </div>
             
+            <!-- Column 2: Explore Links -->
             <div class="footer-links">
                 <h4>Explore</h4>
                 <a href="#">Home</a>
                 <a href="#category-wedding">Weddings</a>
+                <a href="#category-prewed">Pre-Weddings</a>
                 <a href="#category-birthday">Birthdays</a>
-                <a href="#">Photographers</a>
+                <a href="#category-anni">Anniversaries</a>
+                <a href="#category-baby">Baby Shoots</a>
+                <a href="#" onclick="openModal('modal-all-photographers'); return false;">Our Photographers</a>
             </div>
 
+            <!-- Column 3: Partner Call to Action -->
+            <div class="footer-partner">
+                <h4>Partner With Us</h4>
+                <p style="margin-bottom: 15px; font-size: 0.95rem; opacity: 0.8; line-height: 1.6;">Are you a professional photographer? Join Momento to reach more clients and manage your portfolio seamlessly.</p>
+                <button class="btn-book-now" onclick="openProModalFromFooter()" style="background: transparent; border-color: var(--accent-color); color: var(--bg-color); width: 100%;">Join as Photographer</button>
+            </div>
+
+            <!-- Column 4: Contact Info -->
             <div class="footer-contact">
                 <h4>Contact Us</h4>
                 <p>📞 +91 98765 43210</p>
