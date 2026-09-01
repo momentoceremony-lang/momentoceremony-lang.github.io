@@ -929,7 +929,7 @@ textarea.auth-input {
 }
 
 /* =========================================================
-   NEW OVERRIDES: Slide-in Banners & Stop Breathing on Left
+   17. NEW OVERRIDES: Slide-in Banners & Stop Breathing on Left
 ========================================================= */
 /* 1. Stop breathing on the left side banners & prepare for slide */
 .wedding-upper-left.breathing-anim {
@@ -948,4 +948,19 @@ textarea.auth-input {
 /* 3. Make sure the scroll zoom is buttery smooth */
 .arch-photo-mask {
     transition: transform 0.1s linear !important; 
+}
+
+/* =========================================================
+   18. TERMS & CONDITIONS SCROLL BOX
+========================================================= */
+.terms-scroll-box::-webkit-scrollbar {
+    width: 6px;
+}
+.terms-scroll-box::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+.terms-scroll-box::-webkit-scrollbar-thumb {
+    background: var(--accent-color); 
+    border-radius: 10px;
 }
