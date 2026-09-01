@@ -6,6 +6,11 @@
     <title>Momento Photography | Every Moment. Forever.</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    
+    <!-- Premium Calendar Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
 </head>
 <body>
 
@@ -558,14 +563,14 @@
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <div style="flex: 1;">
                         <label style="font-size: 0.85rem; opacity: 0.8;">Start Date</label>
-                        <input type="date" id="book-start" class="auth-input" style="margin-bottom: 0;">
+                        <input type="text" id="book-start" class="auth-input" placeholder="Select date..." style="margin-bottom: 0; background-color: white;">
                     </div>
                     <div style="flex: 1;">
                         <label style="font-size: 0.85rem; opacity: 0.8;">End Date</label>
-                        <input type="date" id="book-end" class="auth-input" style="margin-bottom: 0;">
+                        <input type="text" id="book-end" class="auth-input" placeholder="Select date..." style="margin-bottom: 0; background-color: white;">
                     </div>
                 </div>
-
+                
                 <!-- Event Category -->
                 <select id="book-category" class="auth-input">
                     <option value="" disabled selected>Select Event Category</option>
