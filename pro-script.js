@@ -347,3 +347,89 @@ function updateDynamicFields() {
         `;
     });
 }
+
+
+// ==========================================
+// 7. QUIT PLATFORM LOGIC
+// ==========================================
+
+function initiateQuit() {
+    document.getElementById('modal-quit-terms').style.display = 'block';
+}
+
+async function acceptQuitTerms() {
+    const userString = localStorage.getItem('momentoUser');
+    if (!userString) return;
+    const user = JSON.parse(userString);
+    const btn = document.querySelector('#modal-quit-terms .btn-book-now');
+    
+    btn.innerText = "Checking Bookings...";
+    btn.disabled = true;
+
+    try {
+        // 1. Check for pending bookings
+        const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/check-bookings/${user.id}`);
+        const data = await res.json();
+
+        if (data.success && data.pendingCount > 0) {
+            alert(`ACTION BLOCKED: You have ${data.pendingCount} active booking(s). You must complete or legally cancel all bookings before leaving the platform.`);
+            document.getElementById('modal-quit-terms').style.display = 'none';
+        } else {
+            // 2. If clear, send OTP
+            btn.innerText = "Sending OTP...";
+            await fetch('https://momento-backend-production-8b55.up.railway.app/api/auth/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: user.email })
+            });
+            
+            document.getElementById('modal-quit-terms').style.display = 'none';
+            document.getElementById('modal-quit-otp').style.display = 'block';
+        }
+    } catch (error) {
+        alert("Server error. Please try again.");
+    } finally {
+        btn.innerText = "I Accept & Wish to Proceed";
+        btn.disabled = false;
+    }
+}
+
+async function confirmQuit(btnElement) {
+    const otp = document.getElementById('quit-otp').value.trim();
+    const reason = document.getElementById('quit-reason').value.trim();
+    const user = JSON.parse(localStorage.getItem('momentoUser'));
+
+    if (!otp) return alert("Please enter the OTP to confirm deletion.");
+
+    btnElement.innerText = "Deleting...";
+    btnElement.disabled = true;
+
+    try {
+        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/pro/quit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                proId: user.id,
+                email: user.email,
+                proName: user.name,
+                otp: otp,
+                reason: reason || "No reason provided."
+            })
+        });
+
+        const data = await res.json();
+        
+        if (data.success) {
+            alert("Your account has been successfully deleted. Thank you for your time with Momento.");
+            logoutPro(); // Wipes local storage and redirects to home
+        } else {
+            alert("Error: " + data.error);
+            btnElement.innerText = "Permanently Delete Account";
+            btnElement.disabled = false;
+        }
+    } catch (error) {
+        alert("Failed to process request. Check connection.");
+        btnElement.innerText = "Permanently Delete Account";
+        btnElement.disabled = false;
+    }
+}
