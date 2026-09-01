@@ -174,10 +174,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "Baby Shoot", 
         '"Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one\'s first milestones."'
     );
-    // Initialize Custom Premium Date Pickers
-    flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" });
-    flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" });
-
+    // Initialize Custom Premium Date Pickers (Forces custom UI on mobile)
+    flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+    flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+    
     checkLoginState();
 });
 
@@ -431,6 +431,8 @@ async function submitBooking() {
             document.getElementById('book-end').value = "";
             document.getElementById('book-category').value = "";
             document.getElementById('book-details').value = "";
+            document.getElementById('book-category-display').innerText = "Select Event Category";
+            document.getElementById('book-category-display').style.color = "";
         } else {
             alert("Error: " + data.error);
         }
@@ -554,16 +556,37 @@ async function loginPro() {
 }
 
 // ==========================================
-// 9. DETAILED PROFILE LOGIC
+// 9. DETAILED PROFILE & CUSTOM UI LOGIC
 // ==========================================
 
 function triggerBookingFromProfile() {
-    // Directly trigger the booking flow with the currently viewed professional
-    handleBookNow(currentViewedPro);
+    // Explicitly close the profile modal first
+    closeModal('modal-pro-details');
+    // Add a tiny delay to ensure the browser clears the screen before opening the next
+    setTimeout(() => {
+        handleBookNow(currentViewedPro);
+    }, 100);
 }
 
-// Close the dropdown if the user clicks anywhere else
+// Custom Premium Dropdown Logic
+function toggleCustomSelect() {
+    document.getElementById('book-category-options').classList.toggle('show');
+}
+
+function selectCategory(val) {
+    document.getElementById('book-category-display').innerText = val;
+    document.getElementById('book-category-display').style.color = "var(--primary-color)";
+    document.getElementById('book-category').value = val;
+}
+
+// Close custom dropdown if clicked outside
 window.addEventListener('click', function(event) {
+    if (!event.target.closest('.custom-select-wrapper')) {
+        const options = document.getElementById('book-category-options');
+        if(options) options.classList.remove('show');
+    }
+    
+    // Existing dot-menu code...
     if (!event.target.matches('.dot-menu-icon')) {
         var dropdowns = document.getElementsByClassName("pro-dropdown-content");
         for (var i = 0; i < dropdowns.length; i++) {
