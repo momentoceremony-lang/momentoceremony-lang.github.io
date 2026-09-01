@@ -243,18 +243,28 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
 }
 
 /* =========================================================
-   8. FOOTER STYLES
+   8. FOOTER STYLES (PREMIUM GRID)
 ========================================================= */
 .site-footer { 
     background-color: var(--primary-color); 
     color: var(--bg-color); 
     padding: 60px 5vw 20px; 
-    margin-top: 0; /* FIX: Removes the white gap completely */
-    /* FIX: Adds a subtle lighter brown at the top that fades into the main footer color */
+    margin-top: 0; 
     background: linear-gradient(to bottom, #725460 0%, var(--primary-color) 15%); 
 }
 
-/* FIXED FOOTER LOGO - PERFECTLY ROUND */
+.footer-container { 
+    display: grid; 
+    grid-template-columns: 1.5fr 1fr 1.5fr 1fr; /* 4 columns on desktop */
+    gap: 40px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    border-bottom: 1px solid rgba(255,255,255,0.2); 
+    padding-bottom: 40px; 
+}
+
+.footer-brand { width: 100%; }
+
 .footer-logo {
     width: 140px; 
     height: 140px; 
@@ -264,12 +274,11 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     padding: 0;
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    /* Removed the invert filter that caused the white square */
 }
 
-.footer-brand p { font-style: italic; opacity: 0.8; line-height: 1.6; }
-.footer-links, .footer-contact { display: flex; flex-direction: column; gap: 10px; }
-.footer-links h4, .footer-contact h4 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent-color); }
+.footer-brand p, .footer-partner p { font-style: italic; opacity: 0.8; line-height: 1.6; }
+.footer-links, .footer-contact, .footer-partner { display: flex; flex-direction: column; gap: 10px; }
+.footer-links h4, .footer-contact h4, .footer-partner h4 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent-color); }
 .footer-links a, .footer-contact a, .footer-contact p { color: var(--bg-color); text-decoration: none; font-size: 1rem; opacity: 0.9; transition: 0.3s; }
 .footer-links a:hover, .social-links a:hover { color: var(--accent-color); padding-left: 5px; }
 .social-links { display: flex; gap: 15px; margin-top: 10px; }
@@ -332,12 +341,28 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     .professionals-label { font-size: 0.9rem; text-align: center; margin-bottom: 10px; }
     .btn-view-all { font-size: 0.6rem; padding: 4px 8px; margin-top: 10px; }
    
-   /*footer brand*/
-   
-    .footer-brand { width: 100%; text-align: center; }
-    .footer-logo { margin: 0 auto 15px; border-radius: 50%; object-fit: cover; }
-    .footer-links, .footer-contact { width: 100%; text-align: center; }
-    .social-links { justify-content: center; }
+   /* NEW MOBILE FOOTER GRID */
+    .footer-container {
+        grid-template-columns: 1fr 1fr; /* Splits into 2 perfect columns on mobile */
+        gap: 30px;
+        text-align: left;
+    }
+    
+    .footer-brand { 
+        grid-column: 1 / -1; /* Forces logo to take full width at the top */
+        text-align: center; 
+    }
+    
+    .footer-partner {
+        grid-column: 1 / -1; /* Forces the partner box to take full width at the bottom */
+        text-align: center;
+        background: rgba(255,255,255,0.05);
+        padding: 20px;
+        border-radius: 15px;
+    }
+    
+    .footer-links, .footer-contact { width: 100%; text-align: left; align-items: flex-start; }
+    .social-links { justify-content: flex-start; }
 }
 
 /* =========================================================
