@@ -477,7 +477,14 @@ function switchProAuth(section) {
 
 async function sendProOtp() {
     const email = document.getElementById('pro-reg-email').value.trim();
+    const termsChecked = document.getElementById('pro-terms-checkbox').checked;
+
     if (!email) return alert("Please enter your email address.");
+    
+    // NEW: Stop the process if they haven't agreed to the terms
+    if (!termsChecked) {
+        return alert("You must read and agree to the Partner Terms & Conditions to register.");
+    }
 
     const sendBtn = document.querySelector('#pro-register-section button');
     const originalText = sendBtn.innerText;
