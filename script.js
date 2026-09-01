@@ -810,3 +810,25 @@ function viewProProfile(proId) {
 document.addEventListener("DOMContentLoaded", () => {
     fetchAndRenderPhotographers();
 });
+
+// ==========================================
+// 11. SMART CONTACT LINKS
+// ==========================================
+function handlePhoneClick(event, phoneNumber) {
+    event.preventDefault(); // Prevents the page from jumping to the top
+    
+    // Detect if the user is on a mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // Opens the native phone dialer on mobile
+        window.location.href = 'tel:' + phoneNumber;
+    } else {
+        // Copies to clipboard on desktop
+        navigator.clipboard.writeText(phoneNumber).then(() => {
+            alert("Phone number copied to clipboard: " + phoneNumber);
+        }).catch(err => {
+            console.error('Could not copy text: ', err);
+        });
+    }
+}
