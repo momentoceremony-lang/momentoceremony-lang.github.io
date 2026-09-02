@@ -167,7 +167,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
     /* Hero Layout */
     .dark-hero {
-        padding: 130px 6vw 40px 6vw; 
+        padding: 130px 6vw 40px 1vw; 
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -180,7 +180,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         width: 65%; /* Only takes up the right portion of the screen */
         height: 100%; 
         top: 0; 
-        right: 0; /* Anchors the image to the right edge */
+        right: -10; /* Anchors the image to the right edge */
         left: auto; /* Removes the left anchor from the desktop CSS */
         object-fit: cover;
         object-position: center; /* Keeps the 1:1 image centered within its new right-side box */
