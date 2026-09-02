@@ -1,36 +1,64 @@
 // ==========================================
-// 1. HERO SECTION TYPING ANIMATION
+// 1. HERO SECTION TYPING & DYNAMIC BACKGROUND
 // ==========================================
 const textElement = document.getElementById("typing-text");
-const services = ["Weddings", "Pre-Weddings", "Baby Photo Shoots", "Birthdays", "Anniversaries"];
+const bgImageElement = document.getElementById("hero-dynamic-bg");
+
+// The services matched with their exact image file names
+const serviceData = [
+    { text: "Weddings", image: "Stock/hero_banner_Weddings.jpeg" },
+    { text: "Pre-Weddings", image: "Stock/hero_banner_PreWeddings.jpeg" },
+    { text: "Birthdays", image: "Stock/hero_banner_Birthdays.jpeg" },
+    { text: "Baby Shoots", image: "Stock/hero_banner_BabyShoots.jpeg" },
+    { text: "Anniversaries", image: "Stock/hero_banner_Anniversaries.jpeg" }
+];
+
 let serviceIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
 
 function typeEffect() {
     if (!textElement) return;
-    const currentService = services[serviceIndex];
+    const currentData = serviceData[serviceIndex];
     
     if (isDeleting) {
-        textElement.textContent = currentService.substring(0, charIndex - 1);
+        textElement.textContent = currentData.text.substring(0, charIndex - 1);
         charIndex--;
     } else {
-        textElement.textContent = currentService.substring(0, charIndex + 1);
+        textElement.textContent = currentData.text.substring(0, charIndex + 1);
         charIndex++;
     }
 
     let typeSpeed = isDeleting ? 50 : 100;
 
-    if (!isDeleting && charIndex === currentService.length) {
+    // Word finished typing
+    if (!isDeleting && charIndex === currentData.text.length) {
         typeSpeed = 2000; 
         isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
+    } 
+    // Word finished deleting, move to next
+    else if (isDeleting && charIndex === 0) {
         isDeleting = false;
-        serviceIndex = (serviceIndex + 1) % services.length;
+        serviceIndex = (serviceIndex + 1) % serviceData.length;
         typeSpeed = 500; 
+        
+        // Change the background image for the new word
+        if (bgImageElement) {
+            // Quick fade effect
+            bgImageElement.style.opacity = 0.5;
+            setTimeout(() => {
+                bgImageElement.src = serviceData[serviceIndex].image;
+                bgImageElement.style.opacity = 1;
+            }, 200);
+        }
     }
 
     setTimeout(typeEffect, typeSpeed);
+}
+
+// Mobile Menu Toggle Function (Add this anywhere in script.js)
+function toggleMobileNav() {
+    alert("Mobile menu functionality will be implemented in the next step!");
 }
 
 // ==========================================
