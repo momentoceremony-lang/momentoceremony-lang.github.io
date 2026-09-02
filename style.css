@@ -141,13 +141,13 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
 
 /* =========================================================
-   MOBILE VIEW: FLOATING CINEMATIC APP EXPERIENCE
+   MOBILE VIEW: SEAMLESS BOTTOM FADE
 ========================================================= */
 @media (max-width: 850px) {
     .desktop-only { display: none !important; }
     .mobile-menu-icon { display: block; }
     
-    /* Navbar floating over the image */
+    /* Navbar Alignment */
     .dark-nav {
         flex-direction: row; 
         justify-content: space-between; 
@@ -161,76 +161,75 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     
     .nav-brand { margin: 0; transform: scale(0.85); transform-origin: left center; }
 
-    /* Hero takes the full screen, content pushed to the bottom */
+    /* Hero Setup */
     .dark-hero {
-        padding: 0; 
+        padding: 0 6vw 40px 6vw; /* Removes top padding, keeps side/bottom padding */
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end; /* Pushes the glass card to the bottom */
+        justify-content: flex-end; /* Pushes content strictly to the bottom */
+        background: #0f0f10; 
     }
     
-    /* Image gets full priority */
+    /* Image takes the full screen but focuses on the top */
     .hero-bg-image {
         width: 100%; 
         height: 100%; 
         top: 0; left: 0;
         object-fit: cover;
-        object-position: center 20%; /* Keeps faces near the top visible */
+        object-position: center 15%; /* Ensures faces at the top aren't cut off */
     }
     
-    /* Soften the overlay just enough to let the glass card pop */
+    /* Smooth Bottom Fade - Solid black at the bottom, totally clear at the top */
     .hero-dark-overlay {
-        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.2) 0%, transparent 40%, rgba(15, 15, 16, 0.4) 100%);
+        background: linear-gradient(to top, #0f0f10 0%, #0f0f10 35%, rgba(15, 15, 16, 0.6) 55%, transparent 100%);
     }
     
-    /* The Premium Frosted Glass Card */
+    /* Text Area - Completely transparent, no boxes or blurs */
     .hero-content {
-        width: 90%; 
-        max-width: 420px; 
-        margin: 0 auto 30px auto; /* Centers the card with space at the bottom */
-        padding: 30px 25px;
-        background: rgba(15, 15, 16, 0.75); /* Dark translucent background */
-        backdrop-filter: blur(12px); /* Apple-style frosted glass blur */
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(200, 169, 106, 0.2); /* Very subtle gold rim */
-        border-radius: 20px;
+        width: 100%; 
+        max-width: 100%; 
+        margin: 0; 
+        padding: 0;
+        background: transparent; /* Strips away the bulky box */
+        backdrop-filter: none;
+        border: none;
+        box-shadow: none;
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
         gap: 15px; 
         z-index: 2;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     }
     
     .hero-main-text { width: 100%; text-align: left; }
-    .hero-main-text h1 { font-size: 2.4rem; line-height: 1.15; margin-bottom: 8px; }
-    .hero-subtext { font-size: 0.9rem; line-height: 1.4; width: 100%; text-align: left; opacity: 0.9; }
+    .hero-main-text h1 { font-size: 3rem; line-height: 1.15; margin-bottom: 8px; }
+    .hero-subtext { font-size: 0.95rem; line-height: 1.4; width: 100%; text-align: left; opacity: 0.9; }
     
-    /* Service Box embedded in the card */
+    /* Service Box */
     .hero-service-box { 
         width: 100% !important; 
         padding: 12px 18px;
-        background: rgba(0, 0, 0, 0.4) !important; /* Slightly darker than the card for depth */
+        background: #151515 !important; 
         border-left: 3px solid #c8a96a;
         border-radius: 8px;
         margin-top: 5px;
     }
 
-    .highlight-text-gold { font-size: 1.4rem; }
+    .highlight-text-gold { font-size: 1.5rem; }
     
-    /* Compact Social Proof */
+    /* Social Proof Alignment */
     .hero-social-proof {
         display: flex; align-items: center; justify-content: flex-start; 
-        gap: 10px; margin-top: 5px; width: 100%;
+        gap: 10px; margin-top: 10px; width: 100%;
     }
     
-    .proof-avatars img { width: 32px; height: 32px; border-width: 2px; }
+    .proof-avatars img { width: 35px; height: 35px; border-width: 2px; }
     .proof-details { text-align: left; }
-    .proof-title { font-size: 0.8rem; margin-bottom: 2px; }
-    .proof-sub { font-size: 0.65rem; margin-bottom: 2px; }
-    .proof-stars { font-size: 0.85rem; }
+    .proof-title { font-size: 0.85rem; margin-bottom: 2px; }
+    .proof-sub { font-size: 0.7rem; margin-bottom: 2px; }
+    .proof-stars { font-size: 0.9rem; }
 }
 
 /* =========================================================
