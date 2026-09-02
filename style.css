@@ -165,44 +165,49 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         transform-origin: left center;
     }
 
-    /* Hero Layout - Reduced side padding (4vw) to push text to the extreme corner */
+    /* Hero Base - Sets the left alignment point for the yellow line */
     .dark-hero {
-        padding: 130px 4vw 40px 4vw; 
+        padding: 130px 5vw 40px 5vw; /* 5vw aligns it perfectly with the logo */
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: flex-start; 
-        background: #0f0f10; 
+        background-color: #0f0f10; 
     }
     
-    /* Increased width to 75% to show more of the image on the right */
+    /* Image Control - Stretches full width but anchors the couple to the right */
     .hero-bg-image {
-        width: 75%; 
-        height: 100%; 
-        top: 0; 
+        position: absolute;
+        width: 100%; 
+        height: 100%;
+        top: 0;
         right: 0; 
-        left: auto; 
+        left: 0;
         object-fit: cover;
-        object-position: center; 
+        object-position: 75% center; /* Pushes the image focus to the right */
     }
     
-    /* Pulled the black cutoff back significantly so the image isn't hidden */
+    /* Smooth Step-by-Step Fade - Matches the red curve */
     .hero-dark-overlay {
+        position: absolute;
         width: 100%;
         height: 100%;
         top: 0;
         left: 0;
-        background: linear-gradient(to right, #0f0f10 0%, #0f0f10 28%, rgba(15, 15, 16, 0.8) 42%, transparent 75%);
+        /* Solid black on the left, then steps down smoothly to transparent */
+        background: linear-gradient(to right, #0f0f10 0%, #0f0f10 25%, rgba(15, 15, 16, 0.85) 45%, rgba(15, 15, 16, 0.4) 65%, transparent 100%);
     }
     
-    /* Adjusted text width to ensure it doesn't spill over the newly revealed image */
+    /* Text Container - Forced flush left to the yellow line */
     .hero-content {
-        width: 60%; 
+        width: 100%; 
+        max-width: 320px; /* Prevents text from stretching into the bright area */
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
         margin-top: -20px; 
+        margin-left: 0 !important; /* Forces text to start exactly at the yellow line */
         gap: 15px; 
         z-index: 2;
     }
