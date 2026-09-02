@@ -172,32 +172,37 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         display: flex;
         align-items: center;
         justify-content: flex-start; 
+        background: #0f0f10; /* Ensures the base is solid black */
     }
     
-    /* Image Control (Zoom out and position for 1:1 image) */
+    /* Lock the 1:1 image strictly to the right side */
     .hero-bg-image {
-        width: 100%; 
+        width: 65%; /* Only takes up the right portion of the screen */
         height: 100%; 
-        top: 0; left: 0;
+        top: 0; 
+        right: 0; /* Anchors the image to the right edge */
+        left: auto; /* Removes the left anchor from the desktop CSS */
         object-fit: cover;
-        /* Pins the 1:1 image to the far right so the couple isn't cropped out */
-        object-position: right center; 
+        object-position: center; /* Keeps the 1:1 image centered within its new right-side box */
     }
     
-    /* The Dark Overlay - Smooth fade to blend text and image */
+    /* Creates a harsh fade to blend the left edge of the image into the black background */
     .hero-dark-overlay {
-        background: linear-gradient(to right, #0f0f10 0%, #0f0f10 35%, rgba(15, 15, 16, 0.7) 65%, transparent 100%);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: linear-gradient(to right, #0f0f10 0%, #0f0f10 40%, rgba(15, 15, 16, 0.9) 55%, transparent 100%);
     }
     
-    /* The Text Box - Fixed width to pull text fully left */
+    /* Keep text confined to the left black area */
     .hero-content {
-        width: 100%; /* Replaces the restrictive 55% width that pushed it middle */
-        max-width: 320px; /* Allows text to stretch wider on the left side */
+        width: 70%; /* Prevents text from dragging across the image */
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
-        margin-top: -30px; 
+        margin-top: -20px; 
         gap: 15px; 
         z-index: 2;
     }
@@ -208,20 +213,19 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     }
 
     .hero-main-text h1 { 
-        font-size: 2.8rem; /* Slightly larger to match mockup */
+        font-size: 2.6rem; 
         line-height: 1.15;
         margin-bottom: 12px;
     }
     
     .hero-subtext { 
-        font-size: 0.9rem; 
+        font-size: 0.85rem; 
         line-height: 1.4;
         width: 100%;
         text-align: left;
         color: #e0e0e0;
     }
     
-    /* Dynamic Service Box (If you are still keeping it in the flow) */
     .hero-service-box { 
         width: 100% !important; 
         padding: 12px 18px;
@@ -235,14 +239,13 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         font-size: 1.4rem;
     }
     
-    /* Social Proof Alignment */
     .hero-social-proof {
         display: flex;
         align-items: center;
         justify-content: flex-start; 
         gap: 10px;
         margin-top: 10px;
-        width: 100%; 
+        width: 120%; /* Lets it stretch a bit past the text box so it doesn't bunch up */
     }
     
     .proof-avatars img {
