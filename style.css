@@ -141,7 +141,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
 
 /* =========================================================
-   EXACT MOBILE VIEW OVERRIDES
+   EXACT MOBILE VIEW OVERRIDES (DESKTOP REPLICA)
 ========================================================= */
 @media (max-width: 850px) {
     .desktop-only { display: none !important; }
@@ -152,81 +152,111 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         flex-direction: row; 
         justify-content: space-between; 
         align-items: center;
-        padding: 25px 6vw; /* Exact side padding */
-        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.95) 0%, transparent 100%); 
+        padding: 20px 6vw; 
+        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.9) 0%, transparent 100%); 
         position: absolute;
         top: 0; left: 0; width: 100%;
+        z-index: 1000;
     }
     
     .nav-brand {
         margin: 0;
-        transform: scale(0.95); 
+        transform: scale(0.85); 
         transform-origin: left center;
     }
 
-    /* Hero Background & Exact Gradient Blend */
+    /* Hero Background & Exact Left-to-Right Desktop Gradient */
     .dark-hero {
-        padding: 130px 6vw 40px 6vw; /* Pushes content down perfectly */
+        padding: 120px 6vw 40px 6vw; 
         min-height: 100vh;
         display: flex;
-        flex-direction: column;
+        align-items: center; /* Centers content vertically */
+        justify-content: flex-start; /* Forces content to the left horizontally */
     }
     
     .hero-bg-image {
         width: 100%; 
         height: 100%; 
         top: 0; left: 0;
-        object-position: 65% 20%; /* Centers the couple on mobile */
+        object-position: 70% center; /* Keeps the right side of the image visible */
     }
     
     .hero-dark-overlay {
-        /* Replicates the heavy black left-side and bottom fade from the screenshot */
-        background: 
-            linear-gradient(105deg, #0f0f10 0%, #0f0f10 45%, rgba(15,15,16,0.5) 75%, transparent 100%),
-            linear-gradient(to top, #0f0f10 0%, #0f0f10 20%, transparent 60%);
+        /* Replicates the desktop fade: Pitch black on the left, clear on the right */
+        background: linear-gradient(90deg, #0f0f10 0%, #0f0f10 50%, rgba(15, 15, 16, 0.5) 75%, transparent 100%);
     }
     
-    /* Content Proportions */
+    /* Content Proportions - STRICT LEFT ALIGNMENT */
     .hero-content {
-        width: 100%; 
-        margin-top: auto; 
-        margin-bottom: auto;
-        gap: 25px; 
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start !important; /* Forces all children to the left */
+        text-align: left !important; /* Forces all text to the left */
+        margin-top: 0;
+        gap: 20px; 
     }
     
+    .hero-main-text {
+        width: 100%;
+        text-align: left;
+    }
+
     .hero-main-text h1 { 
-        font-size: 3.5rem; /* Massive mobile serif font */
+        font-size: 2.8rem; /* Scaled down perfectly for mobile */
         line-height: 1.1;
         margin-bottom: 15px;
     }
     
     .hero-subtext { 
-        font-size: 1rem; 
+        font-size: 0.95rem; 
         line-height: 1.5;
-        max-width: 95%; 
+        max-width: 85%; /* Keeps text from touching the right edge */
+        text-align: left;
     }
     
-    /* Service Box (Matched to mobile card width) */
+    /* Service Box - Compact and Dark like Desktop */
     .hero-service-box { 
-        width: 100%; 
-        max-width: 100%; 
-        padding: 20px 25px;
+        width: max-content !important; /* Stops it from stretching across the screen */
+        max-width: 90%; 
+        padding: 15px 25px;
+        background: #151515 !important; /* Solid dark background removes the blurry grey look */
+        border-left: 3px solid #c8a96a;
+        border-radius: 8px;
+        backdrop-filter: none;
         margin-top: 10px;
+        text-align: left;
+    }
+
+    .hero-service-box p {
+        margin-bottom: 5px !important;
+    }
+
+    .highlight-text-gold {
+        font-size: 1.6rem;
     }
     
     /* Social Proof Alignment */
     .hero-social-proof {
-        margin-top: 20px;
-        gap: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* Left aligned */
+        gap: 12px;
+        margin-top: 15px;
     }
     
     .proof-avatars img {
-        width: 42px; height: 42px;
+        width: 38px; height: 38px;
         border-width: 2px;
     }
     
-    .proof-title { font-size: 1.05rem; margin-bottom: 3px; }
-    .proof-sub { font-size: 0.85rem; }
+    .proof-details {
+        text-align: left;
+    }
+
+    .proof-title { font-size: 0.9rem; margin-bottom: 2px; }
+    .proof-sub { font-size: 0.75rem; margin-bottom: 2px; }
+    .proof-stars { font-size: 1rem; }
 }
 
 /* =========================================================
