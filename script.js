@@ -29,27 +29,27 @@ function typeEffect() {
         charIndex++;
     }
 
-    let typeSpeed = isDeleting ? 50 : 100;
+let typeSpeed = isDeleting ? 50 : 100;
 
-    // Word finished typing
+    // Word finished typing - Pause longer for reading
     if (!isDeleting && charIndex === currentData.text.length) {
-        typeSpeed = 2000; 
+        typeSpeed = 3500; // Increased to 3.5 seconds 
         isDeleting = true;
     } 
-    // Word finished deleting, move to next
+    // Word finished deleting - Swap image smoothly
     else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         serviceIndex = (serviceIndex + 1) % serviceData.length;
-        typeSpeed = 500; 
+        typeSpeed = 800; // Pause briefly before typing the next word
         
-        // Change the background image for the new word
+        // Cinematic Image Fade
         if (bgImageElement) {
-            // Quick fade effect
-            bgImageElement.style.opacity = 0.5;
+            bgImageElement.style.opacity = 0; // Trigger CSS fade out
+            
             setTimeout(() => {
-                bgImageElement.src = serviceData[serviceIndex].image;
-                bgImageElement.style.opacity = 1;
-            }, 200);
+                bgImageElement.src = serviceData[serviceIndex].image; // Swap image while dark
+                bgImageElement.style.opacity = 1; // Trigger CSS fade back in
+            }, 600); // Wait 600ms for the fade out to finish before swapping
         }
     }
 
