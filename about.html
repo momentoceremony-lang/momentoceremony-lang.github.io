@@ -31,14 +31,24 @@
             </div>
         </div>
 
-        <!-- Mobile Hamburger Menu (Custom 3-Line Dark) -->
+        <!-- Mobile Hamburger Menu (Custom 3-Line) -->
         <div class="mobile-menu-icon" onclick="toggleMobileNav()">
-            <svg viewBox="0 0 24 24" width="34" height="34" stroke="#5a4049" stroke-width="1.5" stroke-linecap="round" fill="none">
+            <svg viewBox="0 0 24 24" width="34" height="34" stroke="#f5efe6" stroke-width="1.5" stroke-linecap="round" fill="none">
                 <line x1="4" y1="7" x2="20" y2="7"></line>
                 <line x1="4" y1="12" x2="14" y2="12"></line> 
                 <line x1="4" y1="17" x2="20" y2="17"></line>
             </svg>
         </div>
+
+        <!-- NEW: Mobile Dropdown Panel -->
+        <div id="mobileDropdown" class="mobile-dropdown">
+            <div class="close-menu" onclick="toggleMobileNav()">&times;</div>
+            <a href="index.html" onclick="toggleMobileNav()">Home</a>
+            <a href="about.html" onclick="toggleMobileNav()">About</a>
+            <a href="index.html#category-wedding" onclick="toggleMobileNav()">Categories</a>
+            <button class="btn-login-dark btn-login" style="margin-top: 20px; width: 100%; border: 1px solid #c8a96a !important; padding: 12px !important;">Login</button>
+        </div>
+        
     </nav>
 
     <!-- FADE OVERLAY & FIXED LOGO -->
