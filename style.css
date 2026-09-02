@@ -61,21 +61,27 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .dark-nav .nav-links a { color: #f5efe6; font-size: 0.9rem; font-weight: 400; text-transform: capitalize; }
 .dark-nav .nav-links a:hover { color: #c8a96a; }
 .btn-login-dark.btn-login {
-    background: #c8a96a !important; /* The new Gold color */
-    color: #0f0f10 !important; /* Deep black text */
+    background: transparent !important; 
+    color: #f5efe6 !important; 
     border: none !important; 
-    padding: 10px 30px !important; 
-    border-radius: 25px !important; 
-    font-weight: bold !important; 
+    padding: 0 !important; 
+    margin: 0 !important;
+    font-size: 0.9rem !important; 
+    font-weight: 400 !important; 
     font-family: 'Lato', sans-serif !important;
+    text-transform: capitalize !important;
     cursor: pointer !important; 
-    transition: all 0.3s ease !important;
+    transition: color 0.3s ease !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .btn-login-dark.btn-login:hover { 
-    background: #b39556 !important; /* Slightly darker gold on hover */
-    transform: translateY(-2px) !important;
+    background: transparent !important; 
+    color: #c8a96a !important; /* Turns gold on hover like the other links */
+    transform: none !important; /* Stops the hover jump effect */
 }
+
 .btn-signup-gold { background: #c8a96a; color: #0f0f10; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
 .btn-signup-gold:hover { background: #b39556; }
 
