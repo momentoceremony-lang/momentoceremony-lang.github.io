@@ -175,16 +175,16 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         background-color: #0f0f10; 
     }
     
-    /* Image Control - Stretches full width but anchors the couple to the right */
+    /* Image Control - Centers the image exactly on your red line */
     .hero-bg-image {
-        position: absolute;
-        width: 100%; 
-        height: 100%;
-        top: 0;
-        right: 0; 
-        left: 0;
-        object-fit: cover;
-        object-position: 75% center; /* Pushes the image focus to the right */
+        position: absolute !important;
+        width: 85% !important; /* Keeps the image large enough to look good */
+        height: 100% !important;
+        top: 0 !important;
+        right: -25% !important; /* Drags the image off the right edge so its middle hits your red line */
+        left: auto !important; /* Ensures it never stretches to the left side */
+        object-fit: cover !important;
+        object-position: center !important; 
     }
     
     /* Smooth Step-by-Step Fade - Matches the red curve */
