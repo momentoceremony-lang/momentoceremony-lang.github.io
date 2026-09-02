@@ -56,9 +56,21 @@ let typeSpeed = isDeleting ? 50 : 100;
     setTimeout(typeEffect, typeSpeed);
 }
 
-// Mobile Menu Toggle Function (Add this anywhere in script.js)
+// ==========================================
+// MOBILE MENU TOGGLE
+// ==========================================
 function toggleMobileNav() {
-    alert("Mobile menu functionality will be implemented in the next step!");
+    const dropdown = document.getElementById('mobileDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+        
+        // Prevent background scrolling when menu is open
+        if (dropdown.classList.contains('open')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
 }
 
 // ==========================================
