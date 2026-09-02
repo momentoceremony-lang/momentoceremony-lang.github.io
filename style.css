@@ -141,119 +141,96 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
 
 /* =========================================================
-   EXACT MOBILE VIEW OVERRIDES (CUSTOM BLOCK LAYOUT)
+   MOBILE VIEW: FLOATING CINEMATIC APP EXPERIENCE
 ========================================================= */
 @media (max-width: 850px) {
     .desktop-only { display: none !important; }
     .mobile-menu-icon { display: block; }
     
-    /* Navbar Alignment */
+    /* Navbar floating over the image */
     .dark-nav {
         flex-direction: row; 
         justify-content: space-between; 
         align-items: center;
         padding: 20px 6vw; 
-        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.95) 0%, transparent 100%); 
+        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.8) 0%, transparent 100%); 
         position: absolute;
         top: 0; left: 0; width: 100%;
         z-index: 1000;
     }
     
-    .nav-brand {
-        margin: 0;
-        transform: scale(0.85); 
-        transform-origin: left center;
-    }
+    .nav-brand { margin: 0; transform: scale(0.85); transform-origin: left center; }
 
-    /* Hero Layout */
+    /* Hero takes the full screen, content pushed to the bottom */
     .dark-hero {
-        padding: 130px 6vw 40px 6vw; 
+        padding: 0; 
         min-height: 100vh;
         display: flex;
-        align-items: center;
-        justify-content: flex-start; 
+        flex-direction: column;
+        justify-content: flex-end; /* Pushes the glass card to the bottom */
     }
     
-    /* Image Control (The White Dot Position) */
+    /* Image gets full priority */
     .hero-bg-image {
         width: 100%; 
         height: 100%; 
         top: 0; left: 0;
         object-fit: cover;
-        /* Pushes the 1:1 image further right to center the couple */
-        object-position: 85% center; 
+        object-position: center 20%; /* Keeps faces near the top visible */
     }
     
-    /* The Red Line (Block Background Border) */
+    /* Soften the overlay just enough to let the glass card pop */
     .hero-dark-overlay {
-        /* Creates a solid black block on the left that drops off quickly around the middle */
-        background: linear-gradient(95deg, #0f0f10 0%, #0f0f10 48%, rgba(15, 15, 16, 0.8) 55%, transparent 75%);
+        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.2) 0%, transparent 40%, rgba(15, 15, 16, 0.4) 100%);
     }
     
-    /* The Yellow Box (Strict Text Restraint) */
+    /* The Premium Frosted Glass Card */
     .hero-content {
-        width: 55%; /* Strictly limits the width so it stays inside the solid black area */
-        max-width: 250px; /* Safe cap for mobile screens */
+        width: 90%; 
+        max-width: 420px; 
+        margin: 0 auto 30px auto; /* Centers the card with space at the bottom */
+        padding: 30px 25px;
+        background: rgba(15, 15, 16, 0.75); /* Dark translucent background */
+        backdrop-filter: blur(12px); /* Apple-style frosted glass blur */
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(200, 169, 106, 0.2); /* Very subtle gold rim */
+        border-radius: 20px;
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
-        margin-top: -20px; /* Pulls the content up slightly for better balance */
         gap: 15px; 
         z-index: 2;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     }
     
-    .hero-main-text {
-        width: 100%;
-        text-align: left;
-    }
-
-    .hero-main-text h1 { 
-        font-size: 2.6rem; /* Scaled to stack perfectly inside the narrower yellow box */
-        line-height: 1.15;
-        margin-bottom: 12px;
-    }
+    .hero-main-text { width: 100%; text-align: left; }
+    .hero-main-text h1 { font-size: 2.4rem; line-height: 1.15; margin-bottom: 8px; }
+    .hero-subtext { font-size: 0.9rem; line-height: 1.4; width: 100%; text-align: left; opacity: 0.9; }
     
-    .hero-subtext { 
-        font-size: 0.85rem; 
-        line-height: 1.4;
-        width: 100%;
-        text-align: left;
-    }
-    
-    /* Service Box */
+    /* Service Box embedded in the card */
     .hero-service-box { 
         width: 100% !important; 
         padding: 12px 18px;
-        background: #151515 !important; 
+        background: rgba(0, 0, 0, 0.4) !important; /* Slightly darker than the card for depth */
         border-left: 3px solid #c8a96a;
         border-radius: 8px;
         margin-top: 5px;
     }
 
-    .highlight-text-gold {
-        font-size: 1.4rem;
-    }
+    .highlight-text-gold { font-size: 1.4rem; }
     
-    /* Social Proof Alignment */
+    /* Compact Social Proof */
     .hero-social-proof {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start; 
-        gap: 10px;
-        margin-top: 10px;
-        width: 180%; /* Allows the social proof to extend slightly past the text block so it doesn't get squished */
+        display: flex; align-items: center; justify-content: flex-start; 
+        gap: 10px; margin-top: 5px; width: 100%;
     }
     
-    .proof-avatars img {
-        width: 35px; height: 35px;
-        border-width: 2px;
-    }
-
+    .proof-avatars img { width: 32px; height: 32px; border-width: 2px; }
     .proof-details { text-align: left; }
-    .proof-title { font-size: 0.85rem; margin-bottom: 2px; }
-    .proof-sub { font-size: 0.7rem; margin-bottom: 2px; }
-    .proof-stars { font-size: 0.9rem; }
+    .proof-title { font-size: 0.8rem; margin-bottom: 2px; }
+    .proof-sub { font-size: 0.65rem; margin-bottom: 2px; }
+    .proof-stars { font-size: 0.85rem; }
 }
 
 /* =========================================================
