@@ -165,34 +165,37 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         transform-origin: left center;
     }
 
-    /* Hero Background & Exact Left-to-Right Desktop Gradient */
+    /* Hero Background & 1:1 Image Centering */
     .dark-hero {
-        padding: 120px 6vw 40px 6vw; 
+        padding: 130px 5vw 50px 5vw; 
         min-height: 100vh;
         display: flex;
-        align-items: center; /* Centers content vertically */
-        justify-content: flex-start; /* Forces content to the left horizontally */
+        align-items: center; 
+        justify-content: flex-start; 
     }
     
     .hero-bg-image {
         width: 100%; 
         height: 100%; 
         top: 0; left: 0;
-        object-position: 70% center; /* Keeps the right side of the image visible */
+        object-fit: cover;
+        /* Centers the 1:1 image perfectly so the main subject is always in frame */
+        object-position: center center; 
     }
     
     .hero-dark-overlay {
-        /* Replicates the desktop fade: Pitch black on the left, clear on the right */
-        background: linear-gradient(90deg, #0f0f10 0%, #0f0f10 50%, rgba(15, 15, 16, 0.5) 75%, transparent 100%);
+        /* Pushes solid black past the halfway mark to cover the left side of the 1:1 image, fading smoothly to reveal the center subject */
+        background: linear-gradient(90deg, #0f0f10 0%, #0f0f10 55%, rgba(15, 15, 16, 0.6) 80%, transparent 100%);
     }
     
-    /* Content Proportions - STRICT LEFT ALIGNMENT */
+    /* Content Proportions - Constrained Width */
     .hero-content {
         width: 100%;
+        max-width: 85%; /* Prevents the text from stretching over the right side of the image */
         display: flex;
         flex-direction: column;
-        align-items: flex-start !important; /* Forces all children to the left */
-        text-align: left !important; /* Forces all text to the left */
+        align-items: flex-start !important; 
+        text-align: left !important; 
         margin-top: 0;
         gap: 20px; 
     }
@@ -203,15 +206,15 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     }
 
     .hero-main-text h1 { 
-        font-size: 2.8rem; /* Scaled down perfectly for mobile */
-        line-height: 1.1;
-        margin-bottom: 15px;
+        font-size: 3rem; 
+        line-height: 1.15;
+        margin-bottom: 12px;
     }
     
     .hero-subtext { 
         font-size: 0.95rem; 
         line-height: 1.5;
-        max-width: 85%; /* Keeps text from touching the right edge */
+        max-width: 95%; 
         text-align: left;
     }
     
