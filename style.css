@@ -26,6 +26,14 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     position: absolute; width: 100%; z-index: 1000;
 }
 
+.nav-right {
+    display: flex; align-items: center; gap: 40px;
+}
+
+.dark-nav .nav-links {
+    display: flex; gap: 30px; margin: 0; /* Override old nav-links margin */
+}
+
 /* Rolling Logo Animation */
 .nav-brand { display: flex; align-items: center; }
 .rolling-logo {
@@ -50,8 +58,13 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 /* Desktop Navigation Styling */
 .dark-nav .nav-links a { color: #f5efe6; font-size: 0.9rem; font-weight: 400; text-transform: capitalize; }
 .dark-nav .nav-links a:hover { color: #c8a96a; }
-.btn-login-dark { background: transparent; color: #f5efe6; border: none; font-weight: bold; padding: 10px 20px; cursor: pointer; transition: 0.3s; }
-.btn-login-dark:hover { color: #c8a96a; }
+.btn-login-dark {
+    background: transparent; color: #f5efe6; border: 1px solid #f5efe6; 
+    padding: 8px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s;
+}
+.btn-login-dark:hover { 
+    color: #0f0f10; background: #c8a96a; border-color: #c8a96a; 
+}
 .btn-signup-gold { background: #c8a96a; color: #0f0f10; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
 .btn-signup-gold:hover { background: #b39556; }
 
@@ -63,17 +76,20 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     position: relative; min-height: 100vh; display: flex; align-items: center;
     padding: 80px 5vw 40px 5vw; overflow: hidden; background: #0f0f10;
 }
-.hero-bg-image {
-    position: absolute; top: 0; right: 0; width: 60%; height: 100%; object-fit: cover;
-    z-index: 0; transition: opacity 0.5s ease-in-out;
-}
+
 .hero-dark-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    /* Creates the black cloud fading into the image */
-    background: linear-gradient(90deg, #0f0f10 45%, rgba(15, 15, 16, 0.8) 60%, rgba(15, 15, 16, 0) 100%);
+    /* Stretches the fade over a larger area for a seamless blend */
+    background: linear-gradient(to right, #0f0f10 0%, #0f0f10 35%, rgba(15, 15, 16, 0.85) 55%, rgba(15, 15, 16, 0.2) 80%, rgba(15, 15, 16, 0) 100%);
     z-index: 1;
 }
 
+/* Slower CSS Fade Transition */
+.hero-bg-image {
+    position: absolute; top: 0; right: 0; width: 65%; height: 100%; object-fit: cover;
+    z-index: 0; 
+    transition: opacity 0.8s ease-in-out; /* Slowed down to 0.8s for smooth crossfade */
+}
 /* Hero Content & Animations */
 .hero-content { position: relative; z-index: 2; width: 50%; display: flex; flex-direction: column; gap: 30px; }
 .text-gold { color: #c8a96a; }
