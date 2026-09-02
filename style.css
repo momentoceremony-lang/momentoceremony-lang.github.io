@@ -174,31 +174,30 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         justify-content: flex-start; 
     }
     
-    /* Image Control (The White Dot Position) */
+    /* Image Control (Zoom out and position for 1:1 image) */
     .hero-bg-image {
         width: 100%; 
         height: 100%; 
         top: 0; left: 0;
         object-fit: cover;
-        /* Pushes the 1:1 image further right to center the couple */
-        object-position: 85% center; 
+        /* Pins the 1:1 image to the far right so the couple isn't cropped out */
+        object-position: right center; 
     }
     
-    /* The Red Line (Block Background Border) */
+    /* The Dark Overlay - Smooth fade to blend text and image */
     .hero-dark-overlay {
-        /* Creates a solid black block on the left that drops off quickly around the middle */
-        background: linear-gradient(95deg, #0f0f10 0%, #0f0f10 48%, rgba(15, 15, 16, 0.8) 55%, transparent 75%);
+        background: linear-gradient(to right, #0f0f10 0%, #0f0f10 35%, rgba(15, 15, 16, 0.7) 65%, transparent 100%);
     }
     
-    /* The Yellow Box (Strict Text Restraint) */
+    /* The Text Box - Fixed width to pull text fully left */
     .hero-content {
-        width: 55%; /* Strictly limits the width so it stays inside the solid black area */
-        max-width: 250px; /* Safe cap for mobile screens */
+        width: 100%; /* Replaces the restrictive 55% width that pushed it middle */
+        max-width: 320px; /* Allows text to stretch wider on the left side */
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
-        margin-top: -20px; /* Pulls the content up slightly for better balance */
+        margin-top: -30px; 
         gap: 15px; 
         z-index: 2;
     }
@@ -209,19 +208,20 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     }
 
     .hero-main-text h1 { 
-        font-size: 2.6rem; /* Scaled to stack perfectly inside the narrower yellow box */
+        font-size: 2.8rem; /* Slightly larger to match mockup */
         line-height: 1.15;
         margin-bottom: 12px;
     }
     
     .hero-subtext { 
-        font-size: 0.85rem; 
+        font-size: 0.9rem; 
         line-height: 1.4;
         width: 100%;
         text-align: left;
+        color: #e0e0e0;
     }
     
-    /* Service Box */
+    /* Dynamic Service Box (If you are still keeping it in the flow) */
     .hero-service-box { 
         width: 100% !important; 
         padding: 12px 18px;
@@ -242,7 +242,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         justify-content: flex-start; 
         gap: 10px;
         margin-top: 10px;
-        width: 180%; /* Allows the social proof to extend slightly past the text block so it doesn't get squished */
+        width: 100%; 
     }
     
     .proof-avatars img {
