@@ -923,3 +923,26 @@ window.addEventListener('scroll', () => {
         isZoomTicking = true;
     }
 });
+
+// ==========================================
+// ABOUT PAGE: BACK TO TOP NAVIGATION
+// ==========================================
+const backToTopButton = document.getElementById("backToTopBtn");
+
+if (backToTopButton) {
+    // Show button when scrolled down 300px
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+            backToTopButton.classList.add("visible");
+        } else {
+            backToTopButton.classList.remove("visible");
+        }
+    });
+}
+
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
