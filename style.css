@@ -60,10 +60,11 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 /* Desktop Navigation Styling */
 .dark-nav .nav-links a { color: #f5efe6; font-size: 0.9rem; font-weight: 400; text-transform: capitalize; }
 .dark-nav .nav-links a:hover { color: #c8a96a; }
-.btn-login-dark {
-    background: #5a4049; /* Solid elegant background */
-    color: #fcf9f6; 
-    border: none; 
+/* Combining both classes and using !important forces these new styles to win */
+.btn-login-dark.btn-login {
+    background: #5a4049 !important; 
+    color: #fcf9f6 !important; 
+    border: none !important; 
     padding: 10px 30px; 
     border-radius: 25px; 
     font-weight: bold; 
@@ -72,8 +73,9 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     transition: all 0.3s ease;
 }
 
-.btn-login-dark:hover { 
-    background: #c8a96a; /* Smooth gold hover effect */
+.btn-login-dark.btn-login:hover { 
+    background: #c8a96a !important; 
+    color: #0f0f10 !important;
     transform: translateY(-2px);
 }
 .btn-signup-gold { background: #c8a96a; color: #0f0f10; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
