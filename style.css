@@ -1328,12 +1328,28 @@ textarea.auth-input {
 
 /* Mobile Adjustments for About Page */
 @media (max-width: 850px) {
-    .light-nav { padding: 20px 6vw; }
+    /* 1. Force the Light Navbar into a Row (Logo Left, Menu Right) */
+    .light-nav { 
+        flex-direction: row !important; 
+        justify-content: space-between !important; 
+        align-items: center !important;
+        padding: 20px 6vw !important; 
+    }
+    
+    /* 2. Increase the About Image Size for Mobile */
     .about-fixed-header { top: 90px; }
-    .about-hero-img { width: 140px; height: 140px; border-radius: 25px; }
-    .about-fade-overlay { height: 260px; }
-    .about-content-wrapper { margin-top: 260px; }
-    .about-title { font-size: 2.5rem; margin-bottom: 40px; }
+    
+    .about-hero-img { 
+        width: 220px !important;  /* Increased from 140px */
+        height: 220px !important; /* Increased from 140px */
+        border-radius: 35px !important; 
+    }
+    
+    /* 3. Push the text further down so it doesn't overlap the new larger image */
+    .about-fade-overlay { height: 320px !important; }
+    .about-content-wrapper { margin-top: 320px !important; }
+    
+    .about-title { font-size: 2.5rem; margin-bottom: 30px; }
     .about-subtitle { font-size: 1.6rem; }
     .about-text-container p { font-size: 1rem; }
 }
