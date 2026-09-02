@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Momento Photography</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body class="about-page">
+
+    <!-- LIGHT NAVBAR -->
+    <nav class="light-nav">
+        <!-- Rolling Logo & Text Reveal -->
+        <div class="nav-brand">
+            <a href="index.html" style="display:flex; align-items:center; text-decoration:none;">
+                <img src="Stock/logo.png" alt="Momento Logo" class="rolling-logo">
+                <span class="logo-text-dark">MOMENTO</span>
+            </a>
+        </div>
+
+        <!-- Right Side: Links & Login -->
+        <div class="nav-right desktop-only">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#category-wedding">Explore Photographers</a>
+                <a href="index.html#category-wedding">Categories</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn-login-light btn-login">Login</button>
+            </div>
+        </div>
+
+        <!-- Mobile Hamburger Menu (Custom 3-Line Dark) -->
+        <div class="mobile-menu-icon" onclick="toggleMobileNav()">
+            <svg viewBox="0 0 24 24" width="34" height="34" stroke="#5a4049" stroke-width="1.5" stroke-linecap="round" fill="none">
+                <line x1="4" y1="7" x2="20" y2="7"></line>
+                <line x1="4" y1="12" x2="14" y2="12"></line> 
+                <line x1="4" y1="17" x2="20" y2="17"></line>
+            </svg>
+        </div>
+    </nav>
+
+    <!-- FADE OVERLAY & FIXED LOGO -->
+    <div class="about-fade-overlay"></div>
+    <div class="about-fixed-header">
+        <img src="Stock/about_logo.jpeg" alt="About Momento" class="about-hero-img">
+    </div>
+
+    <!-- SCROLLING CONTENT -->
+    <main class="about-content-wrapper">
+        <div class="about-text-container">
+            <h1 class="about-title">About Momento</h1>
+            
+            <h2 class="about-subtitle">Every Moment Deserves to Be Remembered.</h2>
+            <p>Momento was created with a simple belief: the most meaningful moments in our lives deserve more than a camera roll full of photographs — they deserve to be captured beautifully, thoughtfully, and professionally.</p>
+            <p>A wedding, a pre-wedding celebration, a birthday, the arrival of a child, a family gathering, a personal milestone, or even a simple moment that means the world to someone — these moments happen only once. Photographs allow us to return to them years later and experience the emotions, people, places, and stories all over again.</p>
+            <p>Yet finding the right photographer is not always easy.</p>
+            <p>Customers often have to search through social media pages, contact photographers individually, compare portfolios, ask about availability and pricing, and try to determine whether someone is actually the right person for their particular occasion. At the same time, talented photographers often struggle to reach new customers beyond their existing network.</p>
+            <p>Momento is being built to bridge that gap.</p>
+
+            <h2 class="about-subtitle">Our Story</h2>
+            <p>Momento is a young and growing platform with a simple ambition — to make professional photography easier to discover, easier to compare, and easier to book.</p>
+            <p>We are starting our journey with a carefully selected group of professional photographers who bring different styles, experiences, and creative perspectives to the platform. We are intentionally starting small because we believe that building a trusted platform is more important than simply building a large one.</p>
+            <p>Every photographer has a different way of seeing the world.</p>
+            <p>Some specialise in weddings and understand the importance of capturing every emotion during a once-in-a-lifetime celebration. Some focus on pre-wedding photography and create cinematic stories around couples. Others specialise in birthdays, family portraits, baby photography, events, fashion, corporate photography, or candid moments.</p>
+            <p>Momento brings these different talents together in one place.</p>
+            <p>Our goal is to create an environment where customers can discover photographers based on their needs, explore their work, understand their style, and make a more confident decision before booking.</p>
+            <p>At the same time, we want to create an opportunity for photographers to showcase their talent, build their professional presence, connect with new customers, and grow their photography business.</p>
+
+            <h2 class="about-subtitle">More Than a Photography Website</h2>
+            <p>Momento is not intended to be just another directory of photographers.</p>
+            <p>We are building a photography marketplace where people and professionals can connect.</p>
+            <p>The idea is simple.</p>
+            <p>A customer comes to Momento with a moment that needs to be captured. They can explore different photography categories, discover photographers, view portfolios, compare options, and find someone whose style matches their expectations.</p>
+            <p>Photographers, on the other hand, can become part of the Momento community and present their work to customers who are actively looking for photography services.</p>
+            <p>This creates a platform where customers discover talent and photographers discover opportunities.</p>
+            <p>We believe this connection can make the entire photography experience more transparent, convenient, and accessible.</p>
+
+            <h2 class="about-subtitle">Starting in West Bengal</h2>
+            <p>Every great journey has to begin somewhere.</p>
+            <p>For Momento, West Bengal is where our journey begins.</p>
+            <p>We are starting by building our network of professional photographers within the state and gradually expanding our service availability across different cities, towns, and communities.</p>
+            <p>West Bengal has an incredibly rich culture of celebrations, traditions, art, and storytelling. From grand weddings and intimate ceremonies to birthdays, family occasions, festivals, corporate events, and personal milestones, there are countless moments worth preserving.</p>
+            <p>Our aim is to make professional photography accessible to people across West Bengal, while giving local photographers a platform through which their creativity can reach more customers.</p>
+            <p>As Momento grows, our network of photographers will grow with it.</p>
+            <p>What begins with a small group of professionals today can eventually become a much larger community of photographers serving customers across the state and, eventually, beyond it.</p>
+
+            <h2 class="about-subtitle">Built for Photographers</h2>
+            <p>Behind every great photograph is a photographer who knows how to see a moment before it disappears.</p>
+            <p>We want Momento to be a platform that respects that craft.</p>
+            <p>Photography is not simply about owning an expensive camera. It is about understanding light, composition, emotion, timing, people, storytelling, and the countless small details that turn an ordinary photograph into something meaningful.</p>
+            <p>That is why we want photographers on Momento to be able to showcase more than just a name and a phone number.</p>
+            <p>Their portfolio, photography style, experience, services, location, and professional identity should help customers understand who they are and what they can create.</p>
+            <p>As the platform develops, we aim to create better opportunities for photographers to connect with customers, receive enquiries, manage bookings, and build their presence within the Momento ecosystem.</p>
+            <p>Our vision is to create a community where photographers can focus on what they love most:</p>
+            <p style="font-style: italic; font-weight: bold; color: var(--accent-color);">Creating photographs that people will treasure.</p>
+
+            <h2 class="about-subtitle">Built Around People, Not Just Bookings</h2>
+            <p>We understand that photography is personal.</p>
+            <p>When someone hires a photographer for their wedding, their child's first birthday, a family celebration, or another important occasion, they are not simply purchasing a service.</p>
+            <p>They are trusting someone with their memories.</p>
+            <p>That trust is something we take seriously.</p>
+            <p>Our goal is therefore not simply to make booking a photographer faster. We want to make the process more comfortable, transparent, and reliable for customers.</p>
+            <p>We want customers to have enough information to make an informed decision and enough confidence to know that they are choosing someone whose work matches their expectations.</p>
+            <p>At the same time, we want professional photographers to be treated as creative professionals rather than simply service providers.</p>
+            <p>Momento exists for both sides of that relationship.</p>
+
+            <h2 class="about-subtitle">Our Vision</h2>
+            <p>Our long-term vision is to build a photography platform where finding a professional photographer becomes as simple as finding any other service you need.</p>
+            <p>Imagine needing a photographer for a wedding in Kolkata, a birthday celebration in Siliguri, a pre-wedding shoot in Darjeeling, a family event in Durgapur, or a corporate event somewhere else in West Bengal.</p>
+            <p>Instead of spending hours searching through social media and contacting photographers one by one, you should be able to come to Momento, tell us what you need, explore suitable professionals, view their work, and connect with the photographer who feels right for your occasion.</p>
+            <p>That is the experience we are working towards.</p>
+            <p>And as our photographer community grows, we hope to take this vision beyond West Bengal and eventually create a wider network connecting talented photographers with people looking for them.</p>
+
+            <h2 class="about-subtitle">Where We Are Today</h2>
+            <p>Momento is still at the beginning of its journey.</p>
+            <p>We don't claim to have everything figured out yet.</p>
+            <p>Today, we are working with a small number of professional photographers and building the foundation of the platform step by step. Every photographer who joins us, every customer who trusts us, and every moment captured through Momento becomes part of that foundation.</p>
+            <p>We believe that a strong company does not become successful overnight.</p>
+            <p>It grows through trust, consistency, relationships, and the quality of the experience it provides.</p>
+            <p>That is the kind of company we want Momento to become.</p>
+            <p>Rather than focusing only on how quickly we can grow, we want to focus on how well we can serve.</p>
+
+            <h2 class="about-subtitle">Our Promise</h2>
+            <p>As we grow, one thing should remain constant:</p>
+            <p style="font-weight: bold;">We will always put the moment first.</p>
+            <p>Technology may help customers discover photographers. A platform may help manage enquiries and bookings. A portfolio may help someone choose a professional.</p>
+            <p>But at the centre of everything is still the same thing:</p>
+            <div style="font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent-color); margin: 20px 0; font-style: italic;">
+                A moment. A smile. A celebration. A family. A promise. A new beginning.<br>
+                A memory that someone will want to look back on years from now.
+            </div>
+            <p>Momento's purpose is to help make sure those memories are captured by the right person, in the right way.</p>
+
+            <h2 class="about-subtitle">The Journey Ahead</h2>
+            <p>We are only at the beginning.</p>
+            <p>From a small network of professional photographers today, we hope to build a growing community of talented creatives across West Bengal. From a simple platform for discovering photographers, we want to develop a complete ecosystem that makes photography discovery, communication, and booking easier for everyone.</p>
+            <p>We want to help photographers reach more people.</p>
+            <p>We want to help customers find the right creative professional.</p>
+            <p>We want to support local talent.</p>
+            <p>And most importantly, we want to become a platform that people can trust when one of life's important moments comes along.</p>
+            <p>Momento is being built one photographer, one customer, and one unforgettable moment at a time.</p>
+            <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-color); margin-top: 30px; text-align: center;">Because moments pass. Memories shouldn't.</p>
+        </div>
+    </main>
+
+    <!-- Minimal Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top" onclick="scrollToTop()">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
