@@ -141,73 +141,92 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
 
 /* =========================================================
-   MOBILE VIEW OVERRIDES
+   EXACT MOBILE VIEW OVERRIDES
 ========================================================= */
 @media (max-width: 850px) {
     .desktop-only { display: none !important; }
     .mobile-menu-icon { display: block; }
     
-    /* 1. Navbar Mobile Fix */
+    /* Navbar Alignment */
     .dark-nav {
-        flex-direction: row; /* Forces logo and menu into a single line */
-        justify-content: space-between; /* Pushes logo left, menu right */
+        flex-direction: row; 
+        justify-content: space-between; 
         align-items: center;
-        padding: 15px 5vw;
-        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.8), transparent); /* Darkens behind logo for readability */
+        padding: 25px 6vw; /* Exact side padding */
+        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.95) 0%, transparent 100%); 
         position: absolute;
+        top: 0; left: 0; width: 100%;
     }
     
     .nav-brand {
         margin: 0;
-        transform: scale(0.85); /* Slightly scales down the logo for mobile */
+        transform: scale(0.95); 
         transform-origin: left center;
     }
 
-    /* 2. Hero Image & Overlay Mobile Fix */
+    /* Hero Background & Exact Gradient Blend */
     .dark-hero {
-        padding: 100px 5vw 40px 5vw; /* Adds space at top so nav doesn't cover text */
+        padding: 130px 6vw 40px 6vw; /* Pushes content down perfectly */
         min-height: 100vh;
         display: flex;
-        align-items: center; /* Centers content vertically */
+        flex-direction: column;
     }
     
     .hero-bg-image {
         width: 100%; 
-        height: 100%; /* Covers the entire screen */
-        top: 0; 
-        left: 0;
-        object-position: 70% top; /* Focuses on the right side of the image (the couple) */
+        height: 100%; 
+        top: 0; left: 0;
+        object-position: 65% 20%; /* Centers the couple on mobile */
     }
     
     .hero-dark-overlay {
-        /* Dual-gradient: Dark on the left and bottom, fading out to the top right */
-        background: linear-gradient(to right, rgba(15, 15, 16, 0.95) 0%, rgba(15, 15, 16, 0.6) 60%, transparent 100%),
-                    linear-gradient(to bottom, transparent 0%, rgba(15, 15, 16, 0.3) 50%, rgba(15, 15, 16, 1) 100%);
+        /* Replicates the heavy black left-side and bottom fade from the screenshot */
+        background: 
+            linear-gradient(105deg, #0f0f10 0%, #0f0f10 45%, rgba(15,15,16,0.5) 75%, transparent 100%),
+            linear-gradient(to top, #0f0f10 0%, #0f0f10 20%, transparent 60%);
     }
     
-    /* 3. Hero Content Formatting */
+    /* Content Proportions */
     .hero-content {
         width: 100%; 
-        margin-top: 0; /* Removes the old code that pushed it down */
-        gap: 20px; 
-        padding-bottom: 20px;
+        margin-top: auto; 
+        margin-bottom: auto;
+        gap: 25px; 
     }
     
     .hero-main-text h1 { 
-        font-size: 2.8rem; 
-        line-height: 1.15;
+        font-size: 3.5rem; /* Massive mobile serif font */
+        line-height: 1.1;
+        margin-bottom: 15px;
     }
     
     .hero-subtext { 
-        font-size: 0.95rem; 
+        font-size: 1rem; 
+        line-height: 1.5;
         max-width: 95%; 
     }
     
+    /* Service Box (Matched to mobile card width) */
     .hero-service-box { 
         width: 100%; 
         max-width: 100%; 
-        padding: 15px 20px;
+        padding: 20px 25px;
+        margin-top: 10px;
     }
+    
+    /* Social Proof Alignment */
+    .hero-social-proof {
+        margin-top: 20px;
+        gap: 15px;
+    }
+    
+    .proof-avatars img {
+        width: 42px; height: 42px;
+        border-width: 2px;
+    }
+    
+    .proof-title { font-size: 1.05rem; margin-bottom: 3px; }
+    .proof-sub { font-size: 0.85rem; }
 }
 
 /* =========================================================
