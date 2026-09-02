@@ -19,6 +19,100 @@ body {
 
 h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
+/* --- NEW HERO & CONCEPT ART STYLES --- */
+.dark-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 5vw; background: transparent;
+    position: absolute; width: 100%; z-index: 1000;
+}
+
+/* Rolling Logo Animation */
+.nav-brand { display: flex; align-items: center; }
+.rolling-logo {
+    width: 35px; height: 35px; object-fit: contain;
+    animation: rollIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes rollIn {
+    0% { transform: translateX(100px) rotate(360deg); opacity: 0; }
+    100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+}
+
+.logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: bold;
+    color: #f5efe6; letter-spacing: 2px;
+    margin-left: 10px; overflow: hidden; white-space: nowrap;
+    width: 0; /* Starts hidden */
+    animation: revealText 1s steps(10, end) 1.5s forwards; /* Starts AFTER roll */
+}
+@keyframes revealText { to { width: 130px; } }
+
+/* Desktop Navigation Styling */
+.dark-nav .nav-links a { color: #f5efe6; font-size: 0.9rem; font-weight: 400; text-transform: capitalize; }
+.dark-nav .nav-links a:hover { color: #c8a96a; }
+.btn-login-dark { background: transparent; color: #f5efe6; border: none; font-weight: bold; padding: 10px 20px; cursor: pointer; transition: 0.3s; }
+.btn-login-dark:hover { color: #c8a96a; }
+.btn-signup-gold { background: #c8a96a; color: #0f0f10; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-signup-gold:hover { background: #b39556; }
+
+/* Mobile Menu Icon */
+.mobile-menu-icon { display: none; color: #f5efe6; cursor: pointer; }
+
+/* Dark Hero Background & Layout */
+.dark-hero {
+    position: relative; min-height: 100vh; display: flex; align-items: center;
+    padding: 80px 5vw 40px 5vw; overflow: hidden; background: #0f0f10;
+}
+.hero-bg-image {
+    position: absolute; top: 0; right: 0; width: 60%; height: 100%; object-fit: cover;
+    z-index: 0; transition: opacity 0.5s ease-in-out;
+}
+.hero-dark-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    /* Creates the black cloud fading into the image */
+    background: linear-gradient(90deg, #0f0f10 45%, rgba(15, 15, 16, 0.8) 60%, rgba(15, 15, 16, 0) 100%);
+    z-index: 1;
+}
+
+/* Hero Content & Animations */
+.hero-content { position: relative; z-index: 2; width: 50%; display: flex; flex-direction: column; gap: 30px; }
+.text-gold { color: #c8a96a; }
+.hero-main-text h1 { font-size: 4rem; color: #f5efe6; line-height: 1.1; font-family: 'Playfair Display', serif; margin-bottom: 15px; }
+.hero-subtext { color: #d0d0d0; font-size: 1.1rem; line-height: 1.6; max-width: 90%; }
+
+.slide-in-right { opacity: 0; transform: translateX(50px); animation: slideInRight 1s ease-out forwards; }
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+
+@keyframes slideInRight { to { opacity: 1; transform: translateX(0); } }
+
+/* Dynamic Service Box */
+.hero-service-box { background: rgba(255, 255, 255, 0.05); padding: 20px 25px; border-radius: 12px; border-left: 4px solid #c8a96a; backdrop-filter: blur(5px); display: inline-block; max-width: fit-content; }
+.highlight-text-gold { color: #c8a96a; font-family: 'Playfair Display', serif; font-size: 2rem; font-style: italic; }
+
+/* Social Proof */
+.hero-social-proof { display: flex; align-items: center; gap: 15px; margin-top: 20px; }
+.proof-avatars { display: flex; }
+.proof-avatars img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #0f0f10; margin-left: -15px; object-fit: cover; }
+.proof-avatars img:first-child { margin-left: 0; }
+.proof-details { color: #f5efe6; }
+.proof-title { font-weight: bold; font-size: 0.95rem; margin-bottom: 2px; }
+.proof-sub { font-size: 0.75rem; color: #a0a0a0; margin-bottom: 2px; }
+.proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
+
+/* Mobile View Overrides */
+@media (max-width: 850px) {
+    .desktop-only { display: none !important; }
+    .mobile-menu-icon { display: block; }
+    
+    .hero-bg-image { width: 100%; height: 50vh; top: 0; }
+    .hero-dark-overlay { background: linear-gradient(180deg, rgba(15, 15, 16, 0) 0%, rgba(15, 15, 16, 0.9) 40%, #0f0f10 100%); }
+    
+    .hero-content { width: 100%; margin-top: 40vh; gap: 20px; padding-bottom: 40px; }
+    .hero-main-text h1 { font-size: 2.8rem; }
+    .hero-service-box { width: 100%; max-width: 100%; }
+}
+
 /* =========================================================
    2. NAVBAR
 ========================================================= */
