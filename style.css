@@ -152,7 +152,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         flex-direction: row; 
         justify-content: space-between; 
         align-items: center;
-        padding: 20px 20px; /* Aligns navbar with the newly shifted text */
+        padding: 20px 6vw; 
         background: linear-gradient(to bottom, rgba(15, 15, 16, 0.95) 0%, transparent 100%); 
         position: absolute;
         top: 0; left: 0; width: 100%;
@@ -165,98 +165,53 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         transform-origin: left center;
     }
 
-    /* Hero Layout - Padding perfectly matches the 6vw padding of your dark-nav */
+    /* Hero Layout */
     .dark-hero {
-        padding: 130px 6vw 40px 6vw !important; 
+        padding: 130px 6vw 40px 6vw; 
         min-height: 100vh;
         display: flex;
         align-items: center;
-        justify-content: flex-start !important; 
-        background: #0f0f10 !important; 
+        justify-content: flex-start; 
     }
     
-    /* Lock the 1:1 image strictly to the right side */
+    /* Image Control (The White Dot Position) */
     .hero-bg-image {
-        position: absolute !important;
-        width: 65% !important; 
-        height: 100% !important; 
-        top: 0 !important; 
-        right: 0 !important; 
-        left: auto !important; 
-        object-fit: cover !important;
-        object-position: center !important; 
+        width: 100%; 
+        height: 100%; 
+        top: 0; left: 0;
+        object-fit: cover;
+        /* Pushes the 1:1 image further right to center the couple */
+        object-position: 85% center; 
     }
     
-    /* Overlay Fade */
+    /* The Red Line (Block Background Border) */
     .hero-dark-overlay {
-        position: absolute !important;
-        width: 100% !important;
-        height: 100% !important;
-        top: 0 !important;
-        left: 0 !important;
-        background: linear-gradient(to right, #0f0f10 0%, #0f0f10 40%, rgba(15, 15, 16, 0.9) 55%, transparent 100%) !important;
+        /* Creates a solid black block on the left that drops off quickly around the middle */
+        background: linear-gradient(95deg, #0f0f10 0%, #0f0f10 48%, rgba(15, 15, 16, 0.8) 55%, transparent 75%);
     }
     
-    /* The Fix: Forcefully strip all hidden desktop margins and animations */
+    /* The Yellow Box (Strict Text Restraint) */
     .hero-content {
-        width: 75% !important; 
-        margin: 0 !important; 
-        padding: 0 !important;
-        transform: none !important; /* Kills the desktop slide-in animation that pushes text right */
+        width: 55%; /* Strictly limits the width so it stays inside the solid black area */
+        max-width: 250px; /* Safe cap for mobile screens */
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
-        gap: 15px !important; 
+        margin-top: -20px; /* Pulls the content up slightly for better balance */
+        gap: 15px; 
         z-index: 2;
     }
     
-    /* Bulletproof left-alignment for all children inside the text box */
-    .hero-main-text, 
-    .hero-main-text h1, 
-    .hero-subtext, 
-    .hero-service-box, 
-    .hero-social-proof {
-        margin-left: 0 !important;
-        padding-left: 0 !important;
-        transform: none !important; 
-        text-align: left !important;
+    .hero-main-text {
+        width: 100%;
+        text-align: left;
     }
 
     .hero-main-text h1 { 
-        font-size: 2.6rem !important; 
-        line-height: 1.15 !important;
-        margin-bottom: 12px !important;
-    }
-    
-    .hero-subtext { 
-        font-size: 0.85rem !important; 
-        line-height: 1.4 !important;
-        color: #e0e0e0 !important;
-    }
-    
-    .hero-service-box { 
-        width: 100% !important; 
-        padding: 12px 18px !important;
-        background: #151515 !important; 
-        border-left: 3px solid #c8a96a !important;
-        border-radius: 8px !important;
-        margin-top: 5px !important;
-    }
-    
-    /* Guarantee the text blocks inside don't have their own accidental indents */
-    .hero-main-text, .hero-subtext {
-        width: 100% !important;
-        text-align: left !important;
-        margin-left: 0 !important;
-        padding-left: 0 !important;
-    }
-
-    .hero-main-text h1 { 
-        font-size: 2.6rem; 
+        font-size: 2.6rem; /* Scaled to stack perfectly inside the narrower yellow box */
         line-height: 1.15;
         margin-bottom: 12px;
-        margin-left: 0 !important;
     }
     
     .hero-subtext { 
@@ -264,9 +219,9 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         line-height: 1.4;
         width: 100%;
         text-align: left;
-        color: #e0e0e0;
     }
     
+    /* Service Box */
     .hero-service-box { 
         width: 100% !important; 
         padding: 12px 18px;
@@ -280,13 +235,14 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         font-size: 1.4rem;
     }
     
+    /* Social Proof Alignment */
     .hero-social-proof {
         display: flex;
         align-items: center;
         justify-content: flex-start; 
         gap: 10px;
         margin-top: 10px;
-        width: 120%; 
+        width: 180%; /* Allows the social proof to extend slightly past the text block so it doesn't get squished */
     }
     
     .proof-avatars img {
