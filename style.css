@@ -140,17 +140,74 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .proof-sub { font-size: 0.75rem; color: #a0a0a0; margin-bottom: 2px; }
 .proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
 
-/* Mobile View Overrides */
+/* =========================================================
+   MOBILE VIEW OVERRIDES
+========================================================= */
 @media (max-width: 850px) {
     .desktop-only { display: none !important; }
     .mobile-menu-icon { display: block; }
     
-    .hero-bg-image { width: 100%; height: 50vh; top: 0; }
-    .hero-dark-overlay { background: linear-gradient(180deg, rgba(15, 15, 16, 0) 0%, rgba(15, 15, 16, 0.9) 40%, #0f0f10 100%); }
+    /* 1. Navbar Mobile Fix */
+    .dark-nav {
+        flex-direction: row; /* Forces logo and menu into a single line */
+        justify-content: space-between; /* Pushes logo left, menu right */
+        align-items: center;
+        padding: 15px 5vw;
+        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.8), transparent); /* Darkens behind logo for readability */
+        position: absolute;
+    }
     
-    .hero-content { width: 100%; margin-top: 40vh; gap: 20px; padding-bottom: 40px; }
-    .hero-main-text h1 { font-size: 2.8rem; }
-    .hero-service-box { width: 100%; max-width: 100%; }
+    .nav-brand {
+        margin: 0;
+        transform: scale(0.85); /* Slightly scales down the logo for mobile */
+        transform-origin: left center;
+    }
+
+    /* 2. Hero Image & Overlay Mobile Fix */
+    .dark-hero {
+        padding: 100px 5vw 40px 5vw; /* Adds space at top so nav doesn't cover text */
+        min-height: 100vh;
+        display: flex;
+        align-items: center; /* Centers content vertically */
+    }
+    
+    .hero-bg-image {
+        width: 100%; 
+        height: 100%; /* Covers the entire screen */
+        top: 0; 
+        left: 0;
+        object-position: 70% top; /* Focuses on the right side of the image (the couple) */
+    }
+    
+    .hero-dark-overlay {
+        /* Dual-gradient: Dark on the left and bottom, fading out to the top right */
+        background: linear-gradient(to right, rgba(15, 15, 16, 0.95) 0%, rgba(15, 15, 16, 0.6) 60%, transparent 100%),
+                    linear-gradient(to bottom, transparent 0%, rgba(15, 15, 16, 0.3) 50%, rgba(15, 15, 16, 1) 100%);
+    }
+    
+    /* 3. Hero Content Formatting */
+    .hero-content {
+        width: 100%; 
+        margin-top: 0; /* Removes the old code that pushed it down */
+        gap: 20px; 
+        padding-bottom: 20px;
+    }
+    
+    .hero-main-text h1 { 
+        font-size: 2.8rem; 
+        line-height: 1.15;
+    }
+    
+    .hero-subtext { 
+        font-size: 0.95rem; 
+        max-width: 95%; 
+    }
+    
+    .hero-service-box { 
+        width: 100%; 
+        max-width: 100%; 
+        padding: 15px 20px;
+    }
 }
 
 /* =========================================================
