@@ -53,17 +53,28 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     width: 0; /* Starts hidden */
     animation: revealText 1s steps(10, end) 1.5s forwards; /* Starts AFTER roll */
 }
-@keyframes revealText { to { width: 130px; } }
+@keyframes revealText { 
+    to { width: 160px; } /* Increased to give the full word enough space */
+}
 
 /* Desktop Navigation Styling */
 .dark-nav .nav-links a { color: #f5efe6; font-size: 0.9rem; font-weight: 400; text-transform: capitalize; }
 .dark-nav .nav-links a:hover { color: #c8a96a; }
 .btn-login-dark {
-    background: transparent; color: #f5efe6; border: 1px solid #f5efe6; 
-    padding: 8px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s;
+    background: #5a4049; /* Solid elegant background */
+    color: #fcf9f6; 
+    border: none; 
+    padding: 10px 30px; 
+    border-radius: 25px; 
+    font-weight: bold; 
+    font-family: 'Lato', sans-serif;
+    cursor: pointer; 
+    transition: all 0.3s ease;
 }
+
 .btn-login-dark:hover { 
-    color: #0f0f10; background: #c8a96a; border-color: #c8a96a; 
+    background: #c8a96a; /* Smooth gold hover effect */
+    transform: translateY(-2px);
 }
 .btn-signup-gold { background: #c8a96a; color: #0f0f10; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
 .btn-signup-gold:hover { background: #b39556; }
@@ -93,7 +104,14 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 /* Hero Content & Animations */
 .hero-content { position: relative; z-index: 2; width: 50%; display: flex; flex-direction: column; gap: 30px; }
 .text-gold { color: #c8a96a; }
-.hero-main-text h1 { font-size: 4rem; color: #f5efe6; line-height: 1.1; font-family: 'Playfair Display', serif; margin-bottom: 15px; }
+.hero-main-text h1 { 
+    font-size: 4rem; 
+    color: #f5efe6; 
+    line-height: 1.1; 
+    font-family: 'Playfair Display', serif; 
+    font-weight: 400; /* Decreases thickness from default bold (700) to normal (400) */
+    margin-bottom: 15px; 
+}
 .hero-subtext { color: #d0d0d0; font-size: 1.1rem; line-height: 1.6; max-width: 90%; }
 
 .slide-in-right { opacity: 0; transform: translateX(50px); animation: slideInRight 1s ease-out forwards; }
