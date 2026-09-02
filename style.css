@@ -1242,8 +1242,8 @@ textarea.auth-input {
     pointer-events: none;
 }
 .about-hero-img {
-    width: 560px; /* Expanded for 16:9 */
-    height: 315px; /* Expanded for 16:9 */
+    width: 352px; /* Expanded for 16:9 */
+    height: 198px; /* Expanded for 16:9 */
     object-fit: cover;
     border-radius: 40px; 
     box-shadow: 0 15px 35px rgba(90, 64, 73, 0.15);
