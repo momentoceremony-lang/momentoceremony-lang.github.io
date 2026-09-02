@@ -1242,35 +1242,37 @@ textarea.auth-input {
     pointer-events: none;
 }
 .about-hero-img {
-    width: 200px;
-    height: 200px;
+    width: 560px; /* Expanded for 16:9 */
+    height: 315px; /* Expanded for 16:9 */
     object-fit: cover;
-    border-radius: 40px; /* Creates the round-shape square */
+    border-radius: 40px; 
     box-shadow: 0 15px 35px rgba(90, 64, 73, 0.15);
     opacity: 0;
     transform: translateY(20px);
     animation: fadeAndRise 1.2s cubic-bezier(0.25, 1, 0.5, 1) 0.3s forwards;
 }
+
 @keyframes fadeAndRise {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Gradient overlay that hides text as it scrolls up under the logo */
+/* Increased height to cover the taller image */
 .about-fade-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 360px;
+    top: 0; left: 0; width: 100%; height: 480px; 
     background: linear-gradient(to bottom, var(--bg-color) 70%, transparent 100%);
     z-index: 4;
     pointer-events: none;
 }
 
-/* Scrolling Content Area */
+/* Pushed down to clear the larger image */
 .about-content-wrapper {
     position: relative;
     z-index: 2;
-    margin-top: 380px; /* Starts content below the fixed logo and fade area */
+    margin-top: 500px; 
     padding-bottom: 100px;
 }
+
 .about-text-container {
     max-width: 800px;
     margin: 0 auto;
@@ -1336,18 +1338,18 @@ textarea.auth-input {
         padding: 20px 6vw !important; 
     }
     
-    /* 2. Increase the About Image Size for Mobile */
+    /* 2. Wider About Image for Mobile (16:9 Ratio) */
     .about-fixed-header { top: 90px; }
     
     .about-hero-img { 
-        width: 220px !important;  /* Increased from 140px */
-        height: 220px !important; /* Increased from 140px */
-        border-radius: 35px !important; 
+        width: 90vw !important;  /* Takes up 90% of the phone's screen width */
+        height: 50.6vw !important; /* Perfect 16:9 mathematical height */
+        border-radius: 20px !important; 
     }
     
-    /* 3. Push the text further down so it doesn't overlap the new larger image */
-    .about-fade-overlay { height: 320px !important; }
-    .about-content-wrapper { margin-top: 320px !important; }
+    /* 3. Push the text further down to accommodate the wider image */
+    .about-fade-overlay { height: 360px !important; }
+    .about-content-wrapper { margin-top: 360px !important; }
     
     .about-title { font-size: 2.5rem; margin-bottom: 30px; }
     .about-subtitle { font-size: 1.6rem; }
