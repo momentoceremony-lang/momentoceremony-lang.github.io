@@ -1456,10 +1456,19 @@ textarea.auth-input {
     
     .about-text-col {
         margin-top: 20px;
+        text-align: left; /* Forces left alignment for the container */
+    }
+    
+    /* Target the About Us heading specifically on mobile */
+    .home-about-section .section-tag-title {
+        text-align: left !important; 
+        font-size: 2.4rem !important; /* Makes the font significantly larger */
+        margin-bottom: 15px;
     }
     
     .about-description { 
         font-size: 0.95rem; 
         line-height: 1.6; 
+        text-align: left; /* Ensures the paragraph text stays left-aligned */
     }
 }
