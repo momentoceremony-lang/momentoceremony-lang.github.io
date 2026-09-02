@@ -195,27 +195,34 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         background: linear-gradient(to right, #0f0f10 0%, #0f0f10 40%, rgba(15, 15, 16, 0.9) 55%, transparent 100%);
     }
     
-    /* Keep text confined to the left black area */
+    /* Keep text confined to the left black area and forcefully snap it to the edge */
     .hero-content {
-        width: 70%; 
+        width: 70% !important; 
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
-        margin-top: -20px; 
+        margin-top: -20px !important; 
+        margin-left: 0 !important;  /* Kills any hidden inherited margins pushing it right */
+        padding-left: 0 !important; /* Kills any hidden padding */
+        transform: none !important; /* Overrides any stuck desktop slide-in animations */
         gap: 15px; 
         z-index: 2;
     }
     
-    .hero-main-text {
-        width: 100%;
-        text-align: left;
+    /* Guarantee the text blocks inside don't have their own accidental indents */
+    .hero-main-text, .hero-subtext {
+        width: 100% !important;
+        text-align: left !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
     }
 
     .hero-main-text h1 { 
         font-size: 2.6rem; 
         line-height: 1.15;
         margin-bottom: 12px;
+        margin-left: 0 !important;
     }
     
     .hero-subtext { 
