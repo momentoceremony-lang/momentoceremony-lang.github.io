@@ -141,7 +141,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 .proof-stars { color: #c8a96a; font-size: 1.1rem; letter-spacing: 2px; }
 
 /* =========================================================
-   EXACT MOBILE VIEW OVERRIDES (DESKTOP REPLICA)
+   EXACT MOBILE VIEW OVERRIDES (CUSTOM BLOCK LAYOUT)
 ========================================================= */
 @media (max-width: 850px) {
     .desktop-only { display: none !important; }
@@ -153,7 +153,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         justify-content: space-between; 
         align-items: center;
         padding: 20px 6vw; 
-        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.9) 0%, transparent 100%); 
+        background: linear-gradient(to bottom, rgba(15, 15, 16, 0.95) 0%, transparent 100%); 
         position: absolute;
         top: 0; left: 0; width: 100%;
         z-index: 1000;
@@ -165,39 +165,42 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
         transform-origin: left center;
     }
 
-    /* Hero Background & 1:1 Image Centering */
+    /* Hero Layout */
     .dark-hero {
-        padding: 130px 5vw 50px 5vw; 
+        padding: 130px 6vw 40px 6vw; 
         min-height: 100vh;
         display: flex;
-        align-items: center; 
+        align-items: center;
         justify-content: flex-start; 
     }
     
+    /* Image Control (The White Dot Position) */
     .hero-bg-image {
         width: 100%; 
         height: 100%; 
         top: 0; left: 0;
         object-fit: cover;
-        /* Centers the 1:1 image perfectly so the main subject is always in frame */
-        object-position: center center; 
+        /* Pushes the 1:1 image further right to center the couple */
+        object-position: 85% center; 
     }
     
+    /* The Red Line (Block Background Border) */
     .hero-dark-overlay {
-        /* Pushes solid black past the halfway mark to cover the left side of the 1:1 image, fading smoothly to reveal the center subject */
-        background: linear-gradient(90deg, #0f0f10 0%, #0f0f10 55%, rgba(15, 15, 16, 0.6) 80%, transparent 100%);
+        /* Creates a solid black block on the left that drops off quickly around the middle */
+        background: linear-gradient(95deg, #0f0f10 0%, #0f0f10 48%, rgba(15, 15, 16, 0.8) 55%, transparent 75%);
     }
     
-    /* Content Proportions - Constrained Width */
+    /* The Yellow Box (Strict Text Restraint) */
     .hero-content {
-        width: 100%;
-        max-width: 85%; /* Prevents the text from stretching over the right side of the image */
+        width: 55%; /* Strictly limits the width so it stays inside the solid black area */
+        max-width: 250px; /* Safe cap for mobile screens */
         display: flex;
         flex-direction: column;
         align-items: flex-start !important; 
         text-align: left !important; 
-        margin-top: 0;
-        gap: 20px; 
+        margin-top: -20px; /* Pulls the content up slightly for better balance */
+        gap: 15px; 
+        z-index: 2;
     }
     
     .hero-main-text {
@@ -206,60 +209,51 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     }
 
     .hero-main-text h1 { 
-        font-size: 3rem; 
+        font-size: 2.6rem; /* Scaled to stack perfectly inside the narrower yellow box */
         line-height: 1.15;
         margin-bottom: 12px;
     }
     
     .hero-subtext { 
-        font-size: 0.95rem; 
-        line-height: 1.5;
-        max-width: 95%; 
+        font-size: 0.85rem; 
+        line-height: 1.4;
+        width: 100%;
         text-align: left;
     }
     
-    /* Service Box - Compact and Dark like Desktop */
+    /* Service Box */
     .hero-service-box { 
-        width: max-content !important; /* Stops it from stretching across the screen */
-        max-width: 90%; 
-        padding: 15px 25px;
-        background: #151515 !important; /* Solid dark background removes the blurry grey look */
+        width: 100% !important; 
+        padding: 12px 18px;
+        background: #151515 !important; 
         border-left: 3px solid #c8a96a;
         border-radius: 8px;
-        backdrop-filter: none;
-        margin-top: 10px;
-        text-align: left;
-    }
-
-    .hero-service-box p {
-        margin-bottom: 5px !important;
+        margin-top: 5px;
     }
 
     .highlight-text-gold {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
     }
     
     /* Social Proof Alignment */
     .hero-social-proof {
         display: flex;
         align-items: center;
-        justify-content: flex-start; /* Left aligned */
-        gap: 12px;
-        margin-top: 15px;
+        justify-content: flex-start; 
+        gap: 10px;
+        margin-top: 10px;
+        width: 180%; /* Allows the social proof to extend slightly past the text block so it doesn't get squished */
     }
     
     .proof-avatars img {
-        width: 38px; height: 38px;
+        width: 35px; height: 35px;
         border-width: 2px;
     }
-    
-    .proof-details {
-        text-align: left;
-    }
 
-    .proof-title { font-size: 0.9rem; margin-bottom: 2px; }
-    .proof-sub { font-size: 0.75rem; margin-bottom: 2px; }
-    .proof-stars { font-size: 1rem; }
+    .proof-details { text-align: left; }
+    .proof-title { font-size: 0.85rem; margin-bottom: 2px; }
+    .proof-sub { font-size: 0.7rem; margin-bottom: 2px; }
+    .proof-stars { font-size: 0.9rem; }
 }
 
 /* =========================================================
