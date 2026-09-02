@@ -16,21 +16,23 @@
 
     <!-- NAVBAR -->
     <nav class="dark-nav">
-        <!-- 1. Rolling Logo & Text Reveal -->
+        <!-- Rolling Logo & Text Reveal -->
         <div class="nav-brand">
             <img src="Stock/logo.png" alt="Momento Logo" class="rolling-logo">
             <span class="logo-text">MOMENTO</span>
         </div>
 
-        <!-- Desktop Links -->
-        <div class="nav-links desktop-only">
-            <a href="#">Home</a>
-            <a href="#category-wedding">Explore Photographers</a>
-            <a href="#category-wedding">Categories</a>
-        </div>
-        <div class="auth-buttons desktop-only">
-            <button class="btn-login-dark">Login</button>
-            <button class="btn-signup-gold" onclick="openProModalFromFooter()">Join as Photographer</button>
+        <!-- Right Side: Links & Login -->
+        <div class="nav-right desktop-only">
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#category-wedding">Explore Photographers</a>
+                <a href="#category-wedding">Categories</a>
+            </div>
+            <div class="auth-buttons">
+                <!-- Kept .btn-login so script.js popup still triggers -->
+                <button class="btn-login-dark btn-login">Login</button>
+            </div>
         </div>
 
         <!-- Mobile Hamburger Menu -->
