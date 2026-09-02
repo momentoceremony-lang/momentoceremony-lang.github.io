@@ -15,37 +15,68 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#category-wedding">Services</a>
-            <a href="#" onclick="openModal('modal-all-photographers'); return false;">Our Photographers</a>
+    <nav class="dark-nav">
+        <!-- 1. Rolling Logo & Text Reveal -->
+        <div class="nav-brand">
+            <img src="Stock/logo.png" alt="Momento Logo" class="rolling-logo">
+            <span class="logo-text">MOMENTO</span>
         </div>
-        <div class="auth-buttons">
-            <button class="btn-login">Sign In</button>
-            <!-- Partner button moved to footer for a cleaner UX -->
+
+        <!-- Desktop Links -->
+        <div class="nav-links desktop-only">
+            <a href="#">Home</a>
+            <a href="#category-wedding">Explore Photographers</a>
+            <a href="#category-wedding">Categories</a>
+        </div>
+        <div class="auth-buttons desktop-only">
+            <button class="btn-login-dark">Login</button>
+            <button class="btn-signup-gold" onclick="openProModalFromFooter()">Join as Photographer</button>
+        </div>
+
+        <!-- Mobile Hamburger Menu -->
+        <div class="mobile-menu-icon" onclick="toggleMobileNav()">
+            <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
         </div>
     </nav>
     
     <!-- HERO SECTION -->
-    <header class="hero">
-        <video autoplay muted loop playsinline class="hero-bg-video">
-            <source src="Stock/hero-video.mp4" type="video/mp4">
-        </video>
-        <div class="video-overlay"></div>
-
-        <div class="hero-left">
-            <div class="logo-wrapper">
-                <div class="cloud-blob"></div>
-                <!-- Smooth Transparent Logo -->
-                <img src="Stock/1000272025.png" alt="Momento Photography Logo" class="main-logo">
-            </div>
-        </div>
+    <header class="hero dark-hero">
+        <!-- Dynamic Background Image -->
+        <img id="hero-dynamic-bg" src="Stock/hero_banner_Weddings.jpeg" class="hero-bg-image" alt="Momento Cover">
         
-        <div class="hero-right">
-            <div class="hero-text-area">
-                <h1>Capture Your Best Moments</h1>
-                <h2 class="typing-container">We can provide you services like <br><span id="typing-text" class="highlight-text"></span><span class="cursor">|</span></h2>
+        <!-- Black/Gradient Cloud Overlay (Concept Art Style) -->
+        <div class="hero-dark-overlay"></div>
+
+        <div class="hero-content">
+            <!-- Main Heading (Slide in from right) -->
+            <div class="hero-main-text slide-in-right">
+                <h1>Find the<br><span class="text-gold">Photographer</span><br>for Your Moment.</h1>
+                <p class="hero-subtext">Discover talented photographers, compare portfolios, and book the perfect match for your special moments.</p>
+            </div>
+            
+            <!-- Service Typing Box -->
+            <div class="hero-service-box slide-in-right delay-1">
+                <p style="opacity: 0.8; font-size: 0.9rem; margin-bottom: 5px;">We capture memories for</p>
+                <h2 class="typing-container"><span id="typing-text" class="highlight-text-gold"></span><span class="cursor">|</span></h2>
+            </div>
+
+            <!-- Social Proof Rating -->
+            <div class="hero-social-proof slide-in-right delay-2">
+                <div class="proof-avatars">
+                    <!-- Replace with your actual dp images -->
+                    <img src="Stock/pro-dp-1.jpeg" alt="User">
+                    <img src="Stock/pro-dp-2.jpeg" alt="User">
+                    <img src="Stock/pro-dp-3.jpeg" alt="User">
+                </div>
+                <div class="proof-details">
+                    <p class="proof-title">500+ Happy Customers</p>
+                    <p class="proof-sub">Top rated photographers across India</p>
+                    <p class="proof-stars">★★★★★</p>
+                </div>
             </div>
         </div>
     </header>
