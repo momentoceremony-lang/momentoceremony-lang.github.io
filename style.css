@@ -1624,11 +1624,20 @@ textarea.auth-input {
 
 /* Mobile Adjustments */
 @media (max-width: 850px) {
-    .map-container { 
-        width: 700px; height: 950px; /* Scaled down for mobile */
-    }
+    /* Pulls the text and map viewport closer together */
+    .map-text-header { margin-top: 10vh; }
     .map-text-header h2 { font-size: 2.2rem; }
-    .map-text-header { margin-top: 12vh; }
+    
+    .map-viewport {
+        top: 15vh; 
+        align-items: flex-start; /* Stops it from sinking to the dead center */
+        padding-top: 5vh; /* Gives a controlled gap below the text */
+    }
+
+    .map-container { 
+        width: 700px; height: 950px; 
+    }
+    
     .network-img { width: 65px; height: 65px; }
     .pulse-ring { width: 65px; height: 65px; }
 }
