@@ -482,46 +482,86 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
 }
 
 /* =========================================================
-   8. FOOTER STYLES (PREMIUM GRID)
+   8. FOOTER STYLES (PREMIUM DARK GRID)
 ========================================================= */
 .site-footer { 
-    background-color: var(--primary-color); 
-    color: var(--bg-color); 
-    padding: 60px 5vw 20px; 
+    background-color: #0f0f10; 
+    color: #f5efe6; 
+    padding: 80px 5vw 20px; 
     margin-top: 0; 
-    background: linear-gradient(to bottom, #725460 0%, var(--primary-color) 15%); 
+    background: linear-gradient(to bottom, #151515 0%, #0f0f10 100%); 
+    border-top: 1px solid rgba(200, 169, 106, 0.15); /* Subtle gold top border */
 }
 
 .footer-container { 
     display: grid; 
-    grid-template-columns: 1.5fr 1fr 1.5fr 1fr; /* 4 columns on desktop */
+    grid-template-columns: 1.5fr 1fr 1.5fr 1fr; 
     gap: 40px; 
     max-width: 1200px; 
     margin: 0 auto; 
-    border-bottom: 1px solid rgba(255,255,255,0.2); 
+    border-bottom: 1px solid rgba(200, 169, 106, 0.2); 
     padding-bottom: 40px; 
 }
 
 .footer-brand { width: 100%; }
 
+/* Scroll-Triggered Rolling Logo */
 .footer-logo {
-    width: 140px; 
-    height: 140px; 
-    object-fit: cover;
-    border-radius: 50%;
-    background: transparent;
-    padding: 0;
+    width: 60px; /* Scaled perfectly for the logo.png icon */
+    height: 60px; 
+    object-fit: contain;
     margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    opacity: 0; /* Hidden until scrolled into view */
 }
 
-.footer-brand p, .footer-partner p { font-style: italic; opacity: 0.8; line-height: 1.6; }
-.footer-links, .footer-contact, .footer-partner { display: flex; flex-direction: column; gap: 10px; }
-.footer-links h4, .footer-contact h4, .footer-partner h4 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent-color); }
-.footer-links a, .footer-contact a, .footer-contact p { color: var(--bg-color); text-decoration: none; font-size: 1rem; opacity: 0.9; transition: 0.3s; }
-.footer-links a:hover, .social-links a:hover { color: var(--accent-color); padding-left: 5px; }
-.social-links { display: flex; gap: 15px; margin-top: 10px; }
-.footer-bottom { text-align: center; padding-top: 20px; font-size: 0.9rem; opacity: 0.7; }
+.site-footer.visible .footer-logo {
+    animation: rollInFooter 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes rollInFooter {
+    0% { transform: translateX(100px) rotate(360deg); opacity: 0; }
+    100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+}
+
+.footer-brand p, .footer-partner p { 
+    font-style: italic; opacity: 0.8; line-height: 1.6; color: #d0d0d0; 
+}
+.footer-links, .footer-contact, .footer-partner { 
+    display: flex; flex-direction: column; gap: 10px; 
+}
+.footer-links h4, .footer-contact h4, .footer-partner h4 { 
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 10px; color: #c8a96a; 
+}
+.footer-links a, .footer-contact a, .footer-contact p { 
+    color: #f5efe6; text-decoration: none; font-size: 1rem; opacity: 0.9; transition: 0.3s; 
+}
+.footer-links a:hover, .social-links a:hover { 
+    color: #c8a96a; padding-left: 5px; 
+}
+.social-links { 
+    display: flex; gap: 15px; margin-top: 10px; 
+}
+.footer-bottom { 
+    text-align: center; padding-top: 20px; font-size: 0.9rem; opacity: 0.5; color: #f5efe6; 
+}
+
+/* Dark Theme Footer Button */
+.btn-footer-partner {
+    background: transparent; 
+    border: 2px solid #c8a96a; 
+    color: #f5efe6;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+.btn-footer-partner:hover {
+    background: #c8a96a; 
+    color: #0f0f10;
+}
 
 /* =========================================================
    9. COMPLETE MOBILE RESPONSIVENESS
