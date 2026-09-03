@@ -124,68 +124,39 @@
             <div class="map-viewport">
                 <div id="map-container" class="map-container">
                     
-                    <!-- Premium Stylized West Bengal SVG Map -->
-                    <svg class="wb-map-svg" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Soft glowing shadow underneath -->
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                        
-                        <!-- Stylized Silhouette of West Bengal -->
-                        <path class="wb-outline" filter="url(#glow)" 
-                              d="M380,80 C430,60 480,100 460,180 C440,240 480,270 490,320 C500,370 450,430 420,480 C380,540 360,580 340,640 C300,700 240,750 280,850 C310,920 380,960 440,970 C520,950 580,900 600,800 C620,680 560,640 540,580 C520,520 570,480 600,420 C640,360 550,280 500,220 C470,180 440,120 380,80 Z" 
-                              fill="rgba(209, 154, 138, 0.15)" 
-                              stroke="#d19a8a" 
-                              stroke-width="3" 
-                              stroke-dasharray="8 8"/>
-                              
-                        <!-- Network Connection Lines -->
-                        <path class="network-line" d="M430,150 L470,300 L400,480 L300,780 L480,820 L560,900" fill="none" stroke="rgba(90, 64, 73, 0.2)" stroke-width="2"/>
-                        <path class="network-line" d="M470,300 L560,400 L480,820" fill="none" stroke="rgba(90, 64, 73, 0.2)" stroke-width="2"/>
-                    </svg>
+                    <!-- Your Custom Uploaded West Bengal Map -->
+                    <!-- Make sure to upload a transparent PNG named wb_map.png to your Stock folder -->
+                    <img src="Stock/wb_map.png" class="actual-map-img" alt="West Bengal Map">
 
-                    <!-- Geographic Image Nodes (High-Res) -->
-                    <!-- North: Darjeeling / Kalimpong -->
+                    <!-- Scrambled Image Nodes (No Text Labels) -->
                     <div class="map-node img-1-pos">
                         <div class="pulse-ring"></div>
-                        <img src="Stock/glove_im_1.jpeg" class="network-img" alt="Darjeeling Photographer">
-                        <span class="location-label">North Bengal</span>
+                        <img src="Stock/glove_im_1.jpeg" class="network-img" alt="Photographer 1">
                     </div>
 
-                    <!-- Upper Middle: Siliguri / Jalpaiguri -->
                     <div class="map-node img-2-pos">
                         <div class="pulse-ring"></div>
-                        <img src="Stock/glove_im_2.jpeg" class="network-img" alt="Siliguri Photographer">
+                        <img src="Stock/glove_im_2.jpeg" class="network-img" alt="Photographer 2">
                     </div>
 
-                    <!-- Middle: Malda / Murshidabad -->
                     <div class="map-node img-3-pos">
                         <div class="pulse-ring"></div>
-                        <img src="Stock/glove_im_3.jpeg" class="network-img" alt="Malda Photographer">
+                        <img src="Stock/glove_im_3.jpeg" class="network-img" alt="Photographer 3">
                     </div>
 
-                    <!-- Left: Asansol / Durgapur -->
                     <div class="map-node img-4-pos">
                         <div class="pulse-ring"></div>
-                        <img src="Stock/glove_im_4.jpeg" class="network-img" alt="Durgapur Photographer">
-                        <span class="location-label left-label">Western Hub</span>
+                        <img src="Stock/glove_im_4.jpeg" class="network-img" alt="Photographer 4">
                     </div>
 
-                    <!-- Center/Bottom: Kolkata / Howrah -->
                     <div class="map-node img-5-pos">
                         <div class="pulse-ring"></div>
-                        <img src="Stock/glove_im_5.jpeg" class="network-img" alt="Kolkata Photographer">
-                        <span class="location-label">Kolkata</span>
+                        <img src="Stock/glove_im_5.jpeg" class="network-img" alt="Photographer 5">
                     </div>
 
-                    <!-- Deep South: Sundarbans / South 24 Pgs -->
                     <div class="map-node img-6-pos">
                         <div class="pulse-ring"></div>
-                        <img src="Stock/glove_im_6.jpeg" class="network-img" alt="South Bengal Photographer">
+                        <img src="Stock/glove_im_6.jpeg" class="network-img" alt="Photographer 6">
                     </div>
                     
                 </div>
