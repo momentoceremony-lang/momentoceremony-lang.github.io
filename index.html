@@ -111,6 +111,56 @@
             <a href="about.html" class="btn-signup-gold" style="display: inline-block; text-decoration: none; margin-top: 25px; font-family: 'Lato', sans-serif;">Read more</a>
         </div>
     </section>
+
+    <!-- INTERACTIVE 3D NETWORK GLOBE -->
+    <section id="globe-network-section" class="globe-scroll-wrapper">
+        <div class="globe-sticky-view">
+            
+            <div class="globe-text-header">
+                <h2>Our Growing Network</h2>
+                <p>Connecting talented photographers across West Bengal.</p>
+            </div>
+            
+            <div class="globe-viewport">
+                <div id="globe-container" class="globe-container">
+                    
+                    <!-- SVG Wireframe Dome (Matches the Concept Art) -->
+                    <svg class="globe-wireframe" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Main Arcs -->
+                        <path d="M 0 500 A 500 500 0 0 1 1000 500" fill="none" stroke="rgba(200, 169, 106, 0.4)" stroke-width="2"/>
+                        <path d="M 150 500 A 350 500 0 0 1 850 500" fill="none" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <path d="M 300 500 A 200 500 0 0 1 700 500" fill="none" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <!-- Vertical Lines -->
+                        <path d="M 500 500 L 500 0" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <path d="M 500 500 L 150 140" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <path d="M 500 500 L 850 140" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <path d="M 500 500 L 20 320" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <path d="M 500 500 L 980 320" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <!-- Horizontal Latitude Lines -->
+                        <path d="M 40 350 Q 500 250 960 350" fill="none" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                        <path d="M 130 180 Q 500 50 870 180" fill="none" stroke="rgba(200, 169, 106, 0.15)" stroke-width="1"/>
+                    </svg>
+
+                    <!-- West Bengal Focus Node (The Target) -->
+                    <div class="wb-node">
+                        <div class="wb-pulse"></div>
+                        <div class="wb-dot"></div>
+                        <span class="wb-label">West Bengal</span>
+                    </div>
+
+                    <!-- Floating 1:1 Images (Pop in dynamically) -->
+                    <img src="Stock/glove_im_1.jpeg" class="network-img img-1" alt="Photographer 1">
+                    <img src="Stock/glove_im_2.jpeg" class="network-img img-2" alt="Photographer 2">
+                    <img src="Stock/glove_im_3.jpeg" class="network-img img-3" alt="Photographer 3">
+                    <img src="Stock/glove_im_4.jpeg" class="network-img img-4" alt="Photographer 4">
+                    <img src="Stock/glove_im_5.jpeg" class="network-img img-5" alt="Photographer 5">
+                    <img src="Stock/glove_im_6.jpeg" class="network-img img-6" alt="Photographer 6">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </section>
     
     <!-- WEDDING SECTION -->
     <section id="category-wedding" class="wedding-section hidden-section">
