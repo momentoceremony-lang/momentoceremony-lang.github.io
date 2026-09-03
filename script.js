@@ -976,22 +976,20 @@ if (mapWrapper && mapContainer) {
             progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
         }
 
-        // 1. DYNAMIC DEVICE ZOOM (Unified Canvas Math)
         const isMobile = window.innerWidth <= 850;
         
-        // DESKTOP: Starts at 0.7 scale, zooms in by 0.3 (Max scale 1.0) - Keeps images on screen!
-        // MOBILE: Starts at 0.35 scale to fit the 900px canvas on a tiny phone, zooms in by 0.3.
+        // Mobile shrinks the 1200px tall map to fit the phone screen perfectly.
         const startScale = isMobile ? 0.35 : 0.7; 
-        const zoomAmount = isMobile ? 0.3 : 0.3; 
+        const zoomAmount = isMobile ? 0.35 : 0.3; 
         
         const scale = startScale + (progress * zoomAmount); 
         
-        // Panning adjustment to keep the map centered while zooming
-        const translateY = isMobile ? (progress * -5) : (progress * -8);  
+        // Minimal Y-shift since CSS is handling perfect centering
+        const translateY = progress * -3;  
         
         mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
 
-        // 2. POP IN GEOGRAPHIC IMAGES SEQUENTIALLY
+        // Pop in images sequentially
         mapNodes.forEach((node, index) => {
             const revealThreshold = 0.15 + (index * 0.12); 
             
