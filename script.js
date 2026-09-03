@@ -958,3 +958,50 @@ function scrollToTop() {
         behavior: "smooth"
     });
 }
+
+// ==========================================
+// 3D NETWORK GLOBE SCROLL ENGINE
+// ==========================================
+const globeWrapper = document.getElementById('globe-network-section');
+const globeContainer = document.getElementById('globe-container');
+const networkImages = document.querySelectorAll('.network-img');
+const wbLabel = document.querySelector('.wb-label');
+
+if (globeWrapper && globeContainer) {
+    window.addEventListener('scroll', () => {
+        const rect = globeWrapper.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        // Calculate scroll progress from 0 to 1 inside the wrapper
+        let progress = 0;
+        if (rect.top < 0) {
+            progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
+        }
+
+        // 1. ZOOM & PAN: Scale up to 2.2x, shift left and down to center West Bengal
+        const scale = 1 + (progress * 1.2); 
+        const translateX = progress * -15; // Shift left
+        const translateY = progress * 15;  // Shift down
+        
+        globeContainer.style.transform = `scale(${scale}) translate(${translateX}%, ${translateY}%)`;
+
+        // 2. FADE IN WEST BENGAL TEXT
+        if (progress > 0.1) {
+            wbLabel.style.opacity = "1";
+        } else {
+            wbLabel.style.opacity = "0";
+        }
+
+        // 3. POP IN 1:1 IMAGES SEQUENTIALLY
+        networkImages.forEach((img, index) => {
+            // Calculate a staggered reveal threshold for each image
+            const revealThreshold = 0.2 + (index * 0.12); 
+            
+            if (progress > revealThreshold) {
+                img.classList.add('visible');
+            } else {
+                img.classList.remove('visible');
+            }
+        });
+    });
+}
