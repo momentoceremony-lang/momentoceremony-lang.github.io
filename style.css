@@ -1525,11 +1525,13 @@ textarea.auth-input {
     align-items: center; /* Keeps the map perfectly centered */
 }
 
-/* The Fixed High-Res Canvas - Adjusted for a vertical map */
+/* The Unified Fixed High-Res Canvas */
 .map-container {
     position: relative;
     width: 900px; 
-    height: 1200px; /* Much taller height specifically for West Bengal's shape */
+    height: 1200px; /* This size is now permanently locked for ALL devices */
+    left: 50%;
+    margin-left: -450px; /* Perfectly centers the 900px canvas */
     transform-origin: center center;
     will-change: transform;
 }
@@ -1537,8 +1539,8 @@ textarea.auth-input {
 .actual-map-img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Ensures the whole map fits without getting cut off */
-    mix-blend-mode: multiply; /* MAGICAL FIX: Makes the white background of the JPG completely invisible, blending the gold lines natively into your cream background */
+    object-fit: contain; 
+    mix-blend-mode: multiply; 
     opacity: 0.85; 
 }
 
@@ -1624,20 +1626,19 @@ textarea.auth-input {
 
 /* Mobile Adjustments */
 @media (max-width: 850px) {
-    /* Pulls the text and map viewport closer together */
+    /* Notice we removed the .map-container width/height overrides here! */
+    /* The JavaScript will handle scaling the 900x1200 canvas to fit the phone. */
+    
     .map-text-header { margin-top: 10vh; }
     .map-text-header h2 { font-size: 2.2rem; }
     
     .map-viewport {
         top: 15vh; 
-        align-items: flex-start; /* Stops it from sinking to the dead center */
-        padding-top: 5vh; /* Gives a controlled gap below the text */
-    }
-
-    .map-container { 
-        width: 700px; height: 950px; 
+        align-items: flex-start;
+        padding-top: 5vh; 
     }
     
-    .network-img { width: 65px; height: 65px; }
-    .pulse-ring { width: 65px; height: 65px; }
+    /* Make the images slightly smaller so they don't overlap on tiny screens */
+    .network-img { width: 55px; height: 55px; }
+    .pulse-ring { width: 55px; height: 55px; }
 }
