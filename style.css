@@ -1476,15 +1476,15 @@ textarea.auth-input {
 }
 
 /* =========================================================
-   3D NETWORK GLOBE SCROLL ANIMATION (LIGHT THEME)
+   WEST BENGAL MAP SCROLL ANIMATION (LIGHT THEME)
 ========================================================= */
-.globe-scroll-wrapper {
+.map-scroll-wrapper {
     height: 300vh; 
-    background: #F4EBE1; /* Matches the About section perfectly */
+    background: #F4EBE1; /* Matches About Section */
     position: relative;
 }
 
-.globe-sticky-view {
+.map-sticky-view {
     position: sticky;
     top: 0;
     height: 100vh;
@@ -1493,135 +1493,141 @@ textarea.auth-input {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Soft radial glow in the center */
     background: radial-gradient(circle at center, #ffffff 0%, #F4EBE1 70%);
 }
 
-.globe-text-header {
+.map-text-header {
     text-align: center;
     margin-top: 10vh;
     z-index: 10;
 }
 
-.globe-text-header h2 {
-    color: #3C3633; /* Dark readable text */
-    font-size: 2.5rem;
+.map-text-header h2 {
+    color: #3C3633; 
+    font-size: 2.8rem;
+    font-family: 'Playfair Display', serif;
     margin-bottom: 10px;
 }
 
-.globe-text-header p {
-    color: #5a4049; /* Brand primary color */
+.map-text-header p {
+    color: #5a4049; 
     font-size: 1.1rem;
-    font-family: 'Lato', sans-serif;
 }
 
-.globe-viewport {
+.map-viewport {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 70vh;
-    overflow: hidden; /* Hides the massive edges cleanly */
+    height: 75vh;
+    overflow: hidden; 
 }
 
-.globe-container {
+/* The Fixed High-Res Canvas */
+.map-container {
     position: absolute;
-    bottom: 0;
+    bottom: -100px; /* Pushes the map slightly down initially */
     left: 50%;
-    width: 2000px; /* Massive fixed high-res base size */
-    height: 1000px; 
-    margin-left: -1000px; /* Locks it absolutely dead center on ALL screens */
-    transform-origin: center bottom;
+    width: 1200px; 
+    height: 1200px; 
+    margin-left: -600px; /* Centers the 1200px canvas perfectly */
+    transform-origin: center center;
     will-change: transform;
 }
 
-.globe-wireframe {
+.wb-map-svg {
     width: 100%;
     height: 100%;
 }
 
-/* West Bengal Focus Node */
-.wb-node {
+/* Individual Image Nodes */
+.map-node {
     position: absolute;
-    top: 40%; 
-    left: 65%; 
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     z-index: 5;
-    transform: translate(-50%, -50%); /* Keeps the dot perfectly aligned to the grid */
+    transform: translate(-50%, -50%); /* Keeps images centered on their coordinates */
 }
 
-.wb-dot {
-    width: 12px; height: 12px;
-    background: #d19a8a; /* Brand accent color */
-    border-radius: 50%;
-    box-shadow: 0 0 15px rgba(209, 154, 138, 0.6);
-}
+/* Exact Geographic Placements */
+.img-1-pos { top: 15%; left: 53.7%; } /* North Bengal */
+.img-2-pos { top: 30%; left: 58.7%; } /* Siliguri area */
+.img-3-pos { top: 48%; left: 50%; }   /* Malda/Central */
+.img-4-pos { top: 78%; left: 37.5%; } /* Asansol/Durgapur */
+.img-5-pos { top: 82%; left: 60%; }   /* Kolkata */
+.img-6-pos { top: 90%; left: 70%; }   /* Deep South */
 
-.wb-pulse {
-    position: absolute;
-    top: -14px; left: -14px;
-    width: 40px; height: 40px;
-    border: 2px solid #d19a8a;
-    border-radius: 50%;
-    animation: radarPulse 2s infinite;
-}
-
-.wb-label {
-    color: #5a4049; /* Brand primary color */
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 10px;
-    opacity: 0; 
-    transition: opacity 0.5s ease;
-}
-
-@keyframes radarPulse {
-    0% { transform: scale(0.5); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
-}
-
-/* 1:1 Floating Images (High-Res Fix) */
+/* High-Res Floating Images */
 .network-img {
-    position: absolute;
-    width: 90px; height: 90px; /* Increased base size for crisp quality */
-    margin-top: -45px; margin-left: -45px; /* Perfectly centers the larger image on its exact coordinate */
+    width: 100px; height: 100px; /* Native high resolution */
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 15px;
     border: 3px solid white;
-    box-shadow: 0 10px 25px rgba(90, 64, 73, 0.2);
+    box-shadow: 0 12px 30px rgba(90, 64, 73, 0.25);
     opacity: 0;
-    transform: scale(0.3) translateY(40px); /* Starts smaller */
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 4;
+    transform: scale(0.3) translateY(40px);
+    transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 2;
 }
 
-.network-img.visible {
+.map-node.visible .network-img {
     opacity: 1;
-    transform: scale(1) translateY(0); /* Pops to full native sharp resolution */
+    transform: scale(1) translateY(0);
 }
 
-/* Map the 6 images dynamically around the West Bengal node */
-.img-1 { top: 25%; left: 45%; }
-.img-2 { top: 15%; left: 60%; }
-.img-3 { top: 30%; left: 80%; }
-.img-4 { top: 55%; left: 75%; }
-.img-5 { top: 60%; left: 55%; }
-.img-6 { top: 45%; left: 40%; }
+/* Animated Golden Pulse Ring behind images */
+.pulse-ring {
+    position: absolute;
+    width: 100px; height: 100px;
+    background: rgba(209, 154, 138, 0.4);
+    border-radius: 15px;
+    z-index: 1;
+    opacity: 0;
+    animation: imagePulse 2.5s infinite;
+}
+
+.map-node.visible .pulse-ring {
+    opacity: 1;
+}
+
+@keyframes imagePulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* Beautiful Geography Labels */
+.location-label {
+    position: absolute;
+    bottom: -30px;
+    color: #5a4049;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: rgba(255,255,255,0.8);
+    padding: 2px 10px;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s; /* Delays text fade-in slightly after image pops */
+    white-space: nowrap;
+}
+
+.left-label { left: -110px; bottom: 35px; } /* Adjusts label for Durgapur to the side */
+
+.map-node.visible .location-label {
+    opacity: 1;
+}
 
 /* Mobile Adjustments */
 @media (max-width: 850px) {
-    /* Scale the massive grid down safely for phones */
-    .globe-container { 
-        width: 1400px; 
-        height: 700px; 
-        margin-left: -700px; 
+    .map-container { 
+        width: 900px; height: 900px; margin-left: -450px; 
     }
-    .globe-text-header h2 { font-size: 2rem; }
-    .globe-text-header { margin-top: 15vh; }
-    .network-img { 
-        width: 70px; height: 70px; 
-        margin-top: -35px; margin-left: -35px; 
-    }
+    .map-text-header h2 { font-size: 2.2rem; }
+    .map-text-header { margin-top: 12vh; }
+    .network-img { width: 75px; height: 75px; }
+    .pulse-ring { width: 75px; height: 75px; }
+    .location-label { font-size: 0.9rem; bottom: -25px; }
+    .left-label { left: -85px; bottom: 25px; }
 }
