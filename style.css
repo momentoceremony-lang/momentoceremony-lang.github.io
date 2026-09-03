@@ -1476,11 +1476,11 @@ textarea.auth-input {
 }
 
 /* =========================================================
-   3D NETWORK GLOBE SCROLL ANIMATION
+   3D NETWORK GLOBE SCROLL ANIMATION (LIGHT THEME)
 ========================================================= */
 .globe-scroll-wrapper {
-    height: 300vh; /* Creates a long scroll track so the user can scrub the animation */
-    background: #0f0f10;
+    height: 300vh; 
+    background: #F4EBE1; /* Matches the About section perfectly */
     position: relative;
 }
 
@@ -1493,7 +1493,8 @@ textarea.auth-input {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: radial-gradient(circle at center, #1a1a1d 0%, #0f0f10 70%);
+    /* Soft radial glow in the center */
+    background: radial-gradient(circle at center, #ffffff 0%, #F4EBE1 70%);
 }
 
 .globe-text-header {
@@ -1503,13 +1504,13 @@ textarea.auth-input {
 }
 
 .globe-text-header h2 {
-    color: #f5efe6;
+    color: #3C3633; /* Dark readable text */
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
 
 .globe-text-header p {
-    color: #c8a96a;
+    color: #5a4049; /* Brand primary color */
     font-size: 1.1rem;
     font-family: 'Lato', sans-serif;
 }
@@ -1529,7 +1530,6 @@ textarea.auth-input {
     width: 1000px;
     height: 500px;
     transform-origin: center bottom;
-    /* Initial state before scroll zoom */
     transform: scale(1) translate(0, 0); 
     will-change: transform;
 }
@@ -1539,10 +1539,10 @@ textarea.auth-input {
     height: 100%;
 }
 
-/* West Bengal Focus Node */
+/* West Bengal Focus Node (Light Theme Adjustments) */
 .wb-node {
     position: absolute;
-    top: 40%; /* Positioned on the wireframe grid */
+    top: 40%; 
     left: 65%; 
     display: flex;
     flex-direction: column;
@@ -1552,27 +1552,27 @@ textarea.auth-input {
 
 .wb-dot {
     width: 12px; height: 12px;
-    background: #c8a96a;
+    background: #d19a8a; /* Brand accent color */
     border-radius: 50%;
-    box-shadow: 0 0 15px #c8a96a;
+    box-shadow: 0 0 15px rgba(209, 154, 138, 0.6);
 }
 
 .wb-pulse {
     position: absolute;
     top: -14px; left: -14px;
     width: 40px; height: 40px;
-    border: 2px solid #c8a96a;
+    border: 2px solid #d19a8a;
     border-radius: 50%;
     animation: radarPulse 2s infinite;
 }
 
 .wb-label {
-    color: #c8a96a;
+    color: #5a4049; /* Brand primary color */
     font-family: 'Playfair Display', serif;
     font-size: 1.2rem;
     font-weight: bold;
     margin-top: 10px;
-    opacity: 0; /* Hidden initially, fades in via JS */
+    opacity: 0; 
     transition: opacity 0.5s ease;
 }
 
@@ -1581,14 +1581,14 @@ textarea.auth-input {
     100% { transform: scale(1.5); opacity: 0; }
 }
 
-/* 1:1 Floating Images */
+/* 1:1 Floating Images (Light Theme Shadows) */
 .network-img {
     position: absolute;
-    width: 60px; height: 60px; /* 1:1 Ratio */
+    width: 60px; height: 60px; 
     object-fit: cover;
     border-radius: 8px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    border: 2px solid white; /* Clean white border for the light theme */
+    box-shadow: 0 10px 20px rgba(90, 64, 73, 0.15); /* Soft plum shadow */
     opacity: 0;
     transform: scale(0.5) translateY(20px);
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
