@@ -166,200 +166,86 @@
     </section>
     
     <!-- WEDDING SECTION -->
-    <section id="category-wedding" class="wedding-section hidden-section">
-        <div class="ambient-background">
-            <div class="glow-orb orb-1"></div>
-            <div class="glow-orb orb-2"></div>
-            <div class="glow-orb orb-3"></div>
-        </div>
-
-        <div class="wedding-upper-left breathing-anim">
-            <div class="arch-photo-mask" id="wedding-slideshow">
+    <section id="category-wedding" class="home-about-section">
+        <div class="about-image-col">
+            <!-- Retains exact masking, zoom-scroll, and slideshow IDs -->
+            <div class="arch-photo-mask about-mask" id="wedding-slideshow">
                 <img src="Stock/wedding-banner-1.jpeg" class="banner-img active" alt="Wedding Banner 1">
                 <img src="Stock/wedding-banner-2.jpeg" class="banner-img" alt="Wedding Banner 2">
             </div>
-            <h2 class="section-tag-title" id="wedding-title-type"></h2>
         </div>
-
-        <div class="wedding-center-quote">
-            <p id="wedding-quote-type"></p>
-        </div>
-
-        <div class="wedding-bottom-right breathing-anim">
-            <h3 class="professionals-label">Professionals</h3>
-            <div class="card-stack" id="wedding-stack">
-                <div class="pro-card stack-card" data-pos="0">
-                    <img src="Stock/pro-shot-1.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="1">
-                    <img src="Stock/pro-shot-2.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="2">
-                    <img src="Stock/pro-shot-3.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-3.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-            </div>
-            <button class="btn-view-all" onclick="openModal('modal-wedding')">View All Professionals</button>
+        
+        <div class="about-text-col slide-in-right">
+            <!-- Heights reserved so the layout doesn't jump while the typing animation runs -->
+            <h2 class="section-tag-title" id="wedding-title-type" style="margin-top: 0; color: #3C3633; min-height: 48px;"></h2>
+            <p class="about-description" id="wedding-quote-type" style="min-height: 85px;"></p>
+            <button class="btn-signup-gold" onclick="openModal('modal-wedding')" style="margin-top: 15px; font-family: 'Lato', sans-serif;">View more</button>
         </div>
     </section>
 
-    <!-- BIRTHDAY SECTION -->
-    <section id="category-birthday" class="wedding-section hidden-section">
-        <!-- Reusing the ambient background classes for consistency -->
-        <div class="ambient-background">
-            <div class="glow-orb orb-1"></div>
-            <div class="glow-orb orb-2"></div>
-            <div class="glow-orb orb-3"></div>
-        </div>
-
-        <div class="wedding-upper-left breathing-anim">
-            <div class="arch-photo-mask" id="birthday-slideshow">
+    <!-- BIRTHDAY SECTION (Reversed Layout) -->
+    <section id="category-birthday" class="home-about-section reverse-layout">
+        <div class="about-image-col">
+            <div class="arch-photo-mask about-mask" id="birthday-slideshow">
                 <img src="Stock/bday-banner-1.jpeg" class="banner-img active" alt="Birthday Banner 1">
                 <img src="Stock/bday-banner-2.jpeg" class="banner-img" alt="Birthday Banner 2">
             </div>
-            <h2 class="section-tag-title" id="birthday-title-type"></h2>
         </div>
-
-        <div class="wedding-center-quote">
-            <p id="birthday-quote-type"></p>
-        </div>
-
-        <div class="wedding-bottom-right breathing-anim">
-            <h3 class="professionals-label">Professionals</h3>
-            <div class="card-stack" id="birthday-stack">
-                <div class="pro-card stack-card" data-pos="0">
-                    <img src="Stock/bday-shot-1.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="1">
-                    <img src="Stock/bday-shot-2.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="2">
-                    <img src="Stock/bday-shot-3.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-3.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-            </div>
-            <button class="btn-view-all" onclick="openModal('modal-birthday')">View All Professionals</button>
+        
+        <div class="about-text-col slide-in-right">
+            <h2 class="section-tag-title" id="birthday-title-type" style="margin-top: 0; color: #3C3633; min-height: 48px;"></h2>
+            <p class="about-description" id="birthday-quote-type" style="min-height: 85px;"></p>
+            <button class="btn-signup-gold" onclick="openModal('modal-birthday')" style="margin-top: 15px; font-family: 'Lato', sans-serif;">View more</button>
         </div>
     </section>
 
     <!-- ANNIVERSARY SECTION -->
-    <section id="category-anni" class="wedding-section hidden-section">
-        <div class="ambient-background">
-            <div class="glow-orb orb-1"></div>
-            <div class="glow-orb orb-2"></div>
-            <div class="glow-orb orb-3"></div>
-        </div>
-
-        <div class="wedding-upper-left breathing-anim">
-            <div class="arch-photo-mask" id="anni-slideshow">
+    <section id="category-anni" class="home-about-section">
+        <div class="about-image-col">
+            <div class="arch-photo-mask about-mask" id="anni-slideshow">
                 <img src="Stock/anni-banner-1.jpeg" class="banner-img active" alt="Anniversary Banner 1">
                 <img src="Stock/anni-banner-2.jpeg" class="banner-img" alt="Anniversary Banner 2">
             </div>
-            <h2 class="section-tag-title" id="anni-title-type"></h2>
         </div>
-
-        <div class="wedding-center-quote">
-            <p id="anni-quote-type"></p>
-        </div>
-
-        <div class="wedding-bottom-right breathing-anim">
-            <h3 class="professionals-label">Professionals</h3>
-            <div class="card-stack" id="anni-stack">
-                <div class="pro-card stack-card" data-pos="0">
-                    <img src="Stock/anni-shot-1.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="1">
-                    <img src="Stock/anni-shot-2.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="2">
-                    <img src="Stock/anni-shot-3.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-3.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-            </div>
-            <button class="btn-view-all" onclick="openModal('modal-anni')">View All Professionals</button>
+        
+        <div class="about-text-col slide-in-right">
+            <h2 class="section-tag-title" id="anni-title-type" style="margin-top: 0; color: #3C3633; min-height: 48px;"></h2>
+            <p class="about-description" id="anni-quote-type" style="min-height: 85px;"></p>
+            <button class="btn-signup-gold" onclick="openModal('modal-anni')" style="margin-top: 15px; font-family: 'Lato', sans-serif;">View more</button>
         </div>
     </section>
 
-    <!-- PRE-WEDDING SECTION -->
-    <section id="category-prewed" class="wedding-section hidden-section">
-        <div class="ambient-background">
-            <div class="glow-orb orb-1"></div>
-            <div class="glow-orb orb-2"></div>
-            <div class="glow-orb orb-3"></div>
-        </div>
-
-        <div class="wedding-upper-left breathing-anim">
-            <div class="arch-photo-mask" id="prewed-slideshow">
+    <!-- PRE-WEDDING SECTION (Reversed Layout) -->
+    <section id="category-prewed" class="home-about-section reverse-layout">
+        <div class="about-image-col">
+            <div class="arch-photo-mask about-mask" id="prewed-slideshow">
                 <img src="Stock/prewed-banner-1.jpeg" class="banner-img active" alt="Pre-Wedding Banner 1">
                 <img src="Stock/prewed-banner-2.jpeg" class="banner-img" alt="Pre-Wedding Banner 2">
             </div>
-            <h2 class="section-tag-title" id="prewed-title-type"></h2>
         </div>
-
-        <div class="wedding-center-quote">
-            <p id="prewed-quote-type"></p>
-        </div>
-
-        <div class="wedding-bottom-right breathing-anim">
-            <h3 class="professionals-label">Professionals</h3>
-            <div class="card-stack" id="prewed-stack">
-                <div class="pro-card stack-card" data-pos="0">
-                    <img src="Stock/prewed-shot-1.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="1">
-                    <img src="Stock/prewed-shot-2.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="2">
-                    <img src="Stock/prewed-shot-3.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-3.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-            </div>
-            <button class="btn-view-all" onclick="openModal('modal-prewed')">View All Professionals</button>
+        
+        <div class="about-text-col slide-in-right">
+            <h2 class="section-tag-title" id="prewed-title-type" style="margin-top: 0; color: #3C3633; min-height: 48px;"></h2>
+            <p class="about-description" id="prewed-quote-type" style="min-height: 85px;"></p>
+            <button class="btn-signup-gold" onclick="openModal('modal-prewed')" style="margin-top: 15px; font-family: 'Lato', sans-serif;">View more</button>
         </div>
     </section>
 
     <!-- BABY SHOOT SECTION -->
-    <section id="category-baby" class="wedding-section hidden-section">
-        <div class="ambient-background">
-            <div class="glow-orb orb-1"></div>
-            <div class="glow-orb orb-2"></div>
-            <div class="glow-orb orb-3"></div>
-        </div>
-
-        <div class="wedding-upper-left breathing-anim">
-            <div class="arch-photo-mask" id="baby-slideshow">
+    <section id="category-baby" class="home-about-section">
+        <div class="about-image-col">
+            <div class="arch-photo-mask about-mask" id="baby-slideshow">
                 <img src="Stock/baby-banner-1.jpeg" class="banner-img active" alt="Baby Shoot Banner 1">
                 <img src="Stock/baby-banner-2.jpeg" class="banner-img" alt="Baby Shoot Banner 2">
             </div>
-            <h2 class="section-tag-title" id="baby-title-type">Baby Shoot</h2>
         </div>
-
-        <div class="wedding-center-quote">
-            <p id="baby-quote-type">"Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one's first milestones."</p>
-        </div>
-
-        <div class="wedding-bottom-right breathing-anim">
-            <h3 class="professionals-label">Professionals</h3>
-            <div class="card-stack" id="baby-stack">
-                <!-- Dummy cards for layout; JS will replace these -->
-                <div class="pro-card stack-card" data-pos="0">
-                    <img src="Stock/baby-shot-1.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-                <div class="pro-card stack-card" data-pos="1">
-                    <img src="Stock/baby-shot-2.jpeg" class="best-shot" alt="Best Shot">
-                    <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
-                </div>
-            </div>
-            <button class="btn-view-all" onclick="openModal('modal-baby')">View All Professionals</button>
+        
+        <div class="about-text-col slide-in-right">
+            <h2 class="section-tag-title" id="baby-title-type" style="margin-top: 0; color: #3C3633;">Baby Shoot</h2>
+            <p class="about-description" id="baby-quote-type">
+                "Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one's first milestones."
+            </p>
+            <button class="btn-signup-gold" onclick="openModal('modal-baby')" style="margin-top: 15px; font-family: 'Lato', sans-serif;">View more</button>
         </div>
     </section>
     
