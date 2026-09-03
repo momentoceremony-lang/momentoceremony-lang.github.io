@@ -507,11 +507,11 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
 
 /* Scroll-Triggered Rolling Logo */
 .footer-logo {
-    width: 60px; /* Scaled perfectly for the logo.png icon */
+    width: 60px; 
     height: 60px; 
     object-fit: contain;
     margin-bottom: 20px;
-    opacity: 0; /* Hidden until scrolled into view */
+    /* Removed opacity: 0 so it never gets stuck invisible */
 }
 
 .site-footer.visible .footer-logo {
