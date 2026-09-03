@@ -1479,8 +1479,8 @@ textarea.auth-input {
    WEST BENGAL MAP SCROLL ANIMATION (LIGHT THEME)
 ========================================================= */
 .map-scroll-wrapper {
-    height: 300vh; 
-    background: #F4EBE1; /* Matches About Section */
+    height: 450vh; /* Increased from 300vh to make the scroll longer and smoother */
+    background: #F4EBE1; 
     position: relative;
 }
 
@@ -1534,9 +1534,12 @@ textarea.auth-input {
     will-change: transform;
 }
 
-.wb-map-svg {
+.actual-map-img {
     width: 100%;
     height: 100%;
+    object-fit: contain; /* Ensures your map doesn't get stretched or distorted */
+    opacity: 0.7; /* Slightly faded so the golden pulse rings and photos pop */
+    filter: drop-shadow(0 10px 20px rgba(209, 154, 138, 0.3)); /* Adds a soft brand-colored shadow behind your map */
 }
 
 /* Individual Image Nodes */
@@ -1550,13 +1553,13 @@ textarea.auth-input {
     transform: translate(-50%, -50%); /* Keeps images centered on their coordinates */
 }
 
-/* Exact Geographic Placements */
-.img-1-pos { top: 15%; left: 53.7%; } /* North Bengal */
-.img-2-pos { top: 30%; left: 58.7%; } /* Siliguri area */
-.img-3-pos { top: 48%; left: 50%; }   /* Malda/Central */
-.img-4-pos { top: 78%; left: 37.5%; } /* Asansol/Durgapur */
-.img-5-pos { top: 82%; left: 60%; }   /* Kolkata */
-.img-6-pos { top: 90%; left: 70%; }   /* Deep South */
+/* Scrambled Image Placements */
+.img-1-pos { top: 20%; left: 42%; }
+.img-2-pos { top: 35%; left: 65%; }
+.img-3-pos { top: 55%; left: 35%; }
+.img-4-pos { top: 70%; left: 68%; }
+.img-5-pos { top: 85%; left: 45%; }
+.img-6-pos { top: 45%; left: 52%; }
 
 /* High-Res Floating Images */
 .network-img {
