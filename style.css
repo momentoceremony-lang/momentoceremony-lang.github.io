@@ -1553,13 +1553,13 @@ textarea.auth-input {
     transform: translate(-50%, -50%); /* Keeps images centered on their coordinates */
 }
 
-/* Exact Geographic Placements (Safely clustered inside the map) */
-.img-1-pos { top: 22%; left: 55%; } /* Top North (Your top red circle) */
-.img-2-pos { top: 40%; left: 50%; } /* Center Top */
-.img-3-pos { top: 52%; left: 61%; } /* Mid Right (Your middle red circle) */
-.img-4-pos { top: 62%; left: 42%; } /* Mid Left */
-.img-5-pos { top: 76%; left: 44%; } /* Bottom Left (Your bottom-left red circle) */
-.img-6-pos { top: 82%; left: 56%; } /* Bottom Right (Your bottom-right red circle) */
+/* Exact Geographic Placements (Mapped to Green & Red marks) */
+.img-1-pos { top: 12%; left: 52%; } /* Top Green (Darjeeling Tip) */
+.img-2-pos { top: 28%; left: 56%; } /* Top Red (Neck Area) */
+.img-3-pos { top: 52%; left: 62%; } /* Mid Right Red */
+.img-4-pos { top: 55%; left: 33%; } /* Far Left Green (Purulia Bulge) */
+.img-5-pos { top: 66%; left: 45%; } /* Mid/Bottom Left Red */
+.img-6-pos { top: 78%; left: 62%; } /* Bottom Right Green (Sundarbans) */
 
 /* High-Res Floating Images */
 .network-img {
