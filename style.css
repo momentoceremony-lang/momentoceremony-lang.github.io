@@ -1554,12 +1554,12 @@ textarea.auth-input {
 }
 
 /* Exact Geographic Placements (Mapped to Green & Red marks) */
-.img-1-pos { top: 12%; left: 52%; } /* Top Green (Darjeeling Tip) */
+.img-1-pos { top: 42%; left: 46%; }
 .img-2-pos { top: 28%; left: 56%; } /* Top Red (Neck Area) */
 .img-3-pos { top: 52%; left: 62%; } /* Mid Right Red */
 .img-4-pos { top: 55%; left: 33%; } /* Far Left Green (Purulia Bulge) */
 .img-5-pos { top: 66%; left: 45%; } /* Mid/Bottom Left Red */
-.img-6-pos { top: 78%; left: 62%; } /* Bottom Right Green (Sundarbans) */
+.img-6-pos { top: 73%; left: 59%; }
 
 /* High-Res Floating Images */
 .network-img {
