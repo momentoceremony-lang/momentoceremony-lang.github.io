@@ -1553,13 +1553,13 @@ textarea.auth-input {
     transform: translate(-50%, -50%); /* Keeps images centered on their coordinates */
 }
 
-/* Exact Geographic Placements tailored to the tall West Bengal map */
-.img-1-pos { top: 15%; left: 52%; } /* Darjeeling/North */
-.img-2-pos { top: 32%; left: 56%; } /* Siliguri area */
-.img-3-pos { top: 50%; left: 65%; } /* Malda/Central */
-.img-4-pos { top: 70%; left: 35%; } /* Asansol/Western Hub */
-.img-5-pos { top: 80%; left: 58%; } /* Kolkata */
-.img-6-pos { top: 92%; left: 75%; } /* Sundarbans/Deep South */
+/* Exact Geographic Placements (Safely clustered inside the map) */
+.img-1-pos { top: 22%; left: 55%; } /* Top North (Your top red circle) */
+.img-2-pos { top: 40%; left: 50%; } /* Center Top */
+.img-3-pos { top: 52%; left: 61%; } /* Mid Right (Your middle red circle) */
+.img-4-pos { top: 62%; left: 42%; } /* Mid Left */
+.img-5-pos { top: 76%; left: 44%; } /* Bottom Left (Your bottom-left red circle) */
+.img-6-pos { top: 82%; left: 56%; } /* Bottom Right (Your bottom-right red circle) */
 
 /* High-Res Floating Images */
 .network-img {
