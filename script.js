@@ -976,16 +976,18 @@ if (mapWrapper && mapContainer) {
             progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
         }
 
-        // 1. DYNAMIC DEVICE ZOOM
-        // Check if the user is on a phone (850px or smaller)
+        // 1. DYNAMIC DEVICE ZOOM (Unified Canvas Math)
         const isMobile = window.innerWidth <= 850;
         
-        // If mobile, start large (0.9). If desktop, start small (0.6).
-        const startScale = isMobile ? 0.9 : 0.6; 
-        const zoomAmount = isMobile ? 0.4 : 0.7; // Both will end up around 1.3x zoom
+        // DESKTOP: Starts at 0.7 scale, zooms in by 0.3 (Max scale 1.0) - Keeps images on screen!
+        // MOBILE: Starts at 0.35 scale to fit the 900px canvas on a tiny phone, zooms in by 0.3.
+        const startScale = isMobile ? 0.35 : 0.7; 
+        const zoomAmount = isMobile ? 0.3 : 0.3; 
         
         const scale = startScale + (progress * zoomAmount); 
-        const translateY = progress * -10;  
+        
+        // Panning adjustment to keep the map centered while zooming
+        const translateY = isMobile ? (progress * -5) : (progress * -8);  
         
         mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
 
