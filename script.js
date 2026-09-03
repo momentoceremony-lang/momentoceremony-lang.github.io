@@ -74,16 +74,13 @@ function toggleMobileNav() {
 }
 
 // ==========================================
-// 2. MASTER ENGINE FOR CATEGORY SECTIONS
+// 2. MASTER ENGINE FOR CATEGORY SECTIONS (IMAGES ONLY)
 // ==========================================
-// This single function handles the Slideshow, Flipper, and Typing for ANY category
-function initCategorySection(sectionId, slideshowId, stackId, titleId, quoteId, titleText, quoteText) {
-    
-    // A. SILK FADE SLIDER (CLEAN CROSSFADE)
+function initCategorySlideshow(slideshowId) {
     const images = document.querySelectorAll(`#${slideshowId} .banner-img`);
     if(images.length > 1) {
         let currentIndex = 0;
-        images[0].classList.add('active'); // Ensure first is visible on load
+        images[0].classList.add('active'); 
 
         setInterval(() => {
             const prevIndex = currentIndex;
@@ -96,52 +93,35 @@ function initCategorySection(sectionId, slideshowId, stackId, titleId, quoteId, 
             // Fade the new image in on top
             images[currentIndex].classList.add('active');
             
-            // After the 2-second fade finishes, silently reset the old image
+            // After the fade finishes, silently reset the old image
             setTimeout(() => {
                 images[prevIndex].classList.remove('last-active');
             }, 2000);
         }, 4000); 
     }
-    
-    //B is deleted
-    
-    // C. SCROLL OBSERVER & TYPING TEXT
-    const section = document.getElementById(sectionId);
-    const titleEl = document.getElementById(titleId);
-    const quoteEl = document.getElementById(quoteId);
-    let typingStarted = false;
-
-    function typeText(element, text, speed, callback) {
-        if(!element) return;
-        let i = 0;
-        element.innerHTML = "";
-        function typeWriter() {
-            if (i < text.length) {
-                element.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, speed);
-            } else if (callback) {
-                callback();
-            }
-        }
-        typeWriter();
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !typingStarted) {
-                typingStarted = true;
-                typeText(titleEl, titleText, 100, () => {
-                    typeText(quoteEl, quoteText, 40);
-                });
-            }
-        });
-    }, { threshold: 0.4 }); 
-
-    if(section && titleEl && quoteEl) {
-        observer.observe(section);
-    }
 }
+
+
+// ==========================================
+// 4. INITIALIZE EVERYTHING ON PAGE LOAD
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Start Hero Typing
+    setTimeout(typeEffect, 1000); 
+
+    // Initialize Category Image Slideshows
+    initCategorySlideshow("wedding-slideshow");
+    initCategorySlideshow("birthday-slideshow");
+    initCategorySlideshow("anni-slideshow");
+    initCategorySlideshow("prewed-slideshow");
+    initCategorySlideshow("baby-slideshow");
+
+    // Initialize Custom Premium Date Pickers
+    flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+    flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+    
+    checkLoginState();
+});
 
 // ==========================================
 // 3. MODAL POPUP LOGIC
@@ -169,70 +149,6 @@ window.onclick = function(event) {
     }
 }
 
-// ==========================================
-// 4. INITIALIZE EVERYTHING ON PAGE LOAD
-// ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-    // Start Hero Typing
-    setTimeout(typeEffect, 1000); 
-
-    // Initialize Wedding Section
-    initCategorySection(
-        "category-wedding", 
-        "wedding-slideshow", 
-        "wedding-stack", 
-        "wedding-title-type", 
-        "wedding-quote-type", 
-        "Weading", 
-        '"Because every love story is beautiful, but yours should be a masterpiece. Let us freeze your fleeting moments into eternal memories."'
-    );
-
-    // Initialize Birthday Section
-    initCategorySection(
-        "category-birthday", 
-        "birthday-slideshow", 
-        "birthday-stack", 
-        "birthday-title-type", 
-        "birthday-quote-type", 
-        "Birthdays", 
-        '"Every year is a new chapter in your story. Let us capture the joy, the laughter, and the magic of your special day."'
-    );
-    // Initialize Anniversaries
-    initCategorySection(
-        "category-anni", 
-        "anni-slideshow", 
-        "anni-stack", 
-        "anni-title-type", 
-        "anni-quote-type", 
-        "Anniversaries", 
-        '"Milestones of love, celebrated in style. We reflect the depth and beauty of your enduring bond."'
-    );
-    // Initialize Pre-Weddings
-    initCategorySection(
-        "category-prewed", 
-        "prewed-slideshow", 
-        "prewed-stack", 
-        "prewed-title-type", 
-        "prewed-quote-type", 
-        "Pre-Weddings", 
-        '"Before the vows, there is the romance. Let us capture the pure excitement of your journey together."'
-    );
-    // Initialize Baby Shoot
-    initCategorySection(
-        "category-baby", 
-        "baby-slideshow", 
-        "baby-stack", 
-        "baby-title-type", 
-        "baby-quote-type", 
-        "Baby Shoot", 
-        '"Tiny fingers, tiny toes, our love for you just grows and grows. Let us capture the pure innocence of your little one\'s first milestones."'
-    );
-    // Initialize Custom Premium Date Pickers (Forces custom UI on mobile)
-    flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
-    flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
-    
-    checkLoginState();
-});
 
 // ==========================================
 // 5. AUTHENTICATION LOGIC (API INTEGRATION)
