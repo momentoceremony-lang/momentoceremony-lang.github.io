@@ -959,49 +959,127 @@ function scrollToTop() {
     });
 }
 
-// ==========================================
-// 3D NETWORK GLOBE SCROLL ENGINE
-// ==========================================
-const globeWrapper = document.getElementById('globe-network-section');
-const globeContainer = document.getElementById('globe-container');
-const networkImages = document.querySelectorAll('.network-img');
-const wbLabel = document.querySelector('.wb-label');
+/* =========================================================
+   3D NETWORK GLOBE SCROLL ANIMATION (LIGHT THEME)
+========================================================= */
+.globe-scroll-wrapper {
+    height: 300vh; 
+    background: #F4EBE1; /* Matches the About section perfectly */
+    position: relative;
+}
 
-if (globeWrapper && globeContainer) {
-    window.addEventListener('scroll', () => {
-        const rect = globeWrapper.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        
-        // Calculate scroll progress from 0 to 1 inside the wrapper
-        let progress = 0;
-        if (rect.top < 0) {
-            progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
-        }
+.globe-sticky-view {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Soft radial glow in the center */
+    background: radial-gradient(circle at center, #ffffff 0%, #F4EBE1 70%);
+}
 
-        // 1. ZOOM & PAN: Scale up to 2.2x, shift left and down to center West Bengal
-        const scale = 1 + (progress * 1.2); 
-        const translateX = progress * -15; // Shift left
-        const translateY = progress * 15;  // Shift down
-        
-        globeContainer.style.transform = `scale(${scale}) translate(${translateX}%, ${translateY}%)`;
+.globe-text-header {
+    text-align: center;
+    margin-top: 10vh;
+    z-index: 10;
+}
 
-        // 2. FADE IN WEST BENGAL TEXT
-        if (progress > 0.1) {
-            wbLabel.style.opacity = "1";
-        } else {
-            wbLabel.style.opacity = "0";
-        }
+.globe-text-header h2 {
+    color: #3C3633; /* Dark readable text */
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
 
-        // 3. POP IN 1:1 IMAGES SEQUENTIALLY
-        networkImages.forEach((img, index) => {
-            // Calculate a staggered reveal threshold for each image
-            const revealThreshold = 0.2 + (index * 0.12); 
-            
-            if (progress > revealThreshold) {
-                img.classList.add('visible');
-            } else {
-                img.classList.remove('visible');
-            }
-        });
-    });
+.globe-text-header p {
+    color: #5a4049; /* Brand primary color */
+    font-size: 1.1rem;
+    font-family: 'Lato', sans-serif;
+}
+
+.globe-viewport {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.globe-container {
+    position: relative;
+    width: 1000px;
+    height: 500px;
+    transform-origin: center bottom;
+    transform: scale(1) translate(0, 0); 
+    will-change: transform;
+}
+
+.globe-wireframe {
+    width: 100%;
+    height: 100%;
+}
+
+/* West Bengal Focus Node (Light Theme Adjustments) */
+.wb-node {
+    position: absolute;
+    top: 40%; 
+    left: 65%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+}
+
+.wb-dot {
+    width: 12px; height: 12px;
+    background: #d19a8a; /* Brand accent color */
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(209, 154, 138, 0.6);
+}
+
+.wb-pulse {
+    position: absolute;
+    top: -14px; left: -14px;
+    width: 40px; height: 40px;
+    border: 2px solid #d19a8a;
+    border-radius: 50%;
+    animation: radarPulse 2s infinite;
+}
+
+.wb-label {
+    color: #5a4049; /* Brand primary color */
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+    opacity: 0; 
+    transition: opacity 0.5s ease;
+}
+
+@keyframes radarPulse {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* 1:1 Floating Images (Light Theme Shadows) */
+.network-img {
+    position: absolute;
+    width: 60px; height: 60px; 
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid white; /* Clean white border for the light theme */
+    box-shadow: 0 10px 20px rgba(90, 64, 73, 0.15); /* Soft plum shadow */
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 4;
+}
+
+.network-img.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
 }
