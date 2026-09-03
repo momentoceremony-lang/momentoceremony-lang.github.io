@@ -976,12 +976,15 @@ if (mapWrapper && mapContainer) {
             progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
         }
 
-        // 1. ZOOM DEAD CENTER
-        // Starts significantly zoomed out (0.6) so the entire tall map fits on screen.
-        // Zooms smoothly to 1.3x scale as you scroll down.
-        const scale = 0.6 + (progress * 0.7); 
+        // 1. DYNAMIC DEVICE ZOOM
+        // Check if the user is on a phone (850px or smaller)
+        const isMobile = window.innerWidth <= 850;
         
-        // Slight pan up to keep the center of the map perfectly aligned
+        // If mobile, start large (0.9). If desktop, start small (0.6).
+        const startScale = isMobile ? 0.9 : 0.6; 
+        const zoomAmount = isMobile ? 0.4 : 0.7; // Both will end up around 1.3x zoom
+        
+        const scale = startScale + (progress * zoomAmount); 
         const translateY = progress * -10;  
         
         mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
