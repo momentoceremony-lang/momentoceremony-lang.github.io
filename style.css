@@ -1623,14 +1623,19 @@ textarea.auth-input {
     opacity: 1;
 }
 
+/* Mobile Adjustments */
 @media (max-width: 850px) {
+    /* Speeds up the scroll significantly for phone users */
+    .map-scroll-wrapper {
+        height: 250vh; 
+    }
+
     .map-text-header { margin-top: 12vh; }
     .map-text-header h2 { font-size: 2.2rem; }
     
     .map-viewport {
         top: 18vh; 
         height: 82vh; 
-        /* Removed flex-start and padding to let the absolute centering work */
     }
     
     .network-img { width: 55px; height: 55px; }
