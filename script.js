@@ -1025,3 +1025,27 @@ if (revealSections.length > 0) {
         revealObserver.observe(section);
     });
 }
+
+// ==========================================
+// SCROLL REVEAL ANIMATIONS FOR CATEGORIES
+// ==========================================
+const revealSections = document.querySelectorAll('.scroll-reveal');
+
+if (revealSections.length > 0) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            // When the section comes into view
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Stop observing once it has animated in so it doesn't repeat
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { 
+        threshold: 0.05 // CHANGED: Now triggers when just 5% of the footer is visible
+    });
+
+    revealSections.forEach(section => {
+        revealObserver.observe(section);
+    });
+}
