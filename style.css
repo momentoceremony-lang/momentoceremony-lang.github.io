@@ -1654,3 +1654,26 @@ textarea.auth-input {
         flex-direction: column; /* Safely stacks normal again on mobile */
     }
 }
+
+/* =========================================================
+   ON-SCROLL SLIDE ANIMATIONS
+========================================================= */
+/* Starting states: pushed out and invisible */
+.slide-from-left {
+    opacity: 0;
+    transform: translateX(-80px);
+    transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide-from-right {
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Active states: triggered by JavaScript when scrolled into view */
+.scroll-reveal.visible .slide-from-left,
+.scroll-reveal.visible .slide-from-right {
+    opacity: 1;
+    transform: translateX(0);
+}
