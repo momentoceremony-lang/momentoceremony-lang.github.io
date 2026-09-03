@@ -959,127 +959,44 @@ function scrollToTop() {
     });
 }
 
-/* =========================================================
-   3D NETWORK GLOBE SCROLL ANIMATION (LIGHT THEME)
-========================================================= */
-.globe-scroll-wrapper {
-    height: 300vh; 
-    background: #F4EBE1; /* Matches the About section perfectly */
-    position: relative;
-}
+// ==========================================
+// WEST BENGAL MAP SCROLL ENGINE
+// ==========================================
+const mapWrapper = document.getElementById('map-network-section');
+const mapContainer = document.getElementById('map-container');
+const mapNodes = document.querySelectorAll('.map-node');
 
-.globe-sticky-view {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Soft radial glow in the center */
-    background: radial-gradient(circle at center, #ffffff 0%, #F4EBE1 70%);
-}
+if (mapWrapper && mapContainer) {
+    window.addEventListener('scroll', () => {
+        const rect = mapWrapper.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        let progress = 0;
+        if (rect.top < 0) {
+            progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
+        }
 
-.globe-text-header {
-    text-align: center;
-    margin-top: 10vh;
-    z-index: 10;
-}
+        // 1. ZOOM DEAD CENTER
+        // Starts slightly zoomed out (0.8) so the whole state fits on screen.
+        // Zooms smoothly to 1.4x scale as you scroll down.
+        const scale = 0.8 + (progress * 0.6); 
+        
+        // Because the container is mathematically centered, we only need to scale. 
+        // A slight pan up (-5%) keeps the map visually centered as it grows.
+        const translateY = progress * -5;  
+        
+        mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
 
-.globe-text-header h2 {
-    color: #3C3633; /* Dark readable text */
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
-.globe-text-header p {
-    color: #5a4049; /* Brand primary color */
-    font-size: 1.1rem;
-    font-family: 'Lato', sans-serif;
-}
-
-.globe-viewport {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 70vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
-
-.globe-container {
-    position: relative;
-    width: 1000px;
-    height: 500px;
-    transform-origin: center bottom;
-    transform: scale(1) translate(0, 0); 
-    will-change: transform;
-}
-
-.globe-wireframe {
-    width: 100%;
-    height: 100%;
-}
-
-/* West Bengal Focus Node (Light Theme Adjustments) */
-.wb-node {
-    position: absolute;
-    top: 40%; 
-    left: 65%; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 5;
-}
-
-.wb-dot {
-    width: 12px; height: 12px;
-    background: #d19a8a; /* Brand accent color */
-    border-radius: 50%;
-    box-shadow: 0 0 15px rgba(209, 154, 138, 0.6);
-}
-
-.wb-pulse {
-    position: absolute;
-    top: -14px; left: -14px;
-    width: 40px; height: 40px;
-    border: 2px solid #d19a8a;
-    border-radius: 50%;
-    animation: radarPulse 2s infinite;
-}
-
-.wb-label {
-    color: #5a4049; /* Brand primary color */
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 10px;
-    opacity: 0; 
-    transition: opacity 0.5s ease;
-}
-
-@keyframes radarPulse {
-    0% { transform: scale(0.5); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
-}
-
-/* 1:1 Floating Images (Light Theme Shadows) */
-.network-img {
-    position: absolute;
-    width: 60px; height: 60px; 
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid white; /* Clean white border for the light theme */
-    box-shadow: 0 10px 20px rgba(90, 64, 73, 0.15); /* Soft plum shadow */
-    opacity: 0;
-    transform: scale(0.5) translateY(20px);
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 4;
-}
-
-.network-img.visible {
-    opacity: 1;
-    transform: scale(1) translateY(0);
+        // 2. POP IN GEOGRAPHIC IMAGES SEQUENTIALLY (North to South)
+        mapNodes.forEach((node, index) => {
+            // Stagger the pop-in threshold based on the image's order
+            const revealThreshold = 0.15 + (index * 0.12); 
+            
+            if (progress > revealThreshold) {
+                node.classList.add('visible');
+            } else {
+                node.classList.remove('visible');
+            }
+        });
+    });
 }
