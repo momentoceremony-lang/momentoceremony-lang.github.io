@@ -1641,3 +1641,16 @@ textarea.auth-input {
     .network-img { width: 55px; height: 55px; }
     .pulse-ring { width: 55px; height: 55px; }
 }
+
+/* =========================================================
+   CATEGORY ALTERNATE LAYOUT (SUBTLE STYLE CHANGE)
+========================================================= */
+.home-about-section.reverse-layout {
+    flex-direction: row-reverse;
+}
+
+@media (max-width: 850px) {
+    .home-about-section.reverse-layout {
+        flex-direction: column; /* Safely stacks normal again on mobile */
+    }
+}
