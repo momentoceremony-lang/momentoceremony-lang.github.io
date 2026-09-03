@@ -977,19 +977,17 @@ if (mapWrapper && mapContainer) {
         }
 
         // 1. ZOOM DEAD CENTER
-        // Starts slightly zoomed out (0.8) so the whole state fits on screen.
-        // Zooms smoothly to 1.4x scale as you scroll down.
-        const scale = 0.8 + (progress * 0.6); 
+        // Starts significantly zoomed out (0.6) so the entire tall map fits on screen.
+        // Zooms smoothly to 1.3x scale as you scroll down.
+        const scale = 0.6 + (progress * 0.7); 
         
-        // Because the container is mathematically centered, we only need to scale. 
-        // A slight pan up (-5%) keeps the map visually centered as it grows.
-        const translateY = progress * -5;  
+        // Slight pan up to keep the center of the map perfectly aligned
+        const translateY = progress * -10;  
         
         mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
 
-        // 2. POP IN GEOGRAPHIC IMAGES SEQUENTIALLY (North to South)
+        // 2. POP IN GEOGRAPHIC IMAGES SEQUENTIALLY
         mapNodes.forEach((node, index) => {
-            // Stagger the pop-in threshold based on the image's order
             const revealThreshold = 0.15 + (index * 0.12); 
             
             if (progress > revealThreshold) {
