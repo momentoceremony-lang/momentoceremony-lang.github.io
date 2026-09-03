@@ -1516,22 +1516,22 @@ textarea.auth-input {
 
 .map-viewport {
     position: absolute;
-    top: 20vh; /* Starts right below the text header */
+    top: 20vh; 
+    left: 0;
     width: 100%;
-    height: 80vh; /* Stretched vertically to give the tall map plenty of room */
+    height: 80vh; 
     overflow: hidden; 
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Keeps the map perfectly centered */
 }
 
-/* The Unified Fixed High-Res Canvas */
+/* Unified Fixed High-Res Canvas */
 .map-container {
-    position: relative;
-    width: 900px; 
-    height: 1200px; /* This size is now permanently locked for ALL devices */
+    position: absolute;
+    top: 50%;
     left: 50%;
-    margin-left: -450px; /* Perfectly centers the 900px canvas */
+    width: 900px; 
+    height: 1200px; 
+    margin-top: -600px; /* Pulls exactly half the height up */
+    margin-left: -450px; /* Pulls exactly half the width left */
     transform-origin: center center;
     will-change: transform;
 }
@@ -1540,7 +1540,6 @@ textarea.auth-input {
     width: 100%;
     height: 100%;
     object-fit: contain; 
-    mix-blend-mode: multiply; 
     opacity: 0.85; 
 }
 
@@ -1624,21 +1623,16 @@ textarea.auth-input {
     opacity: 1;
 }
 
-/* Mobile Adjustments */
 @media (max-width: 850px) {
-    /* Notice we removed the .map-container width/height overrides here! */
-    /* The JavaScript will handle scaling the 900x1200 canvas to fit the phone. */
-    
-    .map-text-header { margin-top: 10vh; }
+    .map-text-header { margin-top: 12vh; }
     .map-text-header h2 { font-size: 2.2rem; }
     
     .map-viewport {
-        top: 15vh; 
-        align-items: flex-start;
-        padding-top: 5vh; 
+        top: 18vh; 
+        height: 82vh; 
+        /* Removed flex-start and padding to let the absolute centering work */
     }
     
-    /* Make the images slightly smaller so they don't overlap on tiny screens */
     .network-img { width: 55px; height: 55px; }
     .pulse-ring { width: 55px; height: 55px; }
 }
