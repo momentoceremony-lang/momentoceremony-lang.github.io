@@ -511,10 +511,11 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
     height: 60px; 
     object-fit: contain;
     margin-bottom: 20px;
-    /* Removed opacity: 0 so it never gets stuck invisible */
+    opacity: 0; /* Keeps the logo completely invisible until you scroll to the bottom */
 }
 
 .site-footer.visible .footer-logo {
+    /* Fires the animation ONLY when the JavaScript adds the .visible class */
     animation: rollInFooter 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
