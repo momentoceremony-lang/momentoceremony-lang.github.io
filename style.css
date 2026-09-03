@@ -1523,12 +1523,15 @@ textarea.auth-input {
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    overflow: hidden; /* Hides the hard edges of the SVG that spill off-screen */
 }
 
 .globe-container {
     position: relative;
-    width: 1000px;
-    height: 500px;
+    width: 120vw; /* Forces the globe to stretch wider than the screen */
+    min-width: 1200px; /* Prevents shrinking too much before the mobile breakpoint */
+    height: 60vw; /* Perfectly maintains the 2:1 mathematical ratio of your 1000x500 SVG */
+    min-height: 600px;
     transform-origin: center bottom;
     transform: scale(1) translate(0, 0); 
     will-change: transform;
