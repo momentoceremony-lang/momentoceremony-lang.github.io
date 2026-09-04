@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Momento Photography</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body class="about-page"> <!-- Reusing light theme background -->
+
+    <!-- Reusing the Light Navbar -->
+    <nav class="light-nav">
+        <div class="nav-brand">
+            <a href="index.html" style="display:flex; align-items:center; text-decoration:none;">
+                <img src="Stock/logo.png" alt="Momento Logo" class="rolling-logo">
+                <span class="logo-text-dark">MOMENTO</span>
+            </a>
+        </div>
+        <div class="nav-right desktop-only">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- GALLERY SECTION -->
+    <main style="padding-top: 120px; text-align: center;">
+        
+        <!-- Category Filter Buttons -->
+        <div class="gallery-filters">
+            <button class="filter-btn" onclick="filterGallery('wedding')">Weddings</button>
+            <button class="filter-btn" onclick="filterGallery('prewed')">Pre-Weddings</button>
+            <button class="filter-btn" onclick="filterGallery('birthday')">Birthdays</button>
+            <button class="filter-btn" onclick="filterGallery('baby')">Baby Shoots</button>
+            <button class="filter-btn" onclick="filterGallery('anni')">Anniversaries</button>
+        </div>
+
+        <!-- The Image Viewer Layout (Like your screenshot) -->
+        <div class="gallery-viewer">
+            <!-- Main Large Image -->
+            <div class="main-image-wrapper">
+                <button class="nav-arrow left-arrow" onclick="prevImage()">&#10094;</button>
+                <img id="main-gallery-img" src="" alt="Gallery View">
+                <button class="nav-arrow right-arrow" onclick="nextImage()">&#10095;</button>
+            </div>
+            
+            <!-- Small Thumbnails Below -->
+            <div class="thumbnail-row" id="thumbnail-container">
+                <!-- Javascript will generate the small images here -->
+            </div>
+        </div>
+
+        <button class="btn-signup-gold" style="margin-top: 30px; padding: 12px 40px; font-size: 1.1rem;" onclick="window.location.href='index.html'">Back to Home</button>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
