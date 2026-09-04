@@ -1442,15 +1442,19 @@ textarea.auth-input {
 }
 
 /* =========================================================
-   HOME: ABOUT US SECTION
+   HOME: CATEGORY SECTIONS (PREMIUM CARD LAYOUT)
 ========================================================= */
 .home-about-section {
-    background-color: #F5EFE6; /* Matches the color palette from the mockup */
-    padding: 120px 5vw;
+    background-color: #ffffff; /* Clean white card to contrast with the page background */
+    margin: 80px 5vw; /* Creates the distinct physical gap between sections */
+    padding: 80px 5vw;
+    border-radius: 40px; /* Premium smooth corners */
+    box-shadow: 0 15px 40px rgba(90, 64, 73, 0.04); /* Soft, high-end floating shadow */
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 60px;
+    border: 1px solid rgba(209, 154, 138, 0.1); /* Very subtle accent border */
 }
 
 .about-image-col { 
@@ -1459,12 +1463,12 @@ textarea.auth-input {
     justify-content: center; 
 }
 
-/* Overriding the default arch size to fit the About section better */
+/* Overriding the default arch size to fit the card layout better */
 .about-mask { 
     width: 100%; 
     max-width: 450px; 
     height: 550px; 
-    border-radius: 40px; 
+    border-radius: 30px; 
 }
 
 .about-text-col { 
@@ -1475,16 +1479,19 @@ textarea.auth-input {
     font-family: 'Lato', sans-serif;
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #5a4049; /* Brand primary color for high readability */
+    color: #5a4049; 
     margin-top: 20px;
     opacity: 0.9;
 }
 
-/* Mobile adjustments */
+/* Mobile adjustments for the Premium Cards */
 @media (max-width: 850px) {
     .home-about-section { 
         flex-direction: column; 
-        padding: 80px 6vw; 
+        margin: 40px 4vw; /* Maintains the distinct gaps on mobile */
+        padding: 50px 6vw; 
+        border-radius: 30px; /* Slightly tighter corners for phones */
+        gap: 30px;
     }
     
     .about-image-col, .about-text-col { 
@@ -1492,27 +1499,26 @@ textarea.auth-input {
     }
     
     .about-mask { 
-        height: 400px; 
+        height: 380px; /* Scaled down slightly to fit the card padding */
         max-width: 100%; 
-        border-radius: 30px;
+        border-radius: 25px;
     }
     
     .about-text-col {
-        margin-top: 20px;
-        text-align: left; /* Forces left alignment for the container */
+        margin-top: 10px;
+        text-align: left; 
     }
     
-    /* Target the About Us heading specifically on mobile */
     .home-about-section .section-tag-title {
         text-align: left !important; 
-        font-size: 2.4rem !important; /* Makes the font significantly larger */
-        margin-bottom: 15px;
+        font-size: 2.2rem !important; 
+        margin-bottom: 10px;
     }
     
     .about-description { 
         font-size: 0.95rem; 
         line-height: 1.6; 
-        text-align: left; /* Ensures the paragraph text stays left-aligned */
+        text-align: left; 
     }
 }
 
