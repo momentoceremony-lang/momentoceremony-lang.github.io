@@ -876,46 +876,64 @@ function scrollToTop() {
 }
 
 // ==========================================
-// WEST BENGAL MAP SCROLL ENGINE
+// WEST BENGAL MAP TIME-DRIVEN ENGINE
 // ==========================================
 const mapWrapper = document.getElementById('map-network-section');
 const mapContainer = document.getElementById('map-container');
 const mapNodes = document.querySelectorAll('.map-node');
 
 if (mapWrapper && mapContainer) {
-    window.addEventListener('scroll', () => {
-        const rect = mapWrapper.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        
-        let progress = 0;
-        if (rect.top < 0) {
-            progress = Math.min(1, Math.abs(rect.top) / (rect.height - windowHeight));
+    let hasMapAnimated = false;
+    
+    // Watch for the section to appear on screen
+    const mapObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !hasMapAnimated) {
+            hasMapAnimated = true;
+            startMapAnimation();
         }
+    }, { threshold: 0.3 }); // Starts when 30% of the section is visible
+    
+    mapObserver.observe(mapWrapper);
 
-        const isMobile = window.innerWidth <= 850;
-        
-        // Mobile shrinks the 1200px tall map to fit the phone screen perfectly.
-        const startScale = isMobile ? 0.35 : 0.7; 
-        const zoomAmount = isMobile ? 0.35 : 0.3; 
-        
-        const scale = startScale + (progress * zoomAmount); 
-        
-        // Minimal Y-shift since CSS is handling perfect centering
-        const translateY = progress * -3;  
-        
-        mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
+    function startMapAnimation() {
+        let startTimestamp = null;
+        const duration = 2500; // 2.5 seconds total animation time
 
-        // Pop in images sequentially
-        mapNodes.forEach((node, index) => {
-            const revealThreshold = 0.15 + (index * 0.12); 
+        function step(timestamp) {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const elapsed = timestamp - startTimestamp;
             
-            if (progress > revealThreshold) {
-                node.classList.add('visible');
-            } else {
-                node.classList.remove('visible');
+            // Calculate progress from 0 to 1
+            let progress = Math.min(elapsed / duration, 1);
+            
+            // Apply a smooth easing effect so it slows down elegantly at the end
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+            const isMobile = window.innerWidth <= 850;
+            const startScale = isMobile ? 0.35 : 0.7; 
+            const zoomAmount = isMobile ? 0.35 : 0.3; 
+            
+            const scale = startScale + (easeProgress * zoomAmount); 
+            const translateY = easeProgress * -3;  
+            
+            mapContainer.style.transform = `scale(${scale}) translateY(${translateY}%)`;
+
+            // Pop in images sequentially based on time progress
+            mapNodes.forEach((node, index) => {
+                const revealThreshold = 0.15 + (index * 0.12); 
+                if (easeProgress > revealThreshold) {
+                    node.classList.add('visible');
+                }
+            });
+
+            // Keep looping until the 2.5 seconds are up
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
             }
-        });
-    });
+        }
+        
+        window.requestAnimationFrame(step);
+    }
 }
 
 // ==========================================
