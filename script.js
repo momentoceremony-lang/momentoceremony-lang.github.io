@@ -628,7 +628,7 @@ function renderMasterPhotographerList() {
                 <div class="modal-card-details">
                     <h3>${pro.name}</h3>
                     <div class="btn-group">
-                        <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
+                        <button class="btn-view-profile" onclick="window.location.href='profile.html?id=${pro.id}'">View Profile</button>
                         <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
                     </div>
                 </div>
