@@ -1718,3 +1718,87 @@ textarea.auth-input {
     opacity: 1;
     transform: translateX(0);
 }
+
+/* =========================================================
+   OUR PROFESSIONALS TEASER SECTION
+========================================================= */
+.pro-teaser-section {
+    background: radial-gradient(circle at center, #ffffff 0%, #F4EBE1 100%);
+    padding: 100px 5vw;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    border-top: 1px solid rgba(209, 154, 138, 0.2); /* Soft separator from the last category */
+}
+
+.pro-teaser-content {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pro-teaser-desc {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--primary-color);
+    margin-top: 20px;
+    opacity: 0.85;
+}
+
+/* --- UNIQUE ANIMATIONS FOR THIS SECTION --- */
+
+/* The Spring-Loaded Icon */
+.pro-teaser-icon {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    
+    /* Starts tiny, invisible, and pushed down */
+    opacity: 0;
+    transform: scale(0.3) translateY(60px);
+    /* The cubic-bezier creates the "bounce/spring" effect */
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* The Smooth Rising Text */
+.fade-rise {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+
+/* Triggers when JavaScript adds the .visible class */
+.scroll-reveal.visible .pop-in {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.scroll-reveal.visible .fade-rise {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered Delays so they appear one by one */
+.scroll-reveal.visible .teaser-delay-1 { transition-delay: 0.2s; }
+.scroll-reveal.visible .teaser-delay-2 { transition-delay: 0.4s; }
+.scroll-reveal.visible .teaser-delay-3 { transition-delay: 0.6s; }
+
+/* Mobile Adjustments */
+@media (max-width: 850px) {
+    .pro-teaser-section {
+        padding: 80px 6vw;
+        min-height: auto;
+    }
+    .pro-teaser-icon {
+        width: 80px;
+        height: 80px;
+    }
+    .pro-teaser-desc {
+        font-size: 1rem;
+    }
+}
