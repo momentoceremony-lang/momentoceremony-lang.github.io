@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Photographers | Momento Photography</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body class="about-page"> <!-- Inherits the #F5EBEB background -->
+
+    <!-- Light Navigation with Animated Logo -->
+    <nav class="light-nav">
+        <div class="nav-brand">
+            <a href="index.html" style="display:flex; align-items:center; text-decoration:none;">
+                <img src="Stock/logo.png" alt="Momento Logo" class="rolling-logo">
+                <span class="logo-text-dark">MOMENTO</span>
+            </a>
+        </div>
+        <div class="nav-right desktop-only">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn-login-light btn-login">Login</button>
+            </div>
+        </div>
+        
+        <!-- Mobile Hamburger Menu -->
+        <div class="mobile-menu-icon" onclick="toggleMobileNav()">
+            <svg viewBox="0 0 24 24" width="34" height="34" stroke="var(--primary-color)" stroke-width="1.5" stroke-linecap="round" fill="none">
+                <line x1="4" y1="7" x2="20" y2="7"></line>
+                <line x1="4" y1="12" x2="14" y2="12"></line> 
+                <line x1="4" y1="17" x2="20" y2="17"></line>
+            </svg>
+        </div>
+
+        <div id="mobileDropdown" class="mobile-dropdown">
+            <div class="close-menu" onclick="toggleMobileNav()">&times;</div>
+            <a href="index.html" onclick="toggleMobileNav()">Home</a>
+            <a href="about.html" onclick="toggleMobileNav()">About</a>
+            <button class="btn-login-dark btn-login" style="margin-top: 20px; width: 100%; border: 1px solid #c8a96a !important; padding: 12px !important;">Login</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main style="padding-top: 120px; max-width: 1200px; margin: 0 auto; padding-bottom: 80px;">
+        <div style="text-align: center; margin-bottom: 50px; padding: 0 5vw;">
+            <h1 style="font-size: 3rem; color: var(--primary-color);">The Artists Behind the Lens</h1>
+            <p style="font-size: 1.1rem; color: var(--primary-color); opacity: 0.8; margin-top: 10px;">Discover the passionate professionals who turn your fleeting seconds into timeless stories.</p>
+        </div>
+        
+        <!-- The Grid where JS will push the White Cards -->
+        <div id="premium-photographers-grid" class="premium-pro-grid"></div>
+    </main>
+
+    <!-- Detailed Profile Modal (Reused from index.html) -->
+    <div id="modal-pro-details" class="modal">
+        <div class="modal-content" style="padding: 0; overflow: hidden; max-width: 800px; text-align: left;">
+            <span class="close-btn" onclick="closeModal('modal-pro-details')" style="top: 15px; left: 15px; right: auto; background: rgba(255,255,255,0.9); z-index: 10;">&larr; Back</span>
+            <div class="pro-banner-area">
+                <img src="" alt="Banner" class="pro-banner-img">
+            </div>
+            <div class="pro-info-area">
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-top: -60px; position: relative; z-index: 5; margin-bottom: 15px;">
+                    <img src="" alt="DP" class="pro-details-dp">
+                    <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                        <button class="btn-book-now" onclick="triggerBookingFromProfile()" style="padding: 8px 18px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(209,154,138,0.4);">Book Now</button>
+                    </div>
+                </div>
+                <h2 id="detail-pro-name" style="font-size: 2.2rem; color: var(--primary-color);"></h2>
+                <p style="font-style: italic; color: var(--accent-color); font-weight: bold; margin-bottom: 10px;"></p>
+                <p style="opacity: 0.8; line-height: 1.6; font-size: 1rem;"></p>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eaddd7; margin: 25px 40px;">
+            <div class="pro-gallery-area" style="padding: 0 40px 40px 40px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--primary-color);">Portfolio</h3>
+                <div class="pro-gallery-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal (Reused from index.html) -->
+    <div id="modal-booking" class="modal">
+        <div class="modal-content auth-box" style="max-width: 500px !important;">
+            <span class="close-btn" onclick="closeModal('modal-booking')">&times; Close</span>
+            <h2>Book Photographer</h2>
+            <p id="booking-photographer-name" style="margin-bottom: 20px; font-weight: bold; color: var(--accent-color); font-size: 1.1rem;"></p>
+            <div id="booking-form-section">
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85rem; opacity: 0.8;">Start Date</label>
+                        <input type="date" id="book-start" class="auth-input">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85rem; opacity: 0.8;">End Date</label>
+                        <input type="date" id="book-end" class="auth-input">
+                    </div>
+                </div>
+                <input type="text" id="book-category" class="auth-input" placeholder="Event Category (e.g. Wedding)" style="margin-bottom: 15px;">
+                <textarea id="book-details" class="auth-input" placeholder="Event details..." rows="4" style="resize: none;"></textarea>
+                <button class="btn-book-now" onclick="submitBooking()" style="width: 100%; margin-top: 10px;">Request Quotation</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success Modal -->
+    <div id="modal-booking-success" class="modal">
+        <div class="modal-content auth-box" style="max-width: 450px !important; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 10px;">✨</div>
+            <h2 style="color: var(--accent-color); margin-bottom: 10px;">Booking Requested!</h2>
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 5px;">Your unique Ticket ID is:</p>
+            <h1 id="success-ticket-id" style="background: #fcf9f6; border: 2px dashed var(--accent-color); padding: 15px; border-radius: 10px; letter-spacing: 3px; margin: 15px 0 25px 0; color: var(--primary-color);"></h1>
+            <button class="btn-book-now" onclick="closeModal('modal-booking-success')" style="width: 100%;">Done</button>
+        </div>
+    </div>
+
+    <!-- Auth Modal Dependency -->
+    <div id="modal-auth" class="modal">
+        <div class="modal-content auth-box">
+            <span class="close-btn" onclick="closeModal('modal-auth')">&times; Close</span>
+            <div id="login-section">
+                <h2>Sign In</h2>
+                <input type="email" id="login-email" placeholder="Email Address" class="auth-input">
+                <input type="password" id="login-password" placeholder="Password" class="auth-input">
+                <button class="btn-view-all" onclick="loginUser()" style="width: 100%; margin-top: 10px;">Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
