@@ -1096,3 +1096,57 @@ function handleSwipe() {
         prevImage();
     }
 }
+
+// ==========================================
+// PREMIUM PHOTOGRAPHERS PAGE ENGINE
+// ==========================================
+
+// Hook into the existing fetch cycle
+document.addEventListener("DOMContentLoaded", () => {
+    // If we are on the photographers page, hook into the data load
+    const premiumGrid = document.getElementById('premium-photographers-grid');
+    if (premiumGrid) {
+        // Overwrite the original renderMasterPhotographerList slightly to also trigger this one
+        const originalRender = renderMasterPhotographerList;
+        renderMasterPhotographerList = function() {
+            originalRender(); // Still runs the modal code if it exists
+            renderPremiumPhotographersPage(); // Runs the new page code
+        };
+    }
+});
+
+function renderPremiumPhotographersPage() {
+    const grid = document.getElementById('premium-photographers-grid');
+    if (!grid || allPhotographers.length === 0) return;
+
+    grid.innerHTML = ''; 
+
+    allPhotographers.forEach(pro => {
+        const displayImg = pro.banner_url || pro.dp_url; 
+        const specsText = pro.specialties.join(' • ');
+        const bioText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
+
+        const cardHTML = `
+            <div class="premium-pro-card">
+                <div class="pro-card-header" style="cursor: pointer;" onclick="viewProProfile('${pro.id}')">
+                    <img src="${displayImg}" class="pro-card-banner" alt="Banner">
+                    <div class="pro-card-dp-wrapper">
+                        <img src="${pro.dp_url}" alt="DP">
+                    </div>
+                </div>
+                
+                <div class="pro-card-body">
+                    <h3 class="pro-card-name">${pro.name}</h3>
+                    <p class="pro-card-specs">${specsText}</p>
+                    <p class="pro-card-bio">${bioText}</p>
+                    
+                    <div class="pro-card-actions">
+                        <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
+                        <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.innerHTML += cardHTML;
+    });
+}
