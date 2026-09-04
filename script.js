@@ -1116,7 +1116,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Render function now accepts an array to allow for filtering
 function renderPremiumPhotographersPage(photographersToRender) {
     const grid = document.getElementById('premium-photographers-grid');
     if (!grid) return;
@@ -1128,16 +1127,14 @@ function renderPremiumPhotographersPage(photographersToRender) {
         return;
     }
 
-    photographersToRender.forEach((pro, index) => {
+    // Generate all cards and push them to the grid
+    photographersToRender.forEach((pro) => {
         const displayImg = pro.banner_url || pro.dp_url; 
         const specsText = pro.specialties.join(' • ');
         const bioText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
 
-        // Calculate a staggered delay for the fade-in effect (0s, 0.1s, 0.2s...)
-        const animationDelay = index * 0.1;
-
         const cardHTML = `
-            <div class="premium-pro-card" style="animation-delay: ${animationDelay}s;">
+            <div class="premium-pro-card">
                 <div class="pro-card-header" style="cursor: pointer;" onclick="viewProProfile('${pro.id}')">
                     <img src="${displayImg}" class="pro-card-banner" alt="Banner">
                     <div class="pro-card-dp-wrapper">
@@ -1159,6 +1156,22 @@ function renderPremiumPhotographersPage(photographersToRender) {
         `;
         grid.innerHTML += cardHTML;
     });
+
+    // SET UP SCROLL ANIMATION OBSERVER
+    const cards = grid.querySelectorAll('.premium-pro-card');
+    
+    const cardObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            // When the card enters the screen (10% visible)
+            if (entry.isIntersecting) {
+                entry.target.classList.add('scroll-visible');
+                observer.unobserve(entry.target); // Stop observing once it animates in
+            }
+        });
+    }, { threshold: 0.1 }); 
+
+    // Attach the observer to every card we just created
+    cards.forEach(card => cardObserver.observe(card));
 }
 
 // Active Search Filter Function
