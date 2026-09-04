@@ -608,10 +608,13 @@ async function fetchAndRenderPhotographers() {
 // Inject profiles into the "Our Photographers" Master Modal
 function renderMasterPhotographerList() {
     const grid = document.querySelector('#modal-all-photographers .modal-card-grid');
+    
+    // SAFETY CHECK: If the old modal was deleted, stop running this specific function
+    if (!grid) return; 
+
     grid.innerHTML = ''; // Clear the dummy data
 
     allPhotographers.forEach(pro => {
-        // FIX: Now strictly uses the Banner Image, falling back to DP if missing
         const mainDisplayImg = pro.banner_url || pro.dp_url; 
         const specsText = pro.specialties.join(' • ');
 
