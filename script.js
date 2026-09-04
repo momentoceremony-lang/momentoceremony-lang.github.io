@@ -941,3 +941,94 @@ if (revealSections.length > 0) {
         revealObserver.observe(section);
     });
 }
+
+// ==========================================
+// VIEW.HTML GALLERY ENGINE
+// ==========================================
+
+// Add all your stock images for each category here
+const galleryData = {
+    wedding: [ 'Stock/wedding-banner-1.jpeg', 'Stock/wedding-banner-2.jpeg', 'Stock/pro-shot-1.jpeg', 'Stock/pro-shot-2.jpeg', 'Stock/pro-shot-3.jpeg' ],
+    prewed: [ 'Stock/prewed-banner-1.jpeg', 'Stock/prewed-banner-2.jpeg', 'Stock/prewed-shot-1.jpeg', 'Stock/prewed-shot-2.jpeg' ],
+    birthday: [ 'Stock/bday-banner-1.jpeg', 'Stock/bday-banner-2.jpeg', 'Stock/bday-shot-1.jpeg', 'Stock/bday-shot-2.jpeg' ],
+    baby: [ 'Stock/baby-banner-1.jpeg', 'Stock/baby-banner-2.jpeg', 'Stock/baby-shot-1.jpeg' ],
+    anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ]
+};
+
+let activeCategory = 'wedding';
+let activeImageIndex = 0;
+
+// Runs when view.html loads to check the URL (e.g. view.html?category=prewed)
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById('main-gallery-img')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryFromUrl = urlParams.get('category');
+        
+        // Load the category from the URL, or default to wedding
+        if (categoryFromUrl && galleryData[categoryFromUrl]) {
+            filterGallery(categoryFromUrl);
+        } else {
+            filterGallery('wedding');
+        }
+    }
+});
+
+function filterGallery(category) {
+    activeCategory = category;
+    activeImageIndex = 0; // Reset to the first image of the new category
+
+    // Update active state on the buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick').includes(category)) {
+            btn.classList.add('active');
+        }
+    });
+
+    renderGalleryImages();
+}
+
+function renderGalleryImages() {
+    const images = galleryData[activeCategory];
+    if (!images || images.length === 0) return;
+
+    const mainImg = document.getElementById('main-gallery-img');
+    const thumbContainer = document.getElementById('thumbnail-container');
+
+    // Fade effect for the main image
+    mainImg.style.opacity = 0;
+    setTimeout(() => {
+        mainImg.src = images[activeImageIndex];
+        mainImg.style.opacity = 1;
+    }, 200); // Waits for the image to fade out before swapping
+
+    // Draw the small thumbnails
+    thumbContainer.innerHTML = '';
+    images.forEach((src, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = src;
+        if (index === activeImageIndex) {
+            thumb.classList.add('active-thumb');
+        }
+        
+        // When a thumbnail is clicked, change the main image
+        thumb.onclick = () => {
+            activeImageIndex = index;
+            renderGalleryImages();
+        };
+        
+        thumbContainer.appendChild(thumb);
+    });
+}
+
+function prevImage() {
+    const images = galleryData[activeCategory];
+    activeImageIndex = (activeImageIndex - 1 + images.length) % images.length;
+    renderGalleryImages();
+}
+
+function nextImage() {
+    const images = galleryData[activeCategory];
+    activeImageIndex = (activeImageIndex + 1) % images.length;
+    renderGalleryImages();
+}
