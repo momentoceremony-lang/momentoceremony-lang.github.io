@@ -1052,11 +1052,11 @@ textarea.auth-input {
     display: block;
 }
 
-/* Gallery Grid */
 .pro-gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    gap: 40px; /* Creates a clean, elegant space between the large images */
 }
 
 .pro-gallery-grid img {
@@ -2270,11 +2270,12 @@ textarea.auth-input {
 ========================================================= */
 .portfolio-img-anim {
     width: 100%;
-    height: 180px; 
+    max-width: 800px; /* Prevents images from stretching too wide on giant desktop monitors */
+    height: auto; /* Removes the old 180px height limit so the full image can be seen */
+    max-height: 80vh; /* Ensures a single vertical image doesn't exceed the screen height */
     object-fit: cover;
-    border-radius: 15px; /* Soft premium corners */
+    border-radius: 20px; 
     box-shadow: 0 5px 15px rgba(90, 64, 73, 0.05);
-    cursor: pointer;
     
     /* Hidden starting state for scroll reveal */
     opacity: 0;
@@ -2290,17 +2291,13 @@ textarea.auth-input {
 
 /* Premium hover effect */
 .portfolio-img-anim.scroll-visible:hover {
-    transform: translateY(-5px) scale(1.03);
+    transform: translateY(-5px) scale(1.02);
     box-shadow: 0 15px 30px rgba(90, 64, 73, 0.15);
 }
 
+/* Ensure mobile keeps the single column */
 @media (max-width: 850px) {
     .pro-gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) !important; /* Forces 2 columns on mobile */
-        gap: 15px;
-    }
-    .portfolio-img-anim {
-        height: 140px; /* Perfectly sized for phone screens */
+        gap: 25px; /* Slightly tighter gap for phone scrolling */
     }
 }
