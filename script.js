@@ -1192,3 +1192,71 @@ function filterPhotographers() {
 
     renderPremiumPhotographersPage(filteredPros);
 }
+
+// ==========================================
+// DEDICATED PROFILE PAGE LOGIC
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Check if we are on profile.html
+    if (document.getElementById('page-name')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const proId = urlParams.get('id');
+        if (proId) loadDedicatedProfile(proId);
+    }
+});
+
+async function loadDedicatedProfile(proId) {
+    try {
+        const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/profile/${proId}`);
+        const data = await res.json();
+        
+        if (data.success && data.data) {
+            const pro = data.data;
+            
+            // Populate Data
+            document.getElementById('page-name').innerText = pro.name;
+            document.getElementById('page-specs').innerText = (pro.specialties || []).join(' • ');
+            document.getElementById('page-bio').innerText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
+            document.getElementById('page-dp').src = pro.dp_url;
+            document.getElementById('page-banner').src = pro.banner_url || pro.dp_url;
+            
+            // Setup Book Button
+            document.getElementById('page-book-btn').onclick = () => handleBookNow(pro.name);
+            
+            // Populate Gallery
+            const galleryGrid = document.getElementById('page-gallery');
+            galleryGrid.innerHTML = '';
+            const allGalleryImgs = [...Object.values(pro.best_shots || {}), ...(pro.gallery || [])];
+            
+            if (allGalleryImgs.length > 0) {
+                allGalleryImgs.forEach(imgUrl => {
+                    galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image">`;
+                });
+            } else {
+                galleryGrid.innerHTML = '<p style="opacity:0.6;">No portfolio images uploaded yet.</p>';
+            }
+        }
+    } catch (error) {
+        console.error("Failed to load profile:", error);
+        document.getElementById('page-name').innerText = "Profile Not Found";
+    }
+}
+
+// Native Mobile Web Share API + Desktop Clipboard Fallback
+function shareProfile() {
+    const profileUrl = window.location.href;
+    const proName = document.getElementById('page-name').innerText;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: `${proName} | Momento Photography`,
+            text: `Check out ${proName}'s photography portfolio on Momento!`,
+            url: profileUrl
+        }).catch((error) => console.log('Error sharing', error));
+    } else {
+        // Fallback for desktop browsers
+        navigator.clipboard.writeText(profileUrl).then(() => {
+            alert("Profile link copied to clipboard!");
+        });
+    }
+}
