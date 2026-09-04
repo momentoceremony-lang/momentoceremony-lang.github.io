@@ -1056,7 +1056,7 @@ textarea.auth-input {
     display: flex !important;
     flex-direction: column !important;
     align-items: center;
-    gap: 40px; /* Creates a clean, elegant space between the large images */
+    gap: 40px; 
 }
 
 .pro-gallery-grid img {
@@ -2270,9 +2270,13 @@ textarea.auth-input {
 ========================================================= */
 .portfolio-img-anim {
     width: 100%;
-    max-width: 800px; /* Prevents images from stretching too wide on giant desktop monitors */
-    height: auto; /* Removes the old 180px height limit so the full image can be seen */
-    max-height: 80vh; /* Ensures a single vertical image doesn't exceed the screen height */
+    max-width: 800px; 
+    
+    /* This forces the browser to respect the original image size */
+    height: auto !important; 
+    
+    /* aspect-ratio: 1 / 1;  <-- Remove the /* marks on this line if you decide you want perfect squares instead */
+    
     object-fit: cover;
     border-radius: 20px; 
     box-shadow: 0 5px 15px rgba(90, 64, 73, 0.05);
@@ -2295,9 +2299,9 @@ textarea.auth-input {
     box-shadow: 0 15px 30px rgba(90, 64, 73, 0.15);
 }
 
-/* Ensure mobile keeps the single column */
+/* Clean mobile spacing */
 @media (max-width: 850px) {
     .pro-gallery-grid {
-        gap: 25px; /* Slightly tighter gap for phone scrolling */
+        gap: 25px; 
     }
 }
