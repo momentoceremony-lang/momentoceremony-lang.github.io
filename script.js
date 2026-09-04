@@ -1032,3 +1032,49 @@ function nextImage() {
     activeImageIndex = (activeImageIndex + 1) % images.length;
     renderGalleryImages();
 }
+
+// ==========================================
+// GALLERY NAVIGATION: KEYBOARD & SWIPE
+// ==========================================
+
+// Desktop: Keyboard Left/Right Arrows
+document.addEventListener('keydown', (e) => {
+    // Only fire if the user is currently on the gallery page
+    if (!document.getElementById('main-gallery-img')) return; 
+    
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+});
+
+// Mobile: Touch Swipe Detection
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+    const imageWrapper = document.querySelector('.main-image-wrapper');
+    
+    if (imageWrapper) {
+        imageWrapper.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        imageWrapper.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+    }
+});
+
+function handleSwipe() {
+    const swipeThreshold = 50; // Minimum pixel distance to register as a swipe
+    
+    if (touchEndX < touchStartX - swipeThreshold) {
+        // Swiped Left -> Move to Next Image
+        nextImage();
+    }
+    
+    if (touchEndX > touchStartX + swipeThreshold) {
+        // Swiped Right -> Move to Previous Image
+        prevImage();
+    }
+}
