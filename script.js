@@ -1229,8 +1229,24 @@ async function loadDedicatedProfile(proId) {
             
             if (allGalleryImgs.length > 0) {
                 allGalleryImgs.forEach(imgUrl => {
-                    galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image">`;
+                    // Added the new portfolio-img-anim class here
+                    galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim">`;
                 });
+
+                // SET UP SCROLL ANIMATION OBSERVER FOR PORTFOLIO IMAGES
+                const galleryImages = galleryGrid.querySelectorAll('.portfolio-img-anim');
+                
+                const imgObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('scroll-visible');
+                            observer.unobserve(entry.target); 
+                        }
+                    });
+                }, { threshold: 0.1 }); 
+
+                galleryImages.forEach(img => imgObserver.observe(img));
+
             } else {
                 galleryGrid.innerHTML = '<p style="opacity:0.6;">No portfolio images uploaded yet.</p>';
             }
