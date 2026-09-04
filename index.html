@@ -492,65 +492,6 @@
         </div>
     </div>
 
-    <!-- ALL PHOTOGRAPHERS MASTER MODAL -->
-    <div id="modal-all-photographers" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('modal-all-photographers')">&times; Close</span>
-            <h2>Our Top Professionals</h2>
-            <div class="modal-card-grid">
-                
-                <!-- Professional 1 -->
-                <div class="modal-card-item">
-                    <div class="pro-card">
-                        <img src="Stock/pro-shot-1.jpeg" class="best-shot" alt="Shot">
-                        <div class="dp-wrapper"><img src="Stock/pro-dp-1.jpeg" class="pro-dp" alt="DP"></div>
-                        <div class="dp-overlay-text"><p>🏆 Wedding & Candid Expert</p></div>
-                    </div>
-                    <div class="modal-card-details">
-                        <h3>Aarav Mehta</h3>
-                        <div class="btn-group">
-                            <button class="btn-view-profile">View Profile</button>
-                            <button class="btn-book-now" onclick="handleBookNow('Aarav Mehta')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Professional 2 -->
-                <div class="modal-card-item">
-                    <div class="pro-card">
-                        <img src="Stock/bday-shot-2.jpeg" class="best-shot" alt="Shot">
-                        <div class="dp-wrapper"><img src="Stock/pro-dp-2.jpeg" class="pro-dp" alt="DP"></div>
-                        <div class="dp-overlay-text"><p>🏆 Birthday & Sweet Sixteen</p></div>
-                    </div>
-                    <div class="modal-card-details">
-                        <h3>Rohan Verma</h3>
-                        <div class="btn-group">
-                            <button class="btn-view-profile">View Profile</button>
-                            <button class="btn-book-now" onclick="handleBookNow('Rohan Verma')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Professional 3 -->
-                <div class="modal-card-item">
-                    <div class="pro-card">
-                        <img src="Stock/anni-shot-3.jpeg" class="best-shot" alt="Shot">
-                        <div class="dp-wrapper"><img src="Stock/pro-dp-3.jpeg" class="pro-dp" alt="DP"></div>
-                        <div class="dp-overlay-text"><p>🏆 Anniversary & Romantic Themes</p></div>
-                    </div>
-                    <div class="modal-card-details">
-                        <h3>Kabir Das</h3>
-                        <div class="btn-group">
-                            <button class="btn-view-profile">View Profile</button>
-                            <button class="btn-book-now" onclick="handleBookNow('Kabir Das')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <!-- BOOKING CALENDAR MODAL -->
     <div id="modal-booking" class="modal">
         <div class="modal-content auth-box" style="max-width: 500px !important;">
@@ -748,8 +689,7 @@
                 Behind every unforgettable moment is an artist with a vision. Discover the passionate professionals who turn your fleeting seconds into timeless stories. Explore their portfolios, match with their unique styles, and let them craft your masterpiece.
             </p>
             
-            <!-- Action Button -->
-            <button class="btn-signup-gold fade-rise teaser-delay-4" onclick="openModal('modal-all-photographers')" style="margin-top: 30px; font-family: 'Lato', sans-serif; font-size: 1.1rem; padding: 12px 35px;">
+            <button class="btn-signup-gold fade-rise teaser-delay-4" onclick="window.location.href='photographers.html'" style="margin-top: 30px; font-family: 'Lato', sans-serif; font-size: 1.1rem; padding: 12px 35px;">
                 View Them All
             </button>
             
@@ -775,7 +715,7 @@
                 <a href="#category-birthday">Birthdays</a>
                 <a href="#category-anni">Anniversaries</a>
                 <a href="#category-baby">Baby Shoots</a>
-                <a href="#" onclick="openModal('modal-all-photographers'); return false;">Our Photographers</a>
+                <a href="photographers.html">Our Photographers</a>
             </div>
 
             <!-- Column 3: Partner Call to Action -->
