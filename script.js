@@ -1101,36 +1101,43 @@ function handleSwipe() {
 }
 
 // ==========================================
-// PREMIUM PHOTOGRAPHERS PAGE ENGINE
+// PREMIUM PHOTOGRAPHERS PAGE ENGINE (UPDATED)
 // ==========================================
 
 // Hook into the existing fetch cycle
 document.addEventListener("DOMContentLoaded", () => {
-    // If we are on the photographers page, hook into the data load
     const premiumGrid = document.getElementById('premium-photographers-grid');
     if (premiumGrid) {
-        // Overwrite the original renderMasterPhotographerList slightly to also trigger this one
         const originalRender = renderMasterPhotographerList;
         renderMasterPhotographerList = function() {
-            originalRender(); // Still runs the modal code if it exists
-            renderPremiumPhotographersPage(); // Runs the new page code
+            if (typeof originalRender === 'function') originalRender(); 
+            renderPremiumPhotographersPage(allPhotographers); // Pass the full array initially
         };
     }
 });
 
-function renderPremiumPhotographersPage() {
+// Render function now accepts an array to allow for filtering
+function renderPremiumPhotographersPage(photographersToRender) {
     const grid = document.getElementById('premium-photographers-grid');
-    if (!grid || allPhotographers.length === 0) return;
+    if (!grid) return;
 
     grid.innerHTML = ''; 
+    
+    if (!photographersToRender || photographersToRender.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1 / -1; opacity: 0.6; font-size: 1.1rem; padding: 40px 0;">No professionals found matching your search.</p>';
+        return;
+    }
 
-    allPhotographers.forEach(pro => {
+    photographersToRender.forEach((pro, index) => {
         const displayImg = pro.banner_url || pro.dp_url; 
         const specsText = pro.specialties.join(' • ');
         const bioText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
 
+        // Calculate a staggered delay for the fade-in effect (0s, 0.1s, 0.2s...)
+        const animationDelay = index * 0.1;
+
         const cardHTML = `
-            <div class="premium-pro-card">
+            <div class="premium-pro-card" style="animation-delay: ${animationDelay}s;">
                 <div class="pro-card-header" style="cursor: pointer;" onclick="viewProProfile('${pro.id}')">
                     <img src="${displayImg}" class="pro-card-banner" alt="Banner">
                     <div class="pro-card-dp-wrapper">
@@ -1152,4 +1159,23 @@ function renderPremiumPhotographersPage() {
         `;
         grid.innerHTML += cardHTML;
     });
+}
+
+// Active Search Filter Function
+function filterPhotographers() {
+    const searchInput = document.getElementById('pro-search-bar');
+    if (!searchInput) return;
+
+    const query = searchInput.value.toLowerCase().trim();
+    
+    const filteredPros = allPhotographers.filter(pro => {
+        // Search by Name
+        const matchesName = pro.name.toLowerCase().includes(query);
+        // Search by Specialty (e.g., "Wedding", "Birthday")
+        const matchesSpecialty = pro.specialties.some(spec => spec.toLowerCase().includes(query));
+        
+        return matchesName || matchesSpecialty;
+    });
+
+    renderPremiumPhotographersPage(filteredPros);
 }
