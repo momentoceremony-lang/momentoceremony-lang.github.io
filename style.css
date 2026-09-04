@@ -1954,21 +1954,27 @@ textarea.auth-input {
 /* =========================================================
    PREMIUM PHOTOGRAPHERS PAGE GRID & CARDS
 ========================================================= */
+/* =========================================================
+   PREMIUM PHOTOGRAPHERS PAGE GRID & CARDS (SCROLL ANIMATION)
+========================================================= */
 .premium-pro-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));@keyframes popInCard
-    gap: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the cards perfectly */
+    gap: 60px;
     padding: 0 5vw;
 }
 
 .premium-pro-card {
-    background: #ffffff;
+    width: 100%;
+    max-width: 650px; /* Prevents it from stretching too wide on desktop */
+    background-color: #ffffff !important; /* Forces proper pure white */
     border-radius: 30px;
     box-shadow: 0 15px 40px rgba(90, 64, 73, 0.05);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(209, 154, 138, 0.15);
+    border: 1px solid rgba(200, 169, 106, 0.2); /* Subtle gold border */
     
     /* Hidden starting state for scroll reveal */
     opacity: 0;
@@ -2102,4 +2108,29 @@ textarea.auth-input {
     opacity: 0;
     transform: translateY(40px);
     animation: popInCard 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+/* =========================================================
+   PHOTOGRAPHER CARD BUTTONS (GOLD UPDATE)
+========================================================= */
+.pro-card-actions .btn-view-profile {
+    border: 2px solid #c8a96a;
+    color: #c8a96a;
+}
+
+.pro-card-actions .btn-view-profile:hover {
+    background: #c8a96a;
+    color: #0f0f10; /* Dark text for contrast on hover */
+}
+
+.pro-card-actions .btn-book-now {
+    background: #c8a96a;
+    border: 2px solid #c8a96a;
+    color: #0f0f10;
+    box-shadow: 0 4px 15px rgba(200, 169, 106, 0.3);
+}
+
+.pro-card-actions .btn-book-now:hover {
+    background: transparent;
+    color: #c8a96a;
+    box-shadow: 0 6px 20px rgba(200, 169, 106, 0.5);
 }
