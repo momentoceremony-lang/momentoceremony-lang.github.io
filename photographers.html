@@ -55,6 +55,22 @@
         <div id="premium-photographers-grid" class="premium-pro-grid"></div>
     </main>
 
+    <!-- Main Content Area -->
+    <main style="padding-top: 120px; max-width: 1200px; margin: 0 auto; padding-bottom: 80px;">
+        <div style="text-align: center; margin-bottom: 40px; padding: 0 5vw;">
+            <h1 style="font-size: 3rem; color: var(--primary-color);">The Artists Behind the Lens</h1>
+            <p style="font-size: 1.1rem; color: var(--primary-color); opacity: 0.8; margin-top: 10px;">Discover the passionate professionals who turn your fleeting seconds into timeless stories.</p>
+        </div>
+        
+        <!-- NEW: Premium Search Bar -->
+        <div style="text-align: center; margin-bottom: 50px; padding: 0 5vw;">
+            <input type="text" id="pro-search-bar" class="pro-search-input" placeholder="Search by name or specialty (e.g. Wedding)..." onkeyup="filterPhotographers()">
+        </div>
+        
+        <!-- The Grid where JS will push the White Cards -->
+        <div id="premium-photographers-grid" class="premium-pro-grid"></div>
+    </main>
+
     <!-- Detailed Profile Modal (Reused from index.html) -->
     <div id="modal-pro-details" class="modal">
         <div class="modal-content" style="padding: 0; overflow: hidden; max-width: 800px; text-align: left;">
