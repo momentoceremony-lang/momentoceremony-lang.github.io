@@ -1127,7 +1127,6 @@ function renderPremiumPhotographersPage(photographersToRender) {
         return;
     }
 
-    // Generate all cards and push them to the grid
     photographersToRender.forEach((pro) => {
         const displayImg = pro.banner_url || pro.dp_url; 
         const specsText = pro.specialties.join(' • ');
@@ -1135,7 +1134,8 @@ function renderPremiumPhotographersPage(photographersToRender) {
 
         const cardHTML = `
             <div class="premium-pro-card">
-                <div class="pro-card-header" style="cursor: pointer;" onclick="viewProProfile('${pro.id}')">
+                <!-- FIXED: Clicking the banner now routes to the new page -->
+                <div class="pro-card-header" style="cursor: pointer;" onclick="window.location.href='profile.html?id=${pro.id}'">
                     <img src="${displayImg}" class="pro-card-banner" alt="Banner">
                     <div class="pro-card-dp-wrapper">
                         <img src="${pro.dp_url}" alt="DP">
@@ -1148,7 +1148,8 @@ function renderPremiumPhotographersPage(photographersToRender) {
                     <p class="pro-card-bio">${bioText}</p>
                     
                     <div class="pro-card-actions">
-                        <button class="btn-view-profile" onclick="viewProProfile('${pro.id}')">View Profile</button>
+                        <!-- FIXED: Clicking the button now routes to the new page -->
+                        <button class="btn-view-profile" onclick="window.location.href='profile.html?id=${pro.id}'">View Profile</button>
                         <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
                     </div>
                 </div>
@@ -1162,15 +1163,13 @@ function renderPremiumPhotographersPage(photographersToRender) {
     
     const cardObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            // When the card enters the screen (10% visible)
             if (entry.isIntersecting) {
                 entry.target.classList.add('scroll-visible');
-                observer.unobserve(entry.target); // Stop observing once it animates in
+                observer.unobserve(entry.target); 
             }
         });
     }, { threshold: 0.1 }); 
 
-    // Attach the observer to every card we just created
     cards.forEach(card => cardObserver.observe(card));
 }
 
