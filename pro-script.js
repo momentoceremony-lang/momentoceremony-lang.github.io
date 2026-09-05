@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     checkProAuth();
 });
 
-// 1. GATEKEEPER & DATA LOADER
 function checkProAuth() {
     const userString = localStorage.getItem('momentoUser');
     const isPro = localStorage.getItem('isPro');
@@ -24,7 +23,6 @@ function checkProAuth() {
     if (document.getElementById('pro-name')) document.getElementById('pro-name').value = user.name;
     if (document.getElementById('pro-phone')) document.getElementById('pro-phone').value = user.phone;
 
-    // Load saved data from database
     loadProfileData(user.id);
 }
 
@@ -36,10 +34,8 @@ async function loadProfileData(proId) {
         if (data.success && data.data) {
             const pro = data.data;
             
-            // Restore Bio
             if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
             
-            // Restore Specialties & trigger dynamic inputs
             if(pro.specialties) {
                 pro.specialties.forEach(spec => {
                     const cb = document.querySelector(`input[value="${spec}"]`);
@@ -48,7 +44,6 @@ async function loadProfileData(proId) {
                 updateDynamicFields(); 
             }
             
-            // Restore Pricing
             if(pro.pricing) {
                 Object.keys(pro.pricing).forEach(spec => {
                     const idSafe = spec.replace(/\s+/g, '');
@@ -57,17 +52,11 @@ async function loadProfileData(proId) {
                 });
             }
 
-            // Restore Uploaded Images to memory and UI
             if(pro.dp_url) { uploadedImages.dp = pro.dp_url; document.getElementById('preview-dp').src = pro.dp_url; document.getElementById('preview-dp').style.display = 'block'; }
             if(pro.banner_url) { uploadedImages.banner = pro.banner_url; document.getElementById('preview-banner').src = pro.banner_url; document.getElementById('preview-banner').style.display = 'block'; }
-            if(pro.best_shots) {
-                uploadedImages.bestShots = pro.best_shots;
-                Object.keys(pro.best_shots).forEach(spec => {
-                    const idSafe = spec.replace(/\s+/g, '');
-                    const img = document.getElementById(`preview-best-${idSafe}`);
-                    if(img) { img.src = pro.best_shots[spec]; img.style.display = 'block'; }
-                });
-            }
+            
+            // Best Shots logic completely removed from database loader
+            
             if(pro.gallery) {
                 uploadedImages.gallery = pro.gallery;
                 renderGalleryPreviews();
@@ -117,28 +106,32 @@ function toggleProNav() {
 }
 
 // ==========================================
-// 5. CLOUDINARY UPLOAD WIDGET
+// 5. CLOUDINARY UPLOAD WIDGET & GALLERY ENGINE
 // ==========================================
-
 const CLOUD_NAME = "uvj9mm54"; 
 const UPLOAD_PRESET = "momento_preset"; 
 
-// We will store the uploaded URLs here before sending them to Railway
 let uploadedImages = {
     dp: "",
     banner: "",
-    bestShots: {}, // Now an object to map specialty to URL
-    gallery: []
+    gallery: [] // Will now hold objects: { url: "...", category: "Wedding" }
 };
+
+// Function triggered by the Category Modal
+function startGalleryUpload(category) {
+    closeModal('modal-post-category');
+    // Open widget, allow multiple, and pass the chosen category
+    openCloudinaryWidget('gallery', true, category);
+}
 
 function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
     let maxFiles = allowMultiple ? 20 : 1;
     let aspectRatio = null;
 
-    // Set aspect ratios only for specific UI elements. Gallery remains free-form.
-    if (imageType === 'dp') { aspectRatio = 1; } 
-    else if (imageType === 'banner') { aspectRatio = 16/9; } 
-    else if (imageType === 'best') { aspectRatio = 2/3; }
+    // Set Banner and DP to exactly 1:1 ratio
+    if (imageType === 'dp' || imageType === 'banner') { 
+        aspectRatio = 1; 
+    } 
 
     cloudinary.openUploadWidget({
         cloudName: CLOUD_NAME,
@@ -146,39 +139,17 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
         sources: ['local'], 
         multiple: allowMultiple,
         maxFiles: maxFiles,
-        
-        // Force the crop screen to appear, but always allow the user to skip it
         cropping: true, 
         croppingAspectRatio: aspectRatio,
         showSkipCropButton: true, 
-        
         folder: `momento_pro/${imageType}`, 
         clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
         maxFileSize: 5000000,
-        
-        // Premium Theming: Recolor the widget to match Momento exactly
         styles: {
             palette: {
-                window: "#FAF6F3",       
-                windowBorder: "#D19A8A", 
-                tabIcon: "#5C4033",      
-                menuIcons: "#5C4033",
-                textDark: "#5C4033",
-                textLight: "#FFFFFF",
-                link:  "#D19A8A",
-                action:  "#D19A8A",      
-                inactiveTabIcon: "#b5a39c",
-                error: "#e74c3c",
-                inProgress: "#D19A8A",
-                complete: "#27ae60",
-                sourceBg: "#FFFFFF"
-            },
-            fonts: {
-                default: null,
-                "'Lato', sans-serif": {
-                    url: "https://fonts.googleapis.com/css?family=Lato",
-                    active: true
-                }
+                window: "#FAF6F3", windowBorder: "#D19A8A", tabIcon: "#5C4033", menuIcons: "#5C4033",
+                textDark: "#5C4033", textLight: "#FFFFFF", link: "#D19A8A", action: "#D19A8A",      
+                inactiveTabIcon: "#b5a39c", error: "#e74c3c", inProgress: "#D19A8A", complete: "#27ae60", sourceBg: "#FFFFFF"
             }
         }
     }, (error, result) => {
@@ -187,25 +158,17 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
             
             if (imageType === 'dp') {
                 uploadedImages.dp = secureUrl;
-                const img = document.getElementById('preview-dp');
-                img.src = secureUrl;
-                img.style.display = 'block';
+                document.getElementById('preview-dp').src = secureUrl;
+                document.getElementById('preview-dp').style.display = 'block';
             } 
             else if (imageType === 'banner') {
                 uploadedImages.banner = secureUrl;
-                const img = document.getElementById('preview-banner');
-                img.src = secureUrl;
-                img.style.display = 'block';
+                document.getElementById('preview-banner').src = secureUrl;
+                document.getElementById('preview-banner').style.display = 'block';
             } 
-            else if (imageType === 'best') {
-                const idSafe = specialtyTag.replace(/\s+/g, '');
-                uploadedImages.bestShots[specialtyTag] = secureUrl;
-                const img = document.getElementById(`preview-best-${idSafe}`);
-                img.src = secureUrl;
-                img.style.display = 'block';
-            }
             else if (imageType === 'gallery') {
-                uploadedImages.gallery.push(secureUrl);
+                // Save both the URL and the Category as an object
+                uploadedImages.gallery.push({ url: secureUrl, category: specialtyTag });
                 renderGalleryPreviews(); 
             }
         }
@@ -214,36 +177,38 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
 
 function renderGalleryPreviews() {
     const container = document.getElementById('gallery-preview-container');
-    container.innerHTML = ''; // Clear current view
+    container.innerHTML = ''; 
     
     if (uploadedImages.gallery.length === 0) {
         container.innerHTML = '<p style="opacity: 0.6; font-size: 0.95rem; text-align: center; padding: 20px; background: #f9f9f9; border-radius: 10px; border: 1px dashed #ccc;">No gallery images uploaded yet. Click "+ Post" at the top to add some.</p>';
         return;
     }
 
-    // Generate a premium full-width card with a proper remove button
-    uploadedImages.gallery.forEach((url, index) => {
+    uploadedImages.gallery.forEach((item, index) => {
+        // Handle both old string arrays (from previous tests) and the new categorized objects safely
+        const imgUrl = typeof item === 'string' ? item : item.url;
+        const imgCat = typeof item === 'string' ? 'Uncategorized' : item.category;
+
         container.innerHTML += `
-            <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center;">
-                <img src="${url}" style="width: 100%; max-height: 450px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
-                <button onclick="removeGalleryImage(${index})" style="background: white; color: #e74c3c; border: 1px solid #e74c3c; padding: 10px 25px; border-radius: 25px; font-family: 'Lato', sans-serif; font-weight: bold; cursor: pointer; width: 100%; max-width: 250px;">🗑️ Remove Image</button>
+            <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; position: relative;">
+                <!-- Category Badge -->
+                <span style="position: absolute; top: 25px; right: 25px; background: var(--accent-color); color: #0f0f10; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">${imgCat}</span>
+                
+                <img src="${imgUrl}" style="width: 100%; max-height: 450px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                
+                <button onclick="removeGalleryImage(${index})" style="background: white; color: #e74c3c; border: 1px solid #e74c3c; padding: 10px 25px; border-radius: 25px; font-family: 'Lato', sans-serif; font-weight: bold; cursor: pointer; width: 100%; max-width: 250px; transition: 0.3s;" onmouseover="this.style.background='#e74c3c'; this.style.color='white';" onmouseout="this.style.background='white'; this.style.color='#e74c3c';">🗑️ Remove Image</button>
             </div>
         `;
     });
 }
 
 function removeGalleryImage(index) {
-    // Premium safety confirmation prompt
-    const confirmDelete = confirm("Are you sure you want to remove this image from your portfolio?");
-    
-    if (confirmDelete) {
-        uploadedImages.gallery.splice(index, 1); // Removes it from the master array
-        renderGalleryPreviews(); // Re-draws the UI
+    if (confirm("Are you sure you want to remove this image from your portfolio?")) {
+        uploadedImages.gallery.splice(index, 1); 
+        renderGalleryPreviews(); 
     }
 }
 
-
-// UPGRADED SAVE FUNCTION WITH BUTTON ANIMATION
 async function savePortfolioUrls(btnElement) {
     const userString = localStorage.getItem('momentoUser');
     if (!userString) return alert("Session expired. Please log in again.");
@@ -263,7 +228,6 @@ async function savePortfolioUrls(btnElement) {
 
     if (!uploadedImages.dp) return alert("You must upload a Display Picture (DP) to save your profile.");
 
-    // Button Animation Start
     const originalText = btnElement.innerText;
     btnElement.innerText = "Saving...";
     btnElement.disabled = true;
@@ -274,20 +238,19 @@ async function savePortfolioUrls(btnElement) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 proId: user.id, bio: bio, dp_url: uploadedImages.dp, banner_url: uploadedImages.banner,
-                specialties: specialties, pricing: pricing, best_shots: uploadedImages.bestShots, gallery: uploadedImages.gallery
+                specialties: specialties, pricing: pricing, best_shots: {}, gallery: uploadedImages.gallery
             })
         });
 
         const data = await res.json();
         if (data.success) {
-            // Success Animation
             btnElement.innerText = "Saved! ✓";
-            btnElement.style.backgroundColor = "#27ae60"; // Success Green
+            btnElement.style.backgroundColor = "#27ae60"; 
             btnElement.style.borderColor = "#27ae60";
             
             setTimeout(() => {
                 btnElement.innerText = originalText;
-                btnElement.style.backgroundColor = ""; // Reset to default CSS
+                btnElement.style.backgroundColor = ""; 
                 btnElement.style.borderColor = "";
                 btnElement.disabled = false;
             }, 3000);
@@ -304,50 +267,36 @@ async function savePortfolioUrls(btnElement) {
 }
 
 // ==========================================
-// 6. DYNAMIC SPECIALTY ENGINE
+// 6. DYNAMIC SPECIALTY ENGINE (UPDATED)
 // ==========================================
 function updateDynamicFields() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
     const pricingContainer = document.getElementById('pricing-container');
-    const bestShotsContainer = document.getElementById('dynamic-best-shots');
     
-    // 1. SECURE STATE: Memorize existing inputs before wiping the DOM
+    // SECURE STATE: Memorize existing inputs before wiping the DOM
     const currentPricing = {};
     pricingContainer.querySelectorAll('input').forEach(input => {
         currentPricing[input.id] = input.value;
     });
     
     pricingContainer.innerHTML = '';
-    bestShotsContainer.innerHTML = '';
+    // Removed bestShotsContainer logic entirely
     
     checkboxes.forEach(cb => {
         const val = cb.value;
         const idSafe = val.replace(/\s+/g, '');
         const costId = `cost-${idSafe}`;
-        
-        // Retrieve the memorized value, or leave blank if new
         const existingValue = currentPricing[costId] || '';
         
-        // 1. Generate Pricing Input (with preserved value)
+        // Generate Pricing Input 
         pricingContainer.innerHTML += `
             <div class="form-group">
-                <label style="color: var(--accent-color);">${val} Cost (Per Day)</label>
+                <label style="color: var(--primary-color); font-weight: bold;">${val} Cost (Per Day)</label>
                 <input type="number" id="${costId}" class="auth-input" placeholder="₹ Amount" value="${existingValue}">
-            </div>
-        `;
-        
-        // 2. Generate Best Shot Upload Card for the 3D Animation
-        bestShotsContainer.innerHTML += `
-            <div class="upload-card">
-                <h3>Best Shot: ${val}</h3>
-                <p>Displays in the ${val} 3D animation on the home page.</p>
-                <img id="preview-best-${idSafe}" src="${uploadedImages.bestShots[val] || ''}" style="${uploadedImages.bestShots[val] ? 'display:block;' : 'display:none;'} width: 100px; height: 140px; border-radius: 8px; margin: 15px auto; object-fit: cover; border: 2px solid var(--accent-color);">
-                <button class="btn-view-all" onclick="openCloudinaryWidget('best', false, '${val}')">Upload ${val} Shot</button>
             </div>
         `;
     });
 }
-
 
 // ==========================================
 // 7. QUIT PLATFORM LOGIC
