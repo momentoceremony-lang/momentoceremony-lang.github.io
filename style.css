@@ -492,6 +492,24 @@ button {
 /* =========================================================
    14. KEYFRAMES & UTILITIES
 ========================================================= */
+/* Logo Rolling Animation */
+@keyframes rollIn {
+    0% { transform: translateX(100px) rotate(360deg); opacity: 0; }
+    100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+}
+
+/* "MOMENTO" Text Typing Reveal */
+@keyframes revealText { 
+    to { width: 160px; } 
+}
+
+/* Hero Content Slide-In */
+@keyframes slideInRight { 
+    0% { opacity: 0; transform: translateX(50px); }
+    100% { opacity: 1; transform: translateX(0); } 
+}
+
+/* Other Utilities */
 @keyframes fadeAndRise { to { opacity: 1; transform: translateY(0); } }
 @keyframes slowBreathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
