@@ -1476,6 +1476,35 @@ textarea.auth-input {
     color: #c8a96a; 
 }
 
+/* =========================================================
+   LIGHT THEME MOBILE MENU (FOR OTHER PAGES)
+========================================================= */
+.mobile-dropdown.light-menu {
+    background: rgba(245, 235, 235, 0.95); /* Dusty pink/light background */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: -10px 0 30px rgba(90, 64, 73, 0.15);
+}
+
+.mobile-dropdown.light-menu a, 
+.mobile-dropdown.light-menu .menu-toggle-btn {
+    color: var(--primary-color); /* Dark text */
+}
+
+.mobile-dropdown.light-menu .close-menu {
+    color: var(--primary-color);
+}
+
+.mobile-dropdown.light-menu a:hover, 
+.mobile-dropdown.light-menu .menu-toggle-btn:hover,
+.mobile-dropdown.light-menu .close-menu:hover {
+    color: var(--accent-color);
+}
+
+.mobile-dropdown.light-menu .mobile-auth-container {
+    border-top: 1px solid rgba(90, 64, 73, 0.2);
+}
+
 /* Collapsible Sub-Menus */
 .mobile-submenu {
     display: none;
