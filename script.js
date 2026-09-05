@@ -607,13 +607,23 @@ async function fetchAndRenderPhotographers() {
             const proTypeFilter = urlParams.get('type');
             
             let filteredPros = allPhotographers;
+            
             if (proTypeFilter === 'mehndi') {
+                // Filter only Mehndi Artists
                 filteredPros = allPhotographers.filter(pro => pro.proType === 'Mehndi Artist');
+                
+                // Dynamically change the text on the page!
+                const mainTitle = document.getElementById('page-main-title');
+                const subTitle = document.getElementById('page-sub-title');
+                if (mainTitle) mainTitle.innerText = "The Artists Behind the Art";
+                if (subTitle) subTitle.innerText = "Discover the passionate professionals who bring their creativity and unique style to every stroke.";
+                
             } else if (proTypeFilter === 'photographer') {
-                filteredPros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType); // Legacy support
+                // Filter only Photographers
+                filteredPros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType); 
             }
 
-            renderMasterPhotographerList(filteredPros); // Pass the filtered array
+            renderMasterPhotographerList(filteredPros); // Pass the filtered array!
             renderCategoryStacks(); 
             renderCategoryModals(); 
         }
@@ -1187,9 +1197,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const premiumGrid = document.getElementById('premium-photographers-grid');
     if (premiumGrid) {
         const originalRender = renderMasterPhotographerList;
-        renderMasterPhotographerList = function() {
-            if (typeof originalRender === 'function') originalRender(); 
-            renderPremiumPhotographersPage(allPhotographers); // Pass the full array initially
+        // Accept the filtered array from the fetch function
+        renderMasterPhotographerList = function(prosToRender = allPhotographers) {
+            if (typeof originalRender === 'function') originalRender(prosToRender); 
+            // Pass that filtered array to the page builder
+            renderPremiumPhotographersPage(prosToRender); 
         };
     }
 });
@@ -1258,12 +1270,20 @@ function filterPhotographers() {
 
     const query = searchInput.value.toLowerCase().trim();
     
-    const filteredPros = allPhotographers.filter(pro => {
-        // Search by Name
+    // Ensure we only search within the CURRENTLY loaded type
+    const urlParams = new URLSearchParams(window.location.search);
+    const proTypeFilter = urlParams.get('type');
+    
+    let basePros = allPhotographers;
+    if (proTypeFilter === 'mehndi') {
+        basePros = allPhotographers.filter(pro => pro.proType === 'Mehndi Artist');
+    } else if (proTypeFilter === 'photographer') {
+        basePros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType);
+    }
+    
+    const filteredPros = basePros.filter(pro => {
         const matchesName = pro.name.toLowerCase().includes(query);
-        // Search by Specialty (e.g., "Wedding", "Birthday")
-        const matchesSpecialty = pro.specialties.some(spec => spec.toLowerCase().includes(query));
-        
+        const matchesSpecialty = pro.specialties && pro.specialties.some(spec => spec.toLowerCase().includes(query));
         return matchesName || matchesSpecialty;
     });
 
