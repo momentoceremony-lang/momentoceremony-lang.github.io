@@ -67,6 +67,33 @@ async function loadProfileData(proId) {
     }
 }
 
+// ==========================================
+// MODAL POPUP LOGIC FOR DASHBOARD
+// ==========================================
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if(modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevents background scrolling
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if(modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restores background scrolling
+    }
+}
+
+// Close modals when clicking the background shade
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+        document.body.style.overflow = 'auto';
+    }
+}
+
 // 2. TAB SWITCHING LOGIC
 function switchTab(tabName) {
     // Close the mobile menu if it is open
