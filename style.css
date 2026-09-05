@@ -1917,11 +1917,25 @@ textarea.auth-input {
 
 .thumbnail-row { 
     display: flex; 
-    gap: 10px; 
-    justify-content: center; 
+    gap: 12px; 
+    /* Removed justify-content: center to allow the reel to move freely */
     overflow-x: auto; 
     padding-bottom: 10px; 
     max-width: 100%;
+    
+    /* The Magic Trick: Adds exactly enough blank space to the left and right 
+       so even the very first and very last images can slide perfectly into the center */
+    padding-left: calc(50% - 38px); 
+    padding-right: calc(50% - 38px);
+    
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hides scrollbar on Firefox */
+}
+
+/* Hides the ugly scrollbar on Chrome/Safari/Brave */
+.thumbnail-row::-webkit-scrollbar {
+    display: none;
 }
 
 .thumbnail-row img { 
@@ -1933,12 +1947,16 @@ textarea.auth-input {
     opacity: 0.5; 
     transition: 0.3s; 
     border: 3px solid transparent; 
+    
+    /* CRITICAL: Prevents the phone from trying to squish the images together */
+    flex-shrink: 0; 
 }
 
 .thumbnail-row img.active-thumb, .thumbnail-row img:hover { 
     opacity: 1; 
     border-color: #c8a96a; 
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.05); /* Slightly pops the center image up to emphasize it */
+    box-shadow: 0 5px 15px rgba(200, 169, 106, 0.4);
 }
 
 /* MOBILE RESPONSIVENESS */
