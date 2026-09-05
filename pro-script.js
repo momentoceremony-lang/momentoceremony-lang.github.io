@@ -94,29 +94,105 @@ window.onclick = function(event) {
     }
 }
 
-// 2. TAB SWITCHING LOGIC
+// ==========================================
+// 2. TAB SWITCHING LOGIC & SPA ROUTING
+// ==========================================
+
+let backPressedOnce = false;
+
+// When the page first loads, set the baseline history state to "overview"
+window.addEventListener("DOMContentLoaded", () => {
+    if (!window.location.hash) {
+        window.history.replaceState({ tab: 'overview' }, "", "#overview");
+    } else {
+        // If they refresh the page on a specific tab, load that tab
+        executeVisualTabSwitch(window.location.hash.replace('#', ''));
+    }
+});
+
+// Triggered when a user clicks a sidebar menu item
 function switchTab(tabName) {
+    // Push the new tab to the phone's history so the back button registers it
+    if (window.location.hash !== `#${tabName}`) {
+        window.history.pushState({ tab: tabName }, "", `#${tabName}`);
+    }
+    executeVisualTabSwitch(tabName);
+}
+
+// Handles the actual visual hiding/showing of elements
+function executeVisualTabSwitch(tabName) {
     // Close the mobile menu if it is open
     const sidebar = document.querySelector('.sidebar');
-    if (sidebar.classList.contains('show-menu')) {
+    if (sidebar && sidebar.classList.contains('show-menu')) {
         sidebar.classList.remove('show-menu');
     }
+    
+    // Safety feature: Close any open pop-up modals when navigating tabs
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.style.display = 'none';
+    });
+    document.body.style.overflow = 'auto';
     
     // Hide all tabs
     document.querySelectorAll('.dashboard-tab').forEach(tab => {
         tab.classList.remove('active-tab');
     });
+    
     // Remove active class from all sidebar links
     document.querySelectorAll('.sidebar-menu li').forEach(li => {
         li.classList.remove('active');
     });
 
     // Show selected tab
-    document.getElementById(`tab-${tabName}`).classList.add('active-tab');
+    const targetTab = document.getElementById(`tab-${tabName}`);
+    if (targetTab) targetTab.classList.add('active-tab');
     
     // Highlight sidebar link
-    event.currentTarget.classList.add('active');
+    const targetLink = document.querySelector(`.sidebar-menu li[onclick="switchTab('${tabName}')"]`);
+    if (targetLink) targetLink.classList.add('active');
 }
+
+// ==========================================
+// NATIVE APP BACK BUTTON INTERCEPTOR
+// ==========================================
+window.addEventListener('popstate', function(event) {
+    const hash = window.location.hash.replace('#', '');
+    
+    // If there is no hash or we are on the main 'overview' tab
+    if (!hash || hash === 'overview') {
+        if (!backPressedOnce) {
+            // FIRST BACK PRESS: Intercept it, stay on overview, and show the warning toast
+            backPressedOnce = true;
+            
+            // Push overview back into history to prevent the browser from actually exiting
+            window.history.pushState({ tab: 'overview' }, "", "#overview");
+            executeVisualTabSwitch('overview');
+            
+            // Create a native-looking Android toast notification
+            const toast = document.createElement('div');
+            toast.innerText = "Press back again to exit";
+            toast.style.cssText = "position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 12px 24px; border-radius: 25px; z-index: 9999; font-family: 'Lato', sans-serif; font-size: 0.95rem; opacity: 0; transition: opacity 0.3s ease;";
+            document.body.appendChild(toast);
+            
+            // Fade the toast in
+            requestAnimationFrame(() => toast.style.opacity = '1');
+            
+            // Reset the double-tap requirement after 2 seconds
+            setTimeout(() => {
+                backPressedOnce = false;
+                toast.style.opacity = '0';
+                setTimeout(() => { if (document.body.contains(toast)) toast.remove(); }, 300);
+            }, 2000);
+            
+        } else {
+            // SECOND BACK PRESS (within 2 seconds): Actually exit the dashboard
+            window.location.href = "index.html"; 
+        }
+    } else {
+        // If they are on a different tab (e.g., Portfolio), just visually switch back to it
+        executeVisualTabSwitch(hash);
+    }
+});
 
 // 3. LOGOUT
 function logoutPro() {
@@ -125,7 +201,6 @@ function logoutPro() {
     localStorage.removeItem('isPro');
     window.location.href = "index.html";
 }
-
 
 // Toggle mobile dropdown menu
 function toggleProNav() {
