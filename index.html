@@ -44,14 +44,46 @@
             </svg>
         </div>
 
-        <!-- NEW: Mobile Dropdown Panel -->
-        <div id="mobileDropdown" class="mobile-dropdown">
-            <div class="close-menu" onclick="toggleMobileNav()">&times;</div>
-            <a href="index.html" onclick="toggleMobileNav()">Home</a>
-            <a href="about.html" onclick="toggleMobileNav()">About</a>
-            <a href="index.html#category-wedding" onclick="toggleMobileNav()">Categories</a>
-            <button class="btn-login-dark btn-login" style="margin-top: 20px; width: 100%; border: 1px solid #c8a96a !important; padding: 12px !important;">Login</button>
+        <!-- MOBILE MENU OVERLAY (Click to close) -->
+    <div id="mobile-overlay" class="mobile-menu-overlay" onclick="toggleMenu()"></div>
+
+    <!-- PREMIUM MOBILE DROPDOWN MENU -->
+    <div id="mobile-menu" class="mobile-dropdown">
+        <span class="close-menu" onclick="toggleMenu()">&times;</span>
+        
+        <a href="index.html" onclick="toggleMenu()">Home</a>
+        
+        <!-- Categories Submenu -->
+        <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-categories')">
+            Categories <span style="font-size: 0.8rem;">▼</span>
+        </button>
+        <div id="submenu-categories" class="mobile-submenu">
+            <a href="view.html?category=wedding" onclick="toggleMenu()">Weddings</a>
+            <a href="view.html?category=prewed" onclick="toggleMenu()">Pre-Weddings</a>
+            <a href="view.html?category=birthday" onclick="toggleMenu()">Birthdays</a>
+            <a href="view.html?category=baby" onclick="toggleMenu()">Baby Shoots</a>
+            <a href="view.html?category=anni" onclick="toggleMenu()">Anniversaries</a>
+            <a href="view.html?category=mehndi" onclick="toggleMenu()">Mehndi</a>
         </div>
+
+        <!-- Professionals Submenu -->
+        <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-pros')">
+            Our Professionals <span style="font-size: 0.8rem;">▼</span>
+        </button>
+        <div id="submenu-pros" class="mobile-submenu">
+            <a href="photographers.html?type=photographer" onclick="toggleMenu()">Photographers</a>
+            <a href="photographers.html?type=mehndi" onclick="toggleMenu()">Mehndi Artists</a>
+        </div>
+
+        <a href="#" onclick="toggleMenu(); openModal('modal-booking'); return false;">Book Now</a>
+        <a href="#site-footer" onclick="toggleMenu()">Contact Us</a>
+
+        <!-- Dynamic Login/Logout Area -->
+        <div class="mobile-auth-container">
+            <a href="#" id="mobile-login-btn" onclick="toggleMenu(); openModal('modal-login'); return false;">Login</a>
+            <a href="#" id="mobile-logout-btn" onclick="toggleMenu(); logout(); return false;" style="display: none; color: #e74c3c;">Logout</a>
+        </div>
+    </div>
         
     </nav>
     
