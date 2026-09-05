@@ -574,9 +574,19 @@
                 <input type="text" id="pro-reg-name" placeholder="Full Name / Studio Name" class="auth-input">
                 <input type="tel" id="pro-reg-phone" placeholder="Phone Number" class="auth-input">
                 <input type="email" id="pro-reg-email" placeholder="Email Address" class="auth-input">
+                
+                <!-- NEW: Mandatory Profession Selector -->
+                <div class="custom-select-wrapper" style="margin-bottom: 15px;">
+                    <select id="pro-reg-type" class="auth-input" style="color: var(--primary-color); cursor: pointer; padding-right: 30px;">
+                        <option value="" disabled selected>Select Your Profession...</option>
+                        <option value="Photographer">Photographer</option>
+                        <option value="Mehndi Artist">Mehndi Artist</option>
+                    </select>
+                </div>
+
                 <input type="password" id="pro-reg-password" placeholder="Create Password" class="auth-input">
                 
-                <!-- NEW: Terms and Conditions Checkbox -->
+                <!-- Terms and Conditions Checkbox -->
                 <div style="display: flex; align-items: flex-start; gap: 10px; margin: 10px 0 15px 0; text-align: left;">
                     <input type="checkbox" id="pro-terms-checkbox" style="margin-top: 4px; cursor: pointer; width: 18px; height: 18px;">
                     <label for="pro-terms-checkbox" style="font-size: 0.85rem; opacity: 0.8; line-height: 1.4;">
@@ -587,7 +597,7 @@
                 <button class="btn-view-all" onclick="sendProOtp()" style="width: 100%; background: var(--primary-color); color: white;">Send Verification</button>
                 <p class="auth-switch">Already a partner? <a href="#" onclick="switchProAuth('login')">Login</a></p>
             </div>
-
+            
             <!-- Pro OTP Verification (Step 2) -->
             <div id="pro-otp-section" style="display: none;">
                 <h2>Verify Email</h2>
@@ -762,7 +772,7 @@
             <div class="footer-partner">
                 <h4>Partner With Us</h4>
                 <p style="margin-bottom: 15px; font-size: 0.95rem; opacity: 0.8; line-height: 1.6;">Are you a professional photographer? Join Momento to reach more clients and manage your portfolio seamlessly.</p>
-                <button class="btn-footer-partner" onclick="openProModalFromFooter()">Join as Photographer</button>
+                <button class="btn-footer-partner" onclick="openProModalFromFooter()">Join as Professional</button>
             </div>
 
             <!-- Column 4: Contact Info -->
