@@ -40,39 +40,32 @@
             </svg>
         </div>
 
-        <!-- MOBILE MENU OVERLAY (Click to close) -->
-    <div id="mobile-overlay" class="mobile-menu-overlay" onclick="toggleMenu()"></div>
-
-    <!-- PREMIUM MOBILE DROPDOWN MENU (SHORTENED) -->
-    <div id="mobile-menu" class="mobile-dropdown">
-        <span class="close-menu" onclick="toggleMenu()">&times;</span>
-        
-        <!-- 1. Login (Hidden when logged in) -->
-        <div style="border-bottom: 1px solid rgba(200, 169, 106, 0.3); padding-bottom: 5px; margin-bottom: 20px;">
-            <a href="#" id="mobile-login-btn" onclick="toggleMenu(); openModal('modal-auth'); switchAuth('login'); return false;" style="color: #c8a96a;">Login</a>
-        </div>
-
-        <!-- 2. Home -->
-        <a href="index.html" onclick="toggleMenu()">Home</a>
-
-        <!-- 4. Professionals Submenu -->
-        <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-pros')">
-            Our Professionals <span style="font-size: 0.8rem;">▼</span>
-        </button>
-        <div id="submenu-pros" class="mobile-submenu">
-            <a href="photographers.html?type=photographer" onclick="toggleMenu()">Photographers</a>
-            <a href="photographers.html?type=mehndi" onclick="toggleMenu()">Mehndi Artists</a>
-        </div>
-
-        <!-- 5. Book an Artist -->
-        <a href="#" onclick="toggleMenu(); openModal('modal-booking'); return false;">Book an Artist</a>
-
-        <!-- 7. Logout (Hidden when logged out) -->
-        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(200, 169, 106, 0.3);">
-            <a href="#" id="mobile-logout-btn" onclick="toggleMenu(); logoutUser(); return false;" style="display: none; color: #e74c3c;">Logout</a>
-        </div>
-    </div>
-        
+            <!-- MOBILE MENU OVERLAY (Click to close) -->
+        <div id="mobile-overlay" class="mobile-menu-overlay" onclick="toggleMenu()"></div>
+    
+        <!-- MOBILE DROPDOWN MENU (LIGHT - FOR OTHER PAGES) -->
+        <div id="mobile-menu" class="mobile-dropdown light-menu">
+            <span class="close-menu" onclick="toggleMenu()">&times;</span>
+            
+            <a href="index.html" onclick="toggleMenu()">Home</a>
+            
+            <!-- Professionals Submenu -->
+            <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-pros')">
+                Our Professionals <span style="font-size: 0.8rem;">▼</span>
+            </button>
+            <div id="submenu-pros" class="mobile-submenu">
+                <a href="photographers.html?type=photographer" onclick="toggleMenu()">Photographers</a>
+                <a href="photographers.html?type=mehndi" onclick="toggleMenu()">Mehndi Artists</a>
+            </div>
+    
+            <a href="#" onclick="toggleMenu(); openModal('modal-booking'); return false;">Book an Artist</a>
+    
+            <!-- Dynamic Login/Logout Area -->
+            <div class="mobile-auth-container">
+                <a href="#" id="mobile-login-btn" onclick="toggleMenu(); openModal('modal-login'); return false;">Login</a>
+                <a href="#" id="mobile-logout-btn" onclick="toggleMenu(); logout(); return false;" style="display: none; color: #e74c3c;">Logout</a>
+            </div>
+        </div>        
     </nav>
 
     <!-- FADE OVERLAY & FIXED LOGO -->
