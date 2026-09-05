@@ -116,7 +116,7 @@
                     <p style="opacity: 0.8; font-size: 0.9rem;">Upload your best work to attract customers.</p>
                 </div>
                 <!-- Changed onclick to open the new category selection modal -->
-                <button onclick="openModal('modal-post-category')" style="background: var(--accent-color); color: #0f0f10; border: 2px solid var(--accent-color); padding: 10px 18px; border-radius: 25px; font-family: 'Lato', sans-serif; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(209,154,138,0.4); flex-shrink: 0; transition: 0.3s;">+ Post</button>
+                <button onclick="openCategoryModal()" style="background: var(--accent-color); color: #0f0f10; border: 2px solid var(--accent-color); padding: 10px 18px; border-radius: 25px; font-family: 'Lato', sans-serif; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(200, 169, 106, 0.4); flex-shrink: 0; transition: 0.3s;">+ Post</button>
             </div>
             
             <div class="upload-grid">
@@ -187,24 +187,20 @@
             <button class="btn-book-now" onclick="confirmQuit(this)" style="width: 100%; margin-top: 10px; background: #e74c3c; border-color: #e74c3c;">Permanently Delete Account</button>
         </div>
     </div>
-
-    <!-- POST CATEGORY SELECTION MODAL -->
+    
+    <!-- POST CATEGORY SELECTION MODAL (DYNAMIC) -->
     <div id="modal-post-category" class="modal" style="z-index: 2000;">
-        <div class="modal-content auth-box" style="max-width: 400px !important; text-align: center;">
+        <div class="modal-content auth-box" style="max-width: 400px !important; text-align: center; border-radius: 25px; padding: 40px 30px !important;">
             <span class="close-btn" onclick="closeModal('modal-post-category')">&times; Close</span>
-            <h2 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;">Select Category</h2>
+            <h2 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 5px;">Select Category</h2>
             <p style="opacity: 0.8; font-size: 0.95rem; margin-bottom: 25px;">Which category does this photo belong to?</p>
             
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <button class="btn-view-all" onclick="startGalleryUpload('Wedding')" style="width: 100%;">Wedding</button>
-                <button class="btn-view-all" onclick="startGalleryUpload('Pre-Wedding')" style="width: 100%;">Pre-Wedding</button>
-                <button class="btn-view-all" onclick="startGalleryUpload('Birthday')" style="width: 100%;">Birthday</button>
-                <button class="btn-view-all" onclick="startGalleryUpload('Anniversary')" style="width: 100%;">Anniversary</button>
-                <button class="btn-view-all" onclick="startGalleryUpload('Baby Shoot')" style="width: 100%;">Baby Shoot</button>
+            <!-- JavaScript will dynamically inject the premium buttons here based on what is checked -->
+            <div id="dynamic-category-buttons" style="display: flex; flex-direction: column; gap: 15px;">
             </div>
         </div>
     </div>
-
+    
     <script src="pro-script.js"></script>
 </body>
 </html>
