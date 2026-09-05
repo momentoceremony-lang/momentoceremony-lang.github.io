@@ -994,17 +994,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// Dictionary mapping database tags to beautiful display names
+const categoryDisplayNames = {
+    'wedding': 'Weddings',
+    'prewed': 'Pre-Weddings',
+    'birthday': 'Birthdays',
+    'baby': 'Baby Shoots',
+    'anni': 'Anniversaries'
+};
+
 function filterGallery(category) {
     activeCategory = category;
-    activeImageIndex = 0; // Reset to the first image of the new category
+    activeImageIndex = 0; 
+    
+    const filterContainer = document.querySelector('.gallery-filters');
+    
+    if (filterContainer) {
+        // Strip flex classes and force left alignment
+        filterContainer.className = ''; 
+        filterContainer.style.margin = '0 auto 20px auto';
+        filterContainer.style.textAlign = 'left';
+        filterContainer.style.position = 'relative';
+        filterContainer.style.zIndex = '50';
+        
+        // Add dynamic padding so it lines up with the image viewer on both PC and Mobile
+        filterContainer.style.padding = window.innerWidth <= 850 ? '0 20px' : '0 5vw';
+        
+        let optionsHTML = '';
+        Object.keys(galleryData).forEach(catKey => {
+            optionsHTML += `<div class="custom-select-option" onclick="filterGallery('${catKey}')" style="text-align: left; font-weight: bold;">${categoryDisplayNames[catKey]}</div>`;
+        });
 
-    // Update active state on the buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.getAttribute('onclick').includes(category)) {
-            btn.classList.add('active');
-        }
-    });
+        // Inject the identical left-aligned dropdown
+        filterContainer.innerHTML = `
+            <div class="custom-select-wrapper" style="width: fit-content; margin: 0;" onclick="this.querySelector('.custom-select-options').classList.toggle('show')">
+                <div class="custom-select-display auth-input" style="border-radius: 25px; padding: 8px 22px 8px 18px; border: 1px solid var(--accent-color); color: var(--primary-color); font-weight: bold; background: transparent; cursor: pointer; gap: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 0;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    <span style="font-size: 0.95rem; margin-right: 5px;">${categoryDisplayNames[category]}</span>
+                </div>
+                <div class="custom-select-options" style="width: 220px; left: 0; top: calc(100% + 5px);">
+                    ${optionsHTML}
+                </div>
+            </div>
+        `;
+    }
 
     renderGalleryImages();
 }
@@ -1243,7 +1278,7 @@ async function loadDedicatedProfile(proId) {
     }
 }
 
-// NEW: Dynamic Category Filtering Function (Premium Dropdown UI)
+// NEW: Dynamic Category Filtering Function (Left-Aligned Dropdown)
 function renderProfileGallery(filterCategory) {
     const galleryGrid = document.getElementById('page-gallery');
     const filterContainer = document.getElementById('profile-gallery-filters');
@@ -1254,12 +1289,12 @@ function renderProfileGallery(filterCategory) {
 
     if (filterContainer) {
         filterContainer.innerHTML = '';
-        // Strip the old horizontal scroll classes so the dropdown doesn't get cut off
         filterContainer.className = ''; 
-        filterContainer.style.margin = '0 auto 30px auto';
-        filterContainer.style.textAlign = 'center';
+        // Force left alignment and push the images down slightly
+        filterContainer.style.margin = '0 0 25px 0';
+        filterContainer.style.textAlign = 'left';
         filterContainer.style.position = 'relative';
-        filterContainer.style.zIndex = '50'; // Ensures dropdown floats above images
+        filterContainer.style.zIndex = '50';
     }
 
     if (!currentProfileGallery || currentProfileGallery.length === 0) {
@@ -1267,7 +1302,7 @@ function renderProfileGallery(filterCategory) {
         return;
     }
 
-    // 1. Build Premium Dropdown Filter Dynamically
+    // 1. Build Premium Left-Aligned Dropdown
     if (filterContainer) {
         const uniqueCategories = new Set();
         uniqueCategories.add('All');
@@ -1281,23 +1316,23 @@ function renderProfileGallery(filterCategory) {
         if (uniqueCategories.size > 1) {
             let optionsHTML = '';
             uniqueCategories.forEach(cat => {
-                optionsHTML += `<div class="custom-select-option" onclick="renderProfileGallery('${cat}')" style="text-align: center; font-weight: bold;">${cat}</div>`;
+                optionsHTML += `<div class="custom-select-option" onclick="renderProfileGallery('${cat}')" style="text-align: left; font-weight: bold;">${cat}</div>`;
             });
 
             filterContainer.innerHTML = `
-                <div class="custom-select-wrapper" style="width: fit-content; margin: 0 auto;" onclick="this.querySelector('.custom-select-options').classList.toggle('show')">
+                <div class="custom-select-wrapper" style="width: fit-content; margin: 0;" onclick="this.querySelector('.custom-select-options').classList.toggle('show')">
                     
                     <!-- The Main Button (Icon + Active Category) -->
-                    <div class="custom-select-display auth-input" style="border-radius: 25px; padding: 10px 25px; border: 2px solid var(--accent-color); color: var(--primary-color); font-weight: bold; background: transparent; cursor: pointer; gap: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 0;">
+                    <div class="custom-select-display auth-input" style="border-radius: 25px; padding: 8px 22px 8px 18px; border: 1px solid var(--accent-color); color: var(--primary-color); font-weight: bold; background: transparent; cursor: pointer; gap: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 0;">
                         <!-- Premium Funnel/Filter Icon -->
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                         </svg>
-                        <span style="font-size: 1.05rem;">${filterCategory}</span>
+                        <span style="font-size: 0.95rem; margin-right: 5px;">${filterCategory}</span>
                     </div>
 
-                    <!-- The Hidden Dropdown Menu -->
-                    <div class="custom-select-options" style="width: 220px; left: 50%; transform: translateX(-50%); top: calc(100% + 5px);">
+                    <!-- The Hidden Dropdown Menu (Aligned Left) -->
+                    <div class="custom-select-options" style="width: 220px; left: 0; top: calc(100% + 5px);">
                         ${optionsHTML}
                     </div>
                     
@@ -1323,7 +1358,7 @@ function renderProfileGallery(filterCategory) {
         galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim">`;
     });
 
-    // 3. Re-attach Scroll Observer to the newly injected images
+    // 3. Re-attach Scroll Observer
     const galleryImages = galleryGrid.querySelectorAll('.portfolio-img-anim');
     const imgObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
