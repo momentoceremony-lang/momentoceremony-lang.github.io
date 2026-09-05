@@ -32,7 +32,7 @@
         </div>
 
         <!-- Mobile Hamburger Menu (Custom 3-Line) -->
-        <div class="mobile-menu-icon" onclick="toggleMobileNav()">
+        <div class="mobile-menu-icon" onclick="toggleMenu()">
             <svg viewBox="0 0 24 24" width="34" height="34" stroke="#f5efe6" stroke-width="1.5" stroke-linecap="round" fill="none">
                 <line x1="4" y1="7" x2="20" y2="7"></line>
                 <line x1="4" y1="12" x2="14" y2="12"></line> 
@@ -40,14 +40,38 @@
             </svg>
         </div>
 
-        <!-- NEW: Mobile Dropdown Panel -->
-        <div id="mobileDropdown" class="mobile-dropdown">
-            <div class="close-menu" onclick="toggleMobileNav()">&times;</div>
-            <a href="index.html" onclick="toggleMobileNav()">Home</a>
-            <a href="about.html" onclick="toggleMobileNav()">About</a>
-            <a href="index.html#category-wedding" onclick="toggleMobileNav()">Categories</a>
-            <button class="btn-login-dark btn-login" style="margin-top: 20px; width: 100%; border: 1px solid #c8a96a !important; padding: 12px !important;">Login</button>
+        <!-- MOBILE MENU OVERLAY (Click to close) -->
+    <div id="mobile-overlay" class="mobile-menu-overlay" onclick="toggleMenu()"></div>
+
+    <!-- PREMIUM MOBILE DROPDOWN MENU (SHORTENED) -->
+    <div id="mobile-menu" class="mobile-dropdown">
+        <span class="close-menu" onclick="toggleMenu()">&times;</span>
+        
+        <!-- 1. Login (Hidden when logged in) -->
+        <div style="border-bottom: 1px solid rgba(200, 169, 106, 0.3); padding-bottom: 5px; margin-bottom: 20px;">
+            <a href="#" id="mobile-login-btn" onclick="toggleMenu(); openModal('modal-auth'); switchAuth('login'); return false;" style="color: #c8a96a;">Login</a>
         </div>
+
+        <!-- 2. Home -->
+        <a href="index.html" onclick="toggleMenu()">Home</a>
+
+        <!-- 4. Professionals Submenu -->
+        <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-pros')">
+            Our Professionals <span style="font-size: 0.8rem;">▼</span>
+        </button>
+        <div id="submenu-pros" class="mobile-submenu">
+            <a href="photographers.html?type=photographer" onclick="toggleMenu()">Photographers</a>
+            <a href="photographers.html?type=mehndi" onclick="toggleMenu()">Mehndi Artists</a>
+        </div>
+
+        <!-- 5. Book an Artist -->
+        <a href="#" onclick="toggleMenu(); openModal('modal-booking'); return false;">Book an Artist</a>
+
+        <!-- 7. Logout (Hidden when logged out) -->
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(200, 169, 106, 0.3);">
+            <a href="#" id="mobile-logout-btn" onclick="toggleMenu(); logoutUser(); return false;" style="display: none; color: #e74c3c;">Logout</a>
+        </div>
+    </div>
         
     </nav>
 
