@@ -488,24 +488,27 @@ async function registerPro() {
     const phone = document.getElementById('pro-reg-phone').value;
     const email = document.getElementById('pro-reg-email').value;
     const password = document.getElementById('pro-reg-password').value;
+    const proType = document.getElementById('pro-reg-type').value; // Get Profession
     const otp = document.getElementById('pro-reg-otp').value;
 
+    if (!proType) return alert("Please select your profession from the dropdown.");
     if (!otp) return alert("Please enter the 4-digit OTP.");
 
     try {
         const res = await fetch(`${API_BASE_URL}/pro-register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, phone, email, password, otp })
+            body: JSON.stringify({ name, phone, email, password, proType, otp }) // Pass proType
         });
         const data = await res.json();
 
         if (data.success) {
-            alert("Welcome to Momento Photography! Redirecting to your dashboard...");
+            alert("Welcome to Momento! Redirecting to your dashboard...");
+            // Ensure the backend includes proType in the returned user object
             localStorage.setItem('momentoToken', data.token);
             localStorage.setItem('momentoUser', JSON.stringify(data.user));
             localStorage.setItem('isPro', 'true');
-            window.location.href = "pro-dashboard.html"; // Direct redirect
+            window.location.href = "pro-dashboard.html";
         } else {
             alert(data.error);
         }
@@ -598,27 +601,38 @@ async function fetchAndRenderPhotographers() {
         
         if (data.success && data.data.length > 0) {
             allPhotographers = data.data;
-            renderMasterPhotographerList();
+            
+            // Check if URL specifies a type (Photographer or Mehndi Artist)
+            const urlParams = new URLSearchParams(window.location.search);
+            const proTypeFilter = urlParams.get('type');
+            
+            let filteredPros = allPhotographers;
+            if (proTypeFilter === 'mehndi') {
+                filteredPros = allPhotographers.filter(pro => pro.proType === 'Mehndi Artist');
+            } else if (proTypeFilter === 'photographer') {
+                filteredPros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType); // Legacy support
+            }
+
+            renderMasterPhotographerList(filteredPros); // Pass the filtered array
             renderCategoryStacks(); 
-            renderCategoryModals(); // NEW: Triggers dynamic lists for "View All Professionals"
+            renderCategoryModals(); 
         }
     } catch (error) {
-        console.error("Failed to load photographers from DB:", error);
+        console.error("Failed to load professionals from DB:", error);
     }
 }
 
-// Inject profiles into the "Our Photographers" Master Modal
-function renderMasterPhotographerList() {
+// Update the master renderer to accept the filtered array
+function renderMasterPhotographerList(prosToRender = allPhotographers) {
     const grid = document.querySelector('#modal-all-photographers .modal-card-grid');
-    
-    // SAFETY CHECK: If the old modal was deleted, stop running this specific function
     if (!grid) return; 
 
-    grid.innerHTML = ''; // Clear the dummy data
+    grid.innerHTML = ''; 
 
-    allPhotographers.forEach(pro => {
+    prosToRender.forEach(pro => {
+        // ... (Keep the rest of the inner HTML card generation exactly the same) ...
         const mainDisplayImg = pro.banner_url || pro.dp_url; 
-        const specsText = pro.specialties.join(' • ');
+        const specsText = (pro.specialties || []).join(' • ');
 
         const cardHTML = `
             <div class="modal-card-item">
