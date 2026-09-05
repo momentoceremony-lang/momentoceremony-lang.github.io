@@ -58,19 +58,30 @@ let typeSpeed = isDeleting ? 50 : 100;
 }
 
 // ==========================================
-// MOBILE MENU TOGGLE
+// MOBILE MENU TOGGLE (Premium Overlay & Dropdowns)
 // ==========================================
-function toggleMobileNav() {
-    const dropdown = document.getElementById('mobileDropdown');
-    if (dropdown) {
-        dropdown.classList.toggle('open');
-        
-        // Prevent background scrolling when menu is open
-        if (dropdown.classList.contains('open')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
+function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-overlay');
+    
+    if (menu) menu.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('open');
+    
+    // Prevent background scrolling when menu is open
+    if (menu && menu.classList.contains('open')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
+        // Close all submenus when the main menu closes
+        document.querySelectorAll('.mobile-submenu').forEach(sub => sub.classList.remove('open'));
+    }
+}
+
+// Toggles nested menus inside the mobile sidebar
+function toggleSubMenu(submenuId) {
+    const submenu = document.getElementById(submenuId);
+    if (submenu) {
+        submenu.classList.toggle('open');
     }
 }
 
@@ -285,6 +296,10 @@ function checkLoginState() {
     const isPro = localStorage.getItem('isPro');
     const authContainer = document.querySelector('.auth-buttons');
     
+    // Target the mobile buttons
+    const mobileLoginBtn = document.getElementById('mobile-login-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    
     if (userString && authContainer) {
         const user = JSON.parse(userString);
         const firstName = user.name.split(' ')[0];
@@ -308,6 +323,15 @@ function checkLoginState() {
                 <button class="btn-login" onclick="logoutUser()">Logout</button>
             `;
         }
+        
+        // Hide Login, Show Logout on Mobile
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'block';
+        
+    } else {
+        // Show Login, Hide Logout on Mobile if not logged in
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'block';
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'none';
     }
 }
 
