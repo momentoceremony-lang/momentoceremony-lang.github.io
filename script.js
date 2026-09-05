@@ -1243,7 +1243,7 @@ async function loadDedicatedProfile(proId) {
     }
 }
 
-// NEW: Dynamic Category Filtering Function
+// NEW: Dynamic Category Filtering Function (Premium Dropdown UI)
 function renderProfileGallery(filterCategory) {
     const galleryGrid = document.getElementById('page-gallery');
     const filterContainer = document.getElementById('profile-gallery-filters');
@@ -1251,30 +1251,58 @@ function renderProfileGallery(filterCategory) {
     if (!galleryGrid) return;
     
     galleryGrid.innerHTML = '';
-    if (filterContainer) filterContainer.innerHTML = '';
+
+    if (filterContainer) {
+        filterContainer.innerHTML = '';
+        // Strip the old horizontal scroll classes so the dropdown doesn't get cut off
+        filterContainer.className = ''; 
+        filterContainer.style.margin = '0 auto 30px auto';
+        filterContainer.style.textAlign = 'center';
+        filterContainer.style.position = 'relative';
+        filterContainer.style.zIndex = '50'; // Ensures dropdown floats above images
+    }
 
     if (!currentProfileGallery || currentProfileGallery.length === 0) {
         galleryGrid.innerHTML = '<p style="opacity:0.6;">No portfolio images uploaded yet.</p>';
         return;
     }
 
-    // 1. Build Filter Buttons Dynamically
+    // 1. Build Premium Dropdown Filter Dynamically
     if (filterContainer) {
         const uniqueCategories = new Set();
         uniqueCategories.add('All');
         
         currentProfileGallery.forEach(item => {
-            // Safely check if it's the new object format or an old string
             const cat = typeof item === 'string' ? 'Uncategorized' : (item.category || 'Uncategorized');
             uniqueCategories.add(cat);
         });
 
-        // Only show the filter buttons if there is more than just 1 category
+        // Only show the filter if there is more than just 1 category
         if (uniqueCategories.size > 1) {
+            let optionsHTML = '';
             uniqueCategories.forEach(cat => {
-                const isActive = cat === filterCategory ? 'active' : '';
-                filterContainer.innerHTML += `<button class="filter-btn ${isActive}" onclick="renderProfileGallery('${cat}')">${cat}</button>`;
+                optionsHTML += `<div class="custom-select-option" onclick="renderProfileGallery('${cat}')" style="text-align: center; font-weight: bold;">${cat}</div>`;
             });
+
+            filterContainer.innerHTML = `
+                <div class="custom-select-wrapper" style="width: fit-content; margin: 0 auto;" onclick="this.querySelector('.custom-select-options').classList.toggle('show')">
+                    
+                    <!-- The Main Button (Icon + Active Category) -->
+                    <div class="custom-select-display auth-input" style="border-radius: 25px; padding: 10px 25px; border: 2px solid var(--accent-color); color: var(--primary-color); font-weight: bold; background: transparent; cursor: pointer; gap: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 0;">
+                        <!-- Premium Funnel/Filter Icon -->
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                        </svg>
+                        <span style="font-size: 1.05rem;">${filterCategory}</span>
+                    </div>
+
+                    <!-- The Hidden Dropdown Menu -->
+                    <div class="custom-select-options" style="width: 220px; left: 50%; transform: translateX(-50%); top: calc(100% + 5px);">
+                        ${optionsHTML}
+                    </div>
+                    
+                </div>
+            `;
         }
     }
 
@@ -1291,7 +1319,6 @@ function renderProfileGallery(filterCategory) {
     }
 
     filteredImages.forEach(item => {
-        // FIXED: Extract the actual image URL whether it's the old string format or the new object format
         const imgUrl = typeof item === 'string' ? item : item.url;
         galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim">`;
     });
