@@ -144,6 +144,35 @@ let uploadedImages = {
     gallery: [] // Will now hold objects: { url: "...", category: "Wedding" }
 };
 
+// Function to dynamically populate and open the category selection modal
+function openCategoryModal() {
+    const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const buttonContainer = document.getElementById('dynamic-category-buttons');
+    
+    // Clear out any old buttons
+    buttonContainer.innerHTML = '';
+
+    // Safety check: Ensure they have at least one category selected
+    if (checkedBoxes.length === 0) {
+        alert("Please select at least one Specialty in your 'My Profile' tab first.");
+        return;
+    }
+
+    // Generate a premium button for each selected category
+    checkedBoxes.forEach(cb => {
+        const val = cb.value;
+        buttonContainer.innerHTML += `
+            <button onclick="startGalleryUpload('${val}')" 
+                    style="background: var(--accent-color); color: #0f0f10; border: none; padding: 14px 20px; border-radius: 15px; font-family: 'Lato', sans-serif; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; transition: transform 0.2s ease;">
+                ${val}
+            </button>
+        `;
+    });
+
+    // Open the modal
+    openModal('modal-post-category');
+}
+
 // Function triggered by the Category Modal
 function startGalleryUpload(category) {
     closeModal('modal-post-category');
