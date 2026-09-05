@@ -1204,6 +1204,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// Global variable to hold the currently viewed photographer's gallery
+let currentProfileGallery = []; 
+
 async function loadDedicatedProfile(proId) {
     try {
         const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/profile/${proId}`);
@@ -1212,49 +1215,99 @@ async function loadDedicatedProfile(proId) {
         if (data.success && data.data) {
             const pro = data.data;
             
-            // Populate Data
+            // Populate Basic Data
             document.getElementById('page-name').innerText = pro.name;
             document.getElementById('page-specs').innerText = (pro.specialties || []).join(' • ');
             document.getElementById('page-bio').innerText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
             document.getElementById('page-dp').src = pro.dp_url;
             document.getElementById('page-banner').src = pro.banner_url || pro.dp_url;
             
-            // Setup Book Button
             document.getElementById('page-book-btn').onclick = () => handleBookNow(pro.name);
             
-            // Populate Gallery
-            const galleryGrid = document.getElementById('page-gallery');
-            galleryGrid.innerHTML = '';
-            const allGalleryImgs = [...Object.values(pro.best_shots || {}), ...(pro.gallery || [])];
+            // Store the gallery globally so our filter function can use it
+            currentProfileGallery = pro.gallery || [];
             
-            if (allGalleryImgs.length > 0) {
-                allGalleryImgs.forEach(imgUrl => {
-                    // Added the new portfolio-img-anim class here
-                    galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim">`;
+            // Migrate any old "Best Shots" into the new gallery format so old images aren't lost
+            if (pro.best_shots) {
+                Object.entries(pro.best_shots).forEach(([cat, url]) => {
+                    currentProfileGallery.unshift({ url: url, category: cat });
                 });
-
-                // SET UP SCROLL ANIMATION OBSERVER FOR PORTFOLIO IMAGES
-                const galleryImages = galleryGrid.querySelectorAll('.portfolio-img-anim');
-                
-                const imgObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('scroll-visible');
-                            observer.unobserve(entry.target); 
-                        }
-                    });
-                }, { threshold: 0.1 }); 
-
-                galleryImages.forEach(img => imgObserver.observe(img));
-
-            } else {
-                galleryGrid.innerHTML = '<p style="opacity:0.6;">No portfolio images uploaded yet.</p>';
             }
+            
+            // Render the gallery initially showing 'All' categories
+            renderProfileGallery('All');
         }
     } catch (error) {
         console.error("Failed to load profile:", error);
         document.getElementById('page-name').innerText = "Profile Not Found";
     }
+}
+
+// NEW: Dynamic Category Filtering Function
+function renderProfileGallery(filterCategory) {
+    const galleryGrid = document.getElementById('page-gallery');
+    const filterContainer = document.getElementById('profile-gallery-filters');
+    
+    if (!galleryGrid) return;
+    
+    galleryGrid.innerHTML = '';
+    if (filterContainer) filterContainer.innerHTML = '';
+
+    if (!currentProfileGallery || currentProfileGallery.length === 0) {
+        galleryGrid.innerHTML = '<p style="opacity:0.6;">No portfolio images uploaded yet.</p>';
+        return;
+    }
+
+    // 1. Build Filter Buttons Dynamically
+    if (filterContainer) {
+        const uniqueCategories = new Set();
+        uniqueCategories.add('All');
+        
+        currentProfileGallery.forEach(item => {
+            // Safely check if it's the new object format or an old string
+            const cat = typeof item === 'string' ? 'Uncategorized' : (item.category || 'Uncategorized');
+            uniqueCategories.add(cat);
+        });
+
+        // Only show the filter buttons if there is more than just 1 category
+        if (uniqueCategories.size > 1) {
+            uniqueCategories.forEach(cat => {
+                const isActive = cat === filterCategory ? 'active' : '';
+                filterContainer.innerHTML += `<button class="filter-btn ${isActive}" onclick="renderProfileGallery('${cat}')">${cat}</button>`;
+            });
+        }
+    }
+
+    // 2. Filter and Render Images
+    const filteredImages = currentProfileGallery.filter(item => {
+        if (filterCategory === 'All') return true;
+        const cat = typeof item === 'string' ? 'Uncategorized' : (item.category || 'Uncategorized');
+        return cat === filterCategory;
+    });
+
+    if (filteredImages.length === 0) {
+        galleryGrid.innerHTML = '<p style="opacity:0.6;">No images found for this category.</p>';
+        return;
+    }
+
+    filteredImages.forEach(item => {
+        // FIXED: Extract the actual image URL whether it's the old string format or the new object format
+        const imgUrl = typeof item === 'string' ? item : item.url;
+        galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim">`;
+    });
+
+    // 3. Re-attach Scroll Observer to the newly injected images
+    const galleryImages = galleryGrid.querySelectorAll('.portfolio-img-anim');
+    const imgObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('scroll-visible');
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, { threshold: 0.1 }); 
+
+    galleryImages.forEach(img => imgObserver.observe(img));
 }
 
 // Native Mobile Web Share API + Desktop Clipboard Fallback
