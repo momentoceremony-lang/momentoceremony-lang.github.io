@@ -964,7 +964,7 @@ if (revealSections.length > 0) {
 }
 
 // ==========================================
-// VIEW.HTML GALLERY ENGINE
+// VIEW.HTML GALLERY ENGINE (PREMIUM DROPDOWN FIXED)
 // ==========================================
 
 // Add all your stock images for each category here
@@ -976,24 +976,6 @@ const galleryData = {
     anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ]
 };
 
-let activeCategory = 'wedding';
-let activeImageIndex = 0;
-
-// Runs when view.html loads to check the URL (e.g. view.html?category=prewed)
-document.addEventListener("DOMContentLoaded", () => {
-    if (document.getElementById('main-gallery-img')) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryFromUrl = urlParams.get('category');
-        
-        // Load the category from the URL, or default to wedding
-        if (categoryFromUrl && galleryData[categoryFromUrl]) {
-            filterGallery(categoryFromUrl);
-        } else {
-            filterGallery('wedding');
-        }
-    }
-});
-
 // Dictionary mapping database tags to beautiful display names
 const categoryDisplayNames = {
     'wedding': 'Weddings',
@@ -1003,10 +985,29 @@ const categoryDisplayNames = {
     'anni': 'Anniversaries'
 };
 
-function filterGallery(category) {
-    activeCategory = category;
-    activeImageIndex = 0; 
-    
+let activeCategory = 'wedding';
+let activeImageIndex = 0;
+
+// Runs when view.html loads to check the URL (e.g. view.html?category=prewed)
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById('main-gallery-img')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryFromUrl = urlParams.get('category');
+        
+        // 1. Build the dropdown UI first so it exists in the DOM
+        buildGalleryDropdown();
+
+        // 2. Load the category from the URL, or default to wedding
+        if (categoryFromUrl && galleryData[categoryFromUrl]) {
+            selectGalleryCategory(null, categoryFromUrl);
+        } else {
+            selectGalleryCategory(null, 'wedding');
+        }
+    }
+});
+
+// Builds the HTML for the dropdown menu ONLY ONCE on page load
+function buildGalleryDropdown() {
     const filterContainer = document.querySelector('.gallery-filters');
     
     if (filterContainer) {
@@ -1022,7 +1023,8 @@ function filterGallery(category) {
         
         let optionsHTML = '';
         Object.keys(galleryData).forEach(catKey => {
-            optionsHTML += `<div class="custom-select-option" onclick="filterGallery('${catKey}')" style="text-align: left; font-weight: bold;">${categoryDisplayNames[catKey]}</div>`;
+            // Pass 'event' so we can stop the click from breaking the menu
+            optionsHTML += `<div class="custom-select-option" onclick="selectGalleryCategory(event, '${catKey}')" style="text-align: left; font-weight: bold;">${categoryDisplayNames[catKey]}</div>`;
         });
 
         // Inject the identical left-aligned dropdown
@@ -1032,15 +1034,38 @@ function filterGallery(category) {
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                     </svg>
-                    <span style="font-size: 0.95rem; margin-right: 5px;">${categoryDisplayNames[category]}</span>
+                    <span id="active-gallery-category-text" style="font-size: 0.95rem; margin-right: 5px;">${categoryDisplayNames[activeCategory]}</span>
                 </div>
-                <div class="custom-select-options" style="width: 220px; left: 0; top: calc(100% + 5px);">
+                <div class="custom-select-options" id="gallery-dropdown-options" style="width: 220px; left: 0; top: calc(100% + 5px);">
                     ${optionsHTML}
                 </div>
             </div>
         `;
     }
+}
 
+// Handles the logic when a user actually clicks a category in the list
+function selectGalleryCategory(event, category) {
+    if (event) {
+        event.stopPropagation(); // Prevents the browser from destroying the menu mid-click
+    }
+    
+    activeCategory = category;
+    activeImageIndex = 0; 
+    
+    // Smoothly update just the text inside the button
+    const textSpan = document.getElementById('active-gallery-category-text');
+    if (textSpan) {
+        textSpan.innerText = categoryDisplayNames[category];
+    }
+
+    // Force the dropdown to close
+    const optionsBox = document.getElementById('gallery-dropdown-options');
+    if (optionsBox) {
+        optionsBox.classList.remove('show');
+    }
+
+    // Fetch the new photos
     renderGalleryImages();
 }
 
