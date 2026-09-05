@@ -10,7 +10,8 @@ const serviceData = [
     { text: "Pre-Weddings", image: "Stock/hero_banner_PreWeddings.jpeg" },
     { text: "Birthdays", image: "Stock/hero_banner_Birthdays.jpeg" },
     { text: "Baby Shoots", image: "Stock/hero_banner_BabyShoots.jpeg" },
-    { text: "Anniversaries", image: "Stock/hero_banner_Anniversaries.jpeg" }
+    { text: "Anniversaries", image: "Stock/hero_banner_Anniversaries.jpeg" },
+    { text: "Mehndi", image: "Stock/hero_banner_Mehndi.jpeg" }
 ];
 
 let serviceIndex = 0;
@@ -115,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCategorySlideshow("anni-slideshow");
     initCategorySlideshow("prewed-slideshow");
     initCategorySlideshow("baby-slideshow");
+    initCategorySlideshow("mehndi-slideshow");
 
     // Initialize Custom Premium Date Pickers
     flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
@@ -973,7 +975,8 @@ const galleryData = {
     prewed: [ 'Stock/prewed-banner-1.jpeg', 'Stock/prewed-banner-2.jpeg', 'Stock/prewed-shot-1.jpeg', 'Stock/prewed-shot-2.jpeg' ],
     birthday: [ 'Stock/bday-banner-1.jpeg', 'Stock/bday-banner-2.jpeg', 'Stock/bday-shot-1.jpeg', 'Stock/bday-shot-2.jpeg' ],
     baby: [ 'Stock/baby-banner-1.jpeg', 'Stock/baby-banner-2.jpeg', 'Stock/baby-shot-1.jpeg' ],
-    anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ]
+    anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ],
+    mehndi: [ 'Stock/mehndi-banner-1.jpeg', 'Stock/mehndi-banner-2.jpeg' ]
 };
 
 // Dictionary mapping database tags to beautiful display names
@@ -982,7 +985,8 @@ const categoryDisplayNames = {
     'prewed': 'Pre-Weddings',
     'birthday': 'Birthdays',
     'baby': 'Baby Shoots',
-    'anni': 'Anniversaries'
+    'anni': 'Anniversaries',
+    'mehndi': 'Mehndi'
 };
 
 let activeCategory = 'wedding';
