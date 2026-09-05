@@ -990,7 +990,7 @@ if (revealSections.length > 0) {
 }
 
 // ==========================================
-// VIEW.HTML GALLERY ENGINE (PREMIUM DROPDOWN FIXED)
+// VIEW.HTML GALLERY ENGINE (PREMIUM CAROUSEL)
 // ==========================================
 
 // Add all your stock images for each category here
@@ -1000,7 +1000,7 @@ const galleryData = {
     birthday: [ 'Stock/bday-banner-1.jpeg', 'Stock/bday-banner-2.jpeg', 'Stock/bday-shot-1.jpeg', 'Stock/bday-shot-2.jpeg' ],
     baby: [ 'Stock/baby-banner-1.jpeg', 'Stock/baby-banner-2.jpeg', 'Stock/baby-shot-1.jpeg' ],
     anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ],
-    mehndi: [ 'Stock/mehndi-banner-1.jpeg', 'Stock/mehndi-banner-2.jpeg' ]
+    mehndi: [ 'Stock/mehndi-banner-1.jpeg', 'Stock/mehndi-banner-2.jpeg' ] // Mehndi is included here!
 };
 
 // Dictionary mapping database tags to beautiful display names
@@ -1015,6 +1015,7 @@ const categoryDisplayNames = {
 
 let activeCategory = 'wedding';
 let activeImageIndex = 0;
+let isCategoryLoaded = false; // NEW: Tracks if thumbnails are already built
 
 // Runs when view.html loads to check the URL (e.g. view.html?category=prewed)
 document.addEventListener("DOMContentLoaded", () => {
@@ -1080,6 +1081,7 @@ function selectGalleryCategory(event, category) {
     
     activeCategory = category;
     activeImageIndex = 0; 
+    isCategoryLoaded = false; // Forces the thumbnail bar to rebuild for the new category
     
     // Smoothly update just the text inside the button
     const textSpan = document.getElementById('active-gallery-category-text');
@@ -1109,24 +1111,36 @@ function renderGalleryImages() {
     setTimeout(() => {
         mainImg.src = images[activeImageIndex];
         mainImg.style.opacity = 1;
-    }, 200); // Waits for the image to fade out before swapping
+    }, 200);
 
-    // Draw the small thumbnails
-    thumbContainer.innerHTML = '';
-    images.forEach((src, index) => {
-        const thumb = document.createElement('img');
-        thumb.src = src;
+    // ONLY rebuild the HTML thumbnails if the category actually changed
+    // This stops the scroll bar from violently resetting to zero on every swipe
+    if (!isCategoryLoaded) {
+        thumbContainer.innerHTML = '';
+        images.forEach((src, index) => {
+            const thumb = document.createElement('img');
+            thumb.src = src;
+            thumb.onclick = () => {
+                activeImageIndex = index;
+                renderGalleryImages();
+            };
+            thumbContainer.appendChild(thumb);
+        });
+        isCategoryLoaded = true;
+    }
+
+    // Update the active class and smoothly scroll the row!
+    const allThumbs = thumbContainer.querySelectorAll('img');
+    allThumbs.forEach((thumb, index) => {
         if (index === activeImageIndex) {
             thumb.classList.add('active-thumb');
+            
+            // The magic line: slides the container so the active thumb is always in the exact middle of the screen!
+            thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            
+        } else {
+            thumb.classList.remove('active-thumb');
         }
-        
-        // When a thumbnail is clicked, change the main image
-        thumb.onclick = () => {
-            activeImageIndex = index;
-            renderGalleryImages();
-        };
-        
-        thumbContainer.appendChild(thumb);
     });
 }
 
