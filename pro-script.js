@@ -36,20 +36,41 @@ async function loadProfileData(proId) {
             
             if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
             
-            if(pro.specialties) {
-                pro.specialties.forEach(spec => {
-                    const cb = document.querySelector(`input[value="${spec}"]`);
-                    if(cb) cb.checked = true;
-                });
-                updateDynamicFields(); 
-            }
-            
-            if(pro.pricing) {
-                Object.keys(pro.pricing).forEach(spec => {
-                    const idSafe = spec.replace(/\s+/g, '');
-                    const input = document.getElementById(`cost-${idSafe}`);
-                    if(input) input.value = pro.pricing[spec];
-                });
+            // NEW: Dashboard Adaptation Logic based on Profession
+            if (pro.proType === 'Mehndi Artist') {
+                // Hide the checkboxes
+                const specGroup = document.getElementById('specialties-selection-group');
+                if (specGroup) specGroup.style.display = 'none';
+                
+                // Automatically inject a single pricing field for Mehndi
+                const pricingContainer = document.getElementById('pricing-container');
+                const existingValue = (pro.pricing && pro.pricing['Mehndi Design']) ? pro.pricing['Mehndi Design'] : '';
+                if (pricingContainer) {
+                    pricingContainer.innerHTML = `
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label style="color: var(--primary-color); font-weight: bold;">Mehndi Design Cost (Starting At)</label>
+                            <input type="number" id="cost-MehndiDesign" class="auth-input" placeholder="₹ Amount" value="${existingValue}">
+                        </div>
+                    `;
+                }
+            } else {
+                // Normal Photographer Flow
+                if(pro.specialties) {
+                    pro.specialties.forEach(spec => {
+                        const cb = document.querySelector(`input[value="${spec}"]`);
+                        if(cb) cb.checked = true;
+                    });
+                    updateDynamicFields(); 
+                }
+                
+                // Restore Pricing for standard photographers
+                if(pro.pricing) {
+                    Object.keys(pro.pricing).forEach(spec => {
+                        const idSafe = spec.replace(/\s+/g, '');
+                        const input = document.getElementById(`cost-${idSafe}`);
+                        if(input) input.value = pro.pricing[spec];
+                    });
+                }
             }
 
             if(pro.dp_url) { uploadedImages.dp = pro.dp_url; document.getElementById('preview-dp').src = pro.dp_url; document.getElementById('preview-dp').style.display = 'block'; }
@@ -66,6 +87,7 @@ async function loadProfileData(proId) {
         console.error("Failed to load profile data", e); 
     }
 }
+
 
 // ==========================================
 // MODAL POPUP LOGIC FOR DASHBOARD
