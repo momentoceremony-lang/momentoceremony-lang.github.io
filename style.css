@@ -1918,22 +1918,20 @@ textarea.auth-input {
 .thumbnail-row { 
     display: flex; 
     gap: 12px; 
-    /* Removed justify-content: center to allow the reel to move freely */
     overflow-x: auto; 
-    padding-bottom: 10px; 
-    max-width: 100%;
     
-    /* The Magic Trick: Adds exactly enough blank space to the left and right 
-       so even the very first and very last images can slide perfectly into the center */
+    /* ADDED: Top padding gives the image room to pop up without hitting the ceiling */
+    padding-top: 15px; 
+    padding-bottom: 15px; 
+    
+    max-width: 100%;
     padding-left: calc(50% - 38px); 
     padding-right: calc(50% - 38px);
-    
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Hides scrollbar on Firefox */
+    scrollbar-width: none; 
 }
 
-/* Hides the ugly scrollbar on Chrome/Safari/Brave */
 .thumbnail-row::-webkit-scrollbar {
     display: none;
 }
@@ -1947,16 +1945,20 @@ textarea.auth-input {
     opacity: 0.5; 
     transition: 0.3s; 
     border: 3px solid transparent; 
-    
-    /* CRITICAL: Prevents the phone from trying to squish the images together */
     flex-shrink: 0; 
+    
+    /* ADDED: Position relative allows z-index to work */
+    position: relative; 
 }
 
 .thumbnail-row img.active-thumb, .thumbnail-row img:hover { 
     opacity: 1; 
     border-color: #c8a96a; 
-    transform: translateY(-4px) scale(1.05); /* Slightly pops the center image up to emphasize it */
+    transform: translateY(-6px) scale(1.08); 
     box-shadow: 0 5px 15px rgba(200, 169, 106, 0.4);
+    
+    /* ADDED: Forces the active image to step completely forward */
+    z-index: 10; 
 }
 
 /* MOBILE RESPONSIVENESS */
