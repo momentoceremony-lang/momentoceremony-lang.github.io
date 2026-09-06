@@ -381,15 +381,55 @@ function openDashboard() {
 }
 
 // ==========================================
-// MASTER BOOKING ENGINE (UPDATED)
+// MASTER BOOKING ENGINE & PREMIUM DROPDOWNS
 // ==========================================
 let currentSelectedPhotographer = null;
 
-// This single function handles both Generic and Specific booking clicks
+function togglePremiumDropdown(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    
+    // Close all other custom dropdowns
+    document.querySelectorAll('.custom-select-options').forEach(opt => {
+        if (opt.id !== id) opt.classList.remove('show');
+    });
+    
+    target.classList.toggle('show');
+}
+
+function selectPremiumCategory(val, element) {
+    document.getElementById('book-category-display').innerText = val;
+    document.getElementById('book-category-display').style.color = "var(--primary-color)";
+    document.getElementById('book-category-display').style.opacity = "1";
+    document.getElementById('book-category-select').value = val;
+    
+    // Manage visual selected state
+    document.querySelectorAll('#category-options .custom-select-option').forEach(el => el.classList.remove('selected-option'));
+    element.classList.add('selected-option');
+    
+    document.getElementById('category-options').classList.remove('show');
+
+    // Filter artists based on category (if not locked to a specific profile)
+    if (!currentSelectedPhotographer) {
+        populateArtistDropdown(val);
+    }
+}
+
+function selectPremiumArtist(val, element) {
+    document.getElementById('book-artist-display').innerText = val;
+    document.getElementById('book-artist-display').style.color = "var(--primary-color)";
+    document.getElementById('book-artist-display').style.opacity = "1";
+    document.getElementById('book-artist-select').value = val;
+    
+    // Manage visual selected state
+    document.querySelectorAll('#artist-options .custom-select-option').forEach(el => el.classList.remove('selected-option'));
+    element.classList.add('selected-option');
+    
+    document.getElementById('artist-options').classList.remove('show');
+}
+
 function handleBookNow(photographerName = null) {
     const userString = localStorage.getItem('momentoUser');
-    
-    // 1. Check Authentication First
     if (!userString) {
         alert("Please Sign In or Create an Account to book an artist.");
         document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
@@ -401,83 +441,89 @@ function handleBookNow(photographerName = null) {
 
     currentSelectedPhotographer = photographerName;
     const title = document.getElementById('booking-modal-title');
-    const catSelect = document.getElementById('book-category-select');
-    const artistSelect = document.getElementById('book-artist-select');
+    const catOptions = document.getElementById('category-options');
+    const artistOptions = document.getElementById('artist-options');
+    const artistContainer = document.getElementById('booking-artist-container');
     
-    // Reset inputs
-    catSelect.innerHTML = '<option value="" disabled selected>Select Event Category</option>';
-    artistSelect.innerHTML = '<option value="" disabled selected>Select an Artist</option>';
+    // Reset Form Defaults
+    catOptions.innerHTML = '';
+    artistOptions.innerHTML = '';
+    document.getElementById('book-category-display').innerText = "Select Event Category";
+    document.getElementById('book-category-display').style.opacity = "0.8";
+    document.getElementById('book-category-select').value = "";
+    document.getElementById('book-artist-display').innerText = "Select an Artist";
+    document.getElementById('book-artist-display').style.opacity = "0.8";
+    document.getElementById('book-artist-select').value = "";
     document.getElementById('book-start').value = "";
     document.getElementById('book-end').value = "";
     document.getElementById('book-details').value = "";
 
-    // Base Categories (Now includes Mehndi)
     let availableCategories = ['Wedding', 'Pre-Wedding', 'Birthday', 'Anniversary', 'Baby Shoot', 'Mehndi', 'Other Event'];
 
-    // 2. Determine Context (Specific Profile vs Generic Navbar)
+    // CONTEXT A: Triggered directly from profile.html or a specific card
     if (photographerName) {
-        // Context B: Clicked from a specific profile
         title.innerText = `Requesting: ${photographerName}`;
         
-        // Lock the artist dropdown
-        artistSelect.innerHTML = `<option value="${photographerName}" selected>${photographerName}</option>`;
-        artistSelect.disabled = true; 
-        artistSelect.style.opacity = "0.7";
+        // Lock the artist input
+        document.getElementById('book-artist-display').innerText = photographerName;
+        document.getElementById('book-artist-display').style.opacity = "1";
+        document.getElementById('book-artist-select').value = photographerName;
+        artistContainer.style.pointerEvents = "none";
+        artistContainer.style.opacity = "0.6"; 
 
-        // Filter categories based on this specific artist's specialties
+        // Filter categories based on this specific artist
         const pro = allPhotographers.find(p => p.name === photographerName);
         if (pro && pro.specialties && pro.specialties.length > 0) {
             availableCategories = pro.specialties;
         }
-    } else {
-        // Context A: Clicked from Generic Navbar
+    } 
+    // CONTEXT B: Triggered generically from the Navbar
+    else {
         title.innerText = "Book an Artist";
-        
-        // Unlock the artist dropdown and populate with everyone initially
-        artistSelect.disabled = false;
-        artistSelect.style.opacity = "1";
+        artistContainer.style.pointerEvents = "auto";
+        artistContainer.style.opacity = "1";
         populateArtistDropdown(null); 
     }
 
-    // Populate Category Dropdown
+    // Populate Category UI
     availableCategories.forEach(cat => {
-        catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+        catOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumCategory('${cat}', this)">${cat}</div>`;
     });
 
-    // Close all other modals and open booking
     document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
     openModal('modal-booking');
 }
 
-// 3. Dynamic Filter: When user picks a category, filter the Artist list
-function handleBookingCategoryChange() {
-    // If an artist was already locked in from a profile click, do nothing
-    if (currentSelectedPhotographer) return;
-
-    const selectedCat = document.getElementById('book-category-select').value;
-    populateArtistDropdown(selectedCat);
-}
-
-// Helper: Fills the artist dropdown based on category
 function populateArtistDropdown(filterCategory) {
-    const artistSelect = document.getElementById('book-artist-select');
-    artistSelect.innerHTML = '<option value="" disabled selected>Select an Artist</option>';
+    const artistOptions = document.getElementById('artist-options');
+    artistOptions.innerHTML = '';
+    
+    // Reset selection text
+    document.getElementById('book-artist-display').innerText = "Select an Artist";
+    document.getElementById('book-artist-display').style.opacity = "0.8";
+    document.getElementById('book-artist-select').value = "";
 
     let prosToShow = allPhotographers;
 
-    // Filter pros if a specific category is chosen (and it's not "Other")
     if (filterCategory && filterCategory !== 'Other Event') {
         prosToShow = allPhotographers.filter(pro => pro.specialties && pro.specialties.includes(filterCategory));
     }
 
     if (prosToShow.length === 0) {
-        artistSelect.innerHTML += `<option value="" disabled>No artists available for this category</option>`;
+        artistOptions.innerHTML = `<div class="custom-select-option" style="opacity: 0.5;">No artists available</div>`;
     } else {
         prosToShow.forEach(pro => {
-            artistSelect.innerHTML += `<option value="${pro.name}">${pro.name}</option>`;
+            artistOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumArtist('${pro.name}', this)">${pro.name}</div>`;
         });
     }
 }
+
+// Close custom dropdowns if clicked outside
+window.addEventListener('click', function(event) {
+    if (!event.target.closest('.custom-select-wrapper')) {
+        document.querySelectorAll('.custom-select-options').forEach(opt => opt.classList.remove('show'));
+    }
+});
 
 // ==========================================
 // SUBMIT BOOKING (UPDATED FOR STEP 2)
