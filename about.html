@@ -96,6 +96,21 @@
             </div>
     
             <a href="#" onclick="toggleMenu(); openModal('modal-booking'); return false;">Book an Artist</a>
+
+            <!-- Mobile Contact Submenu -->
+            <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-contact')">
+                Contact Us <span style="font-size: 0.8rem;">▼</span>
+            </button>
+            <div id="submenu-contact" class="mobile-submenu">
+                <a href="#" onclick="handlePhoneClick(event, '+919330224549'); return false;">📞 +91 93302 24549</a>
+                <a href="mailto:momentoceremony@gmail.com">✉️ momentoceremony@gmail.com</a>
+                
+                <!-- Mobile Social Links -->
+                <div style="display: flex; gap: 15px; padding-top: 10px; border-top: 1px solid rgba(200, 169, 106, 0.3);">
+                    <a href="https://www.facebook.com/" target="_blank" style="font-size: 0.95rem;">Facebook</a>
+                    <a href="https://www.instagram.com/" target="_blank" style="font-size: 0.95rem;">Instagram</a>
+                </div>
+            </div>
     
             <!-- Dynamic Login/Logout Area -->
             <div class="mobile-auth-container">
