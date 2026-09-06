@@ -118,10 +118,13 @@ function initCategorySlideshow(slideshowId) {
 // 4. INITIALIZE EVERYTHING ON PAGE LOAD
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // Start Hero Typing
+    // 1. Check Login State IMMEDIATELY before anything else can cause an error
+    checkLoginState();
+
+    // 2. Start Hero Typing
     setTimeout(typeEffect, 1000); 
 
-    // Initialize Category Image Slideshows
+    // 3. Initialize Category Image Slideshows
     initCategorySlideshow("wedding-slideshow");
     initCategorySlideshow("birthday-slideshow");
     initCategorySlideshow("anni-slideshow");
@@ -129,11 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
     initCategorySlideshow("baby-slideshow");
     initCategorySlideshow("mehndi-slideshow");
 
-    // Initialize Custom Premium Date Pickers
-    flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
-    flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
-    
-    checkLoginState();
+    // 4. Initialize Custom Premium Date Pickers SAFELY (Only if the library is loaded)
+    if (typeof flatpickr !== 'undefined') {
+        flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+        flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+    }
 });
 
 // ==========================================
