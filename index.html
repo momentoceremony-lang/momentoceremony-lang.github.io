@@ -573,16 +573,14 @@
         </div>
     </div>
 
-        <!-- BOOKING CALENDAR MODAL (MASTER) -->
+    <!-- BOOKING CALENDAR MODAL (PREMIUM UI) -->
     <div id="modal-booking" class="modal">
         <div class="modal-content auth-box" style="max-width: 500px !important;">
             <span class="close-btn" onclick="closeModal('modal-booking')">&times; Close</span>
             
             <h2 id="booking-modal-title">Book an Artist</h2>
-            <p id="booking-photographer-name" style="margin-bottom: 20px; font-weight: bold; color: var(--accent-color); font-size: 1.1rem; display: none;"></p>
             
             <div id="booking-form-section">
-                <!-- Date Selection -->
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <div style="flex: 1;">
                         <label style="font-size: 0.85rem; opacity: 0.8;">Start Date</label>
@@ -594,30 +592,32 @@
                     </div>
                 </div>
                 
-                <!-- Dynamic Event Category Dropdown -->
-                <div style="margin-bottom: 15px;">
-                    <select id="book-category-select" class="auth-input" onchange="handleBookingCategoryChange()" style="cursor: pointer; color: var(--primary-color);">
-                        <option value="" disabled selected>Select Event Category</option>
-                        <!-- JS will populate this -->
-                    </select>
+                <!-- Custom Category Dropdown -->
+                <div class="custom-select-wrapper" onclick="togglePremiumDropdown('category-options')" style="margin-bottom: 15px;">
+                    <div class="custom-select-display auth-input" id="book-category-display" style="text-align: left; opacity: 0.8;">Select Event Category</div>
+                    <div class="custom-select-options dark-premium-dropdown" id="category-options">
+                        <!-- JS will populate -->
+                    </div>
                 </div>
+                <input type="hidden" id="book-category-select" value="">
     
-                <!-- Dynamic Artist Dropdown -->
-                <div style="margin-bottom: 15px;" id="booking-artist-container">
-                    <select id="book-artist-select" class="auth-input" style="cursor: pointer; color: var(--primary-color);">
-                        <option value="" disabled selected>Select an Artist</option>
-                        <!-- JS will populate this -->
-                    </select>
+                <!-- Custom Artist Dropdown -->
+                <div class="custom-select-wrapper" id="booking-artist-container" onclick="togglePremiumDropdown('artist-options')" style="margin-bottom: 15px;">
+                    <div class="custom-select-display auth-input" id="book-artist-display" style="text-align: left; opacity: 0.8;">Select an Artist</div>
+                    <div class="custom-select-options dark-premium-dropdown" id="artist-options">
+                        <!-- JS will populate -->
+                    </div>
                 </div>
+                <input type="hidden" id="book-artist-select" value="">
                 
-                <!-- Event Details -->
-                <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (location, timings, specific requirements...)" rows="4" style="resize: none;"></textarea>
+                <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (location, timings...)" rows="4" style="resize: none;"></textarea>
     
                 <button class="btn-book-now" onclick="submitBooking()" style="width: 100%; margin-top: 10px;">Request Quotation</button>
                 <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">No payment required yet. Our team will confirm availability and send you a custom payment quotation.</p>
             </div>
         </div>
     </div>
+    
     <!-- PHOTOGRAPHER PORTAL MODAL -->
     <div id="modal-pro-auth" class="modal">
         <div class="modal-content auth-box">
