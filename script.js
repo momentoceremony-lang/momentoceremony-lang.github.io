@@ -397,7 +397,9 @@ function togglePremiumDropdown(id) {
     target.classList.toggle('show');
 }
 
-function selectPremiumCategory(val, element) {
+function selectPremiumCategory(event, val, element) {
+    if (event) event.stopPropagation(); // Stops the click from bubbling up to the wrapper
+
     document.getElementById('book-category-display').innerText = val;
     document.getElementById('book-category-display').style.color = "var(--primary-color)";
     document.getElementById('book-category-display').style.opacity = "1";
@@ -415,7 +417,9 @@ function selectPremiumCategory(val, element) {
     }
 }
 
-function selectPremiumArtist(val, element) {
+function selectPremiumArtist(event, val, element) {
+    if (event) event.stopPropagation(); // Stops the click from bubbling up to the wrapper
+
     document.getElementById('book-artist-display').innerText = val;
     document.getElementById('book-artist-display').style.color = "var(--primary-color)";
     document.getElementById('book-artist-display').style.opacity = "1";
@@ -485,9 +489,9 @@ function handleBookNow(photographerName = null) {
         populateArtistDropdown(null); 
     }
 
-    // Populate Category UI
+    // Populate Category UI (Added 'event' parameter)
     availableCategories.forEach(cat => {
-        catOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumCategory('${cat}', this)">${cat}</div>`;
+        catOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumCategory(event, '${cat}', this)">${cat}</div>`;
     });
 
     document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
@@ -512,8 +516,9 @@ function populateArtistDropdown(filterCategory) {
     if (prosToShow.length === 0) {
         artistOptions.innerHTML = `<div class="custom-select-option" style="opacity: 0.5;">No artists available</div>`;
     } else {
+        // Populate Artist UI (Added 'event' parameter)
         prosToShow.forEach(pro => {
-            artistOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumArtist('${pro.name}', this)">${pro.name}</div>`;
+            artistOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumArtist(event, '${pro.name}', this)">${pro.name}</div>`;
         });
     }
 }
