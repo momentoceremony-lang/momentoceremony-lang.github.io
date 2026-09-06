@@ -26,6 +26,26 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     position: absolute; width: 100%; z-index: 1000;
 }
 
+/* =========================================================
+   DARK THEME DROPDOWN OVERRIDES (FOR INDEX.HTML)
+========================================================= */
+.dark-nav .nav-dropdown-content {
+    background: rgba(15, 15, 16, 0.85); /* Deep dark background with slight transparency */
+    backdrop-filter: blur(15px); /* Premium glassmorphism blur */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(200, 169, 106, 0.25); /* Subtle gold border */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.dark-nav .nav-dropdown-content a {
+    color: #f5efe6 !important; /* Creamy white text */
+}
+
+.dark-nav .nav-dropdown-content a:hover {
+    background: rgba(255, 255, 255, 0.05); /* Very subtle highlight box */
+    color: #c8a96a !important; /* Turns gold to match the rest of the dark theme */
+}
+
 .nav-right {
     display: flex; align-items: center; gap: 40px;
 }
