@@ -299,38 +299,65 @@ function checkLoginState() {
     // Target the mobile buttons
     const mobileLoginBtn = document.getElementById('mobile-login-btn');
     const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    // Clean up any existing mobile profile card to prevent duplicates on resize/reload
+    const existingCard = document.getElementById('mobile-profile-card-view');
+    if (existingCard) existingCard.remove();
     
     if (userString && authContainer) {
         const user = JSON.parse(userString);
-        const firstName = user.name.split(' ')[0];
         
-        if (isPro === 'true') {
-            // Photographer State
-            authContainer.innerHTML = `
-                <span style="margin-right: 20px; font-weight: bold; color: var(--primary-color); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic;">
-                    Pro: ${firstName}
-                </span>
-                <button class="btn-signup" style="margin-right: 10px;" onclick="window.location.href='pro-dashboard.html'">Dashboard</button>
-                <button class="btn-login" onclick="logoutUser()">Logout</button>
+        // Extract initials dynamically
+        const nameParts = user.name.trim().split(' ');
+        const initials = nameParts.length > 1 
+            ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() 
+            : nameParts[0].substring(0, 2).toUpperCase();
+        
+        // 1. DESKTOP: Inject the Avatar Dropdown
+        authContainer.innerHTML = `
+            <div class="nav-dropdown">
+                <div class="user-avatar-badge">${initials}</div>
+                <div class="nav-dropdown-content" style="right: 0; left: auto; transform: none; min-width: 160px; margin-top: 10px;">
+                    ${isPro === 'true' ? `<a href="pro-dashboard.html">Dashboard</a>` : `<a href="#" onclick="openDashboard(); return false;">My Bookings</a>`}
+                    <a href="#" onclick="logoutUser(); return false;" style="color: #e74c3c !important;">Logout</a>
+                </div>
+            </div>
+        `;
+        
+        // 2. MOBILE: Inject the Profile Header Card at the top of the menu
+        if (mobileMenu) {
+            const roleText = isPro === 'true' ? 'Professional Partner' : 'Customer';
+            const mobileProfileHTML = `
+                <div id="mobile-profile-card-view" class="mobile-profile-card">
+                    <div class="user-avatar-badge">${initials}</div>
+                    <div class="mobile-profile-details">
+                        <span class="mobile-profile-name">${user.name}</span>
+                        <span class="mobile-profile-role">${roleText}</span>
+                    </div>
+                </div>
             `;
-        } else {
-            // Customer State
-            authContainer.innerHTML = `
-                <span style="margin-right: 20px; font-weight: bold; color: var(--primary-color); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic;">
-                    Welcome, ${firstName}
-                </span>
-                <button class="btn-signup" style="margin-right: 10px;" onclick="openDashboard()">My Bookings</button>
-                <button class="btn-login" onclick="logoutUser()">Logout</button>
-            `;
+            // Insert it right after the 'X' close button
+            const closeBtn = mobileMenu.querySelector('.close-menu');
+            if (closeBtn) {
+                closeBtn.insertAdjacentHTML('afterend', mobileProfileHTML);
+            }
         }
         
-        // Hide Login, Show Logout on Mobile
+        // Hide Login text link, Show Logout text link on Mobile bottom
         if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
-        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'flex'; // FIXED: flex matches your CSS design
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'flex';
         
     } else {
-        // Show Login, Hide Logout on Mobile if not logged in
-        if (mobileLoginBtn) mobileLoginBtn.style.display = 'flex'; // FIXED: flex matches your CSS design
+        // Restore standard Login button on Desktop if logged out
+        if (authContainer) {
+            const isLightNav = document.querySelector('.light-nav') !== null;
+            const btnClass = isLightNav ? 'btn-login-light' : 'btn-login-dark';
+            authContainer.innerHTML = `<button class="${btnClass} btn-login" onclick="openModal('modal-auth'); switchAuth('login');">Login</button>`;
+        }
+        
+        // Show Login text link, Hide Logout text link on Mobile bottom
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'flex';
         if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'none';
     }
 }
