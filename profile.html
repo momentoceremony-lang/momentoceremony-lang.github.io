@@ -17,10 +17,39 @@
                 <span class="logo-text-dark">MOMENTO</span>
             </a>
         </div>
+        <!-- Right Side: Links & Login -->
         <div class="nav-right desktop-only">
             <div class="nav-links">
                 <a href="index.html">Home</a>
-                <a href="photographers.html">Photographers</a>
+                
+                <!-- Categories Dropdown -->
+                <div class="nav-dropdown">
+                    <a href="index.html#category-wedding" style="cursor: default;">Categories ▾</a>
+                    <div class="nav-dropdown-content">
+                        <a href="view.html?category=wedding">Weddings</a>
+                        <a href="view.html?category=prewed">Pre-Weddings</a>
+                        <a href="view.html?category=birthday">Birthdays</a>
+                        <a href="view.html?category=baby">Baby Shoots</a>
+                        <a href="view.html?category=anni">Anniversaries</a>
+                        <a href="view.html?category=mehndi">Mehndi</a>
+                    </div>
+                </div>
+
+                <!-- Professionals Dropdown -->
+                <div class="nav-dropdown">
+                    <a href="photographers.html" style="cursor: default;">Our Professionals ▾</a>
+                    <div class="nav-dropdown-content">
+                        <a href="photographers.html?type=photographer">Photographers</a>
+                        <a href="photographers.html?type=mehndi">Mehndi Artists</a>
+                    </div>
+                </div>
+
+                <a href="#" onclick="openModal('modal-booking'); return false;">Book an Artist</a>
+                <a href="index.html#site-footer">Contact Us</a>
+            </div>
+            
+            <div class="auth-buttons">
+                <button class="btn-login-light btn-login">Login</button>
             </div>
         </div>
     </nav>
