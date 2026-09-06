@@ -138,13 +138,13 @@
         </div>
     </div>
 
-    <!-- BOOKING CALENDAR MODAL -->
+        <!-- BOOKING CALENDAR MODAL (MASTER) -->
     <div id="modal-booking" class="modal">
         <div class="modal-content auth-box" style="max-width: 500px !important;">
             <span class="close-btn" onclick="closeModal('modal-booking')">&times; Close</span>
             
-            <h2>Book Photographer</h2>
-            <p id="booking-photographer-name" style="margin-bottom: 20px; font-weight: bold; color: var(--accent-color); font-size: 1.1rem;"></p>
+            <h2 id="booking-modal-title">Book an Artist</h2>
+            <p id="booking-photographer-name" style="margin-bottom: 20px; font-weight: bold; color: var(--accent-color); font-size: 1.1rem; display: none;"></p>
             
             <div id="booking-form-section">
                 <!-- Date Selection -->
@@ -159,29 +159,31 @@
                     </div>
                 </div>
                 
-                <!-- Premium Custom Event Category Dropdown -->
-                <div class="custom-select-wrapper" onclick="toggleCustomSelect()">
-                    <div class="custom-select-display auth-input" id="book-category-display" style="margin-bottom: 15px; text-align: left; opacity: 0.8;">Select Event Category</div>
-                    <div class="custom-select-options" id="book-category-options">
-                        <div class="custom-select-option" onclick="selectCategory('Wedding')">Wedding</div>
-                        <div class="custom-select-option" onclick="selectCategory('Pre-Wedding')">Pre-Wedding</div>
-                        <div class="custom-select-option" onclick="selectCategory('Birthday')">Birthday</div>
-                        <div class="custom-select-option" onclick="selectCategory('Anniversary')">Anniversary</div>
-                        <div class="custom-select-option" onclick="selectCategory('Baby Photo Shoot')">Baby Photo Shoot</div>
-                        <div class="custom-select-option" onclick="selectCategory('Other Event')">Other Event</div>
-                    </div>
+                <!-- Dynamic Event Category Dropdown -->
+                <div style="margin-bottom: 15px;">
+                    <select id="book-category-select" class="auth-input" onchange="handleBookingCategoryChange()" style="cursor: pointer; color: var(--primary-color);">
+                        <option value="" disabled selected>Select Event Category</option>
+                        <!-- JS will populate this -->
+                    </select>
                 </div>
-                <input type="hidden" id="book-category" value="">
+    
+                <!-- Dynamic Artist Dropdown -->
+                <div style="margin-bottom: 15px;" id="booking-artist-container">
+                    <select id="book-artist-select" class="auth-input" style="cursor: pointer; color: var(--primary-color);">
+                        <option value="" disabled selected>Select an Artist</option>
+                        <!-- JS will populate this -->
+                    </select>
+                </div>
                 
                 <!-- Event Details -->
                 <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (location, timings, specific requirements...)" rows="4" style="resize: none;"></textarea>
-
+    
                 <button class="btn-book-now" onclick="submitBooking()" style="width: 100%; margin-top: 10px;">Request Quotation</button>
                 <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">No payment required yet. Our team will confirm availability and send you a custom payment quotation.</p>
             </div>
         </div>
     </div>
-
+    
     <!-- BOOKING SUCCESS MODAL -->
     <div id="modal-booking-success" class="modal">
         <div class="modal-content auth-box" style="max-width: 450px !important; text-align: center;">
