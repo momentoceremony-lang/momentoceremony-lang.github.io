@@ -45,7 +45,7 @@
                         <a href="photographers.html?type=mehndi">Mehndi Artists</a>
                     </div>
                 </div>
-                <a href="#" onclick="toggleMenu(); openModal('modal-booking'); return false;">Book an Artist</a>
+                <a href="#" onclick="openModal('modal-booking'); return false;">Book an Artist</a>
                 <a href="about.html">About Us</a>
                 <!-- Contact Dropdown -->
                 <div class="nav-dropdown">
@@ -85,6 +85,19 @@
             <span class="close-menu" onclick="toggleMenu()">&times;</span>
             
             <a href="index.html" onclick="toggleMenu()">Home</a>
+            
+            <!-- Categories Submenu -->
+            <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-categories')">
+                Categories <span style="font-size: 0.8rem;">▼</span>
+            </button>
+            <div id="submenu-categories" class="mobile-submenu">
+                <a href="view.html?category=wedding" onclick="toggleMenu()">Weddings</a>
+                <a href="view.html?category=prewed" onclick="toggleMenu()">Pre-Weddings</a>
+                <a href="view.html?category=birthday" onclick="toggleMenu()">Birthdays</a>
+                <a href="view.html?category=baby" onclick="toggleMenu()">Baby Shoots</a>
+                <a href="view.html?category=anni" onclick="toggleMenu()">Anniversaries</a>
+                <a href="view.html?category=mehndi" onclick="toggleMenu()">Mehndi</a>
+            </div>
             
             <!-- Professionals Submenu -->
             <button class="menu-toggle-btn" onclick="toggleSubMenu('submenu-pros')">
