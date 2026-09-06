@@ -326,11 +326,11 @@ function checkLoginState() {
         
         // Hide Login, Show Logout on Mobile
         if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
-        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'block';
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'flex'; // FIXED: flex matches your CSS design
         
     } else {
         // Show Login, Hide Logout on Mobile if not logged in
-        if (mobileLoginBtn) mobileLoginBtn.style.display = 'block';
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'flex'; // FIXED: flex matches your CSS design
         if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'none';
     }
 }
