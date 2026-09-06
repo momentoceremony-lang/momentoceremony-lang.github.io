@@ -316,10 +316,12 @@ function checkLoginState() {
             ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() 
             : nameParts[0].substring(0, 2).toUpperCase();
         
-        // 1. DESKTOP: Inject the Avatar Dropdown
+        // 1. DESKTOP: Inject the Avatar Dropdown (Using Premium SVG Icon)
+        const userIconSVG = `<svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
+        
         authContainer.innerHTML = `
             <div class="nav-dropdown">
-                <div class="user-avatar-badge">${initials}</div>
+                <div class="user-avatar-badge">${userIconSVG}</div>
                 <div class="nav-dropdown-content" style="right: 0; left: auto; transform: none; min-width: 160px; margin-top: 10px;">
                     ${isPro === 'true' ? `<a href="pro-dashboard.html">Dashboard</a>` : `<a href="#" onclick="openDashboard(); return false;">My Bookings</a>`}
                     <a href="#" onclick="logoutUser(); return false;" style="color: #e74c3c !important;">Logout</a>
