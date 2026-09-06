@@ -252,6 +252,52 @@ nav .nav-links { margin-right: auto; margin-left: 20px; }
 .btn-signup:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(209, 154, 138, 0.6); }
 
 /* =========================================================
+   DESKTOP DROPDOWN MENUS
+========================================================= */
+.nav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.nav-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    min-width: 200px;
+    box-shadow: 0 15px 35px rgba(90, 64, 73, 0.15);
+    border-radius: 12px;
+    padding: 10px 0;
+    z-index: 2000;
+    border: 1px solid rgba(209, 154, 138, 0.2);
+}
+
+.nav-dropdown:hover .nav-dropdown-content {
+    display: block;
+    animation: fadeInDown 0.3s ease;
+}
+
+/* Forces dropdown links to contrast against the white box */
+.nav-dropdown-content a {
+    color: var(--primary-color) !important;
+    padding: 12px 25px !important;
+    margin: 0 !important;
+    display: block;
+    font-size: 0.95rem !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    text-align: left;
+}
+
+.nav-dropdown-content a:hover {
+    background: var(--bg-color);
+    color: var(--accent-color) !important;
+    padding-left: 30px !important; /* Premium slide-in effect */
+}
+
+/* =========================================================
    3. HERO SECTION & VIDEO BACKGROUND
 ========================================================= */
 .hero {
