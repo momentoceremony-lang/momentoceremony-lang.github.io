@@ -2511,31 +2511,33 @@ textarea.auth-input {
 /* =========================================================
    USER AVATAR & LOGGED-IN STATE
 ========================================================= */
-/* Desktop Avatar Badge */
+/* Desktop Avatar Icon (Replaces the clunky circle) */
 .user-avatar-badge {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--accent-color);
-    color: #0f0f10;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Lato', sans-serif;
-    font-weight: bold;
-    font-size: 1.1rem;
+    color: var(--primary-color);
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(209, 154, 138, 0.3);
-    text-transform: uppercase;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, color 0.3s ease;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .user-avatar-badge:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
+    color: var(--accent-color);
 }
 
 .dark-nav .user-avatar-badge {
-    border: 2px solid #f5efe6;
+    color: #f5efe6;
+    border: none;
+}
+
+.dark-nav .user-avatar-badge:hover {
+    color: #c8a96a;
 }
 
 /* Mobile Profile Header */
