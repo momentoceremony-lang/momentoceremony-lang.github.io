@@ -239,10 +239,11 @@ async function registerUser() {
 
         if (data.success) {
             alert("Registration successful! Welcome to Momento.");
-            // Store session securely in browser
             localStorage.setItem('momentoToken', data.token);
             localStorage.setItem('momentoUser', JSON.stringify(data.user));
+            localStorage.removeItem('isPro'); // FIXED: Ensures new customer wipes any lingering pro state
             closeModal('modal-auth');
+            checkLoginState();
         } else {
             alert(data.error);
         }
@@ -278,6 +279,7 @@ async function loginUser() {
             alert(`Welcome back, ${data.user.name}!`);
             localStorage.setItem('momentoToken', data.token);
             localStorage.setItem('momentoUser', JSON.stringify(data.user));
+            localStorage.removeItem('isPro'); // FIXED: Ensures customer login wipes any lingering pro state
             closeModal('modal-auth');
             checkLoginState();
         } else {
@@ -365,7 +367,8 @@ function checkLoginState() {
 function logoutUser() {
     localStorage.removeItem('momentoToken');
     localStorage.removeItem('momentoUser');
-    window.location.reload(); // Refresh the page to reset the UI
+    localStorage.removeItem('isPro'); // FIXED: Safely wipes the pro state
+    window.location.reload(); 
 }
 
 function openDashboard() {
