@@ -1532,7 +1532,7 @@ textarea.auth-input {
 
 /* Dynamic Auth Buttons in Menu */
 .mobile-auth-container {
-    margin-top: auto; /* Pushes to the bottom */
+    margin-top: 30px; /* FIXED: Keeps it visible above the mobile browser address bar */
     padding-top: 20px;
     border-top: 1px solid rgba(90, 64, 73, 0.2);
     display: flex;
