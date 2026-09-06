@@ -479,14 +479,18 @@ function populateArtistDropdown(filterCategory) {
     }
 }
 
+// ==========================================
+// SUBMIT BOOKING (UPDATED FOR STEP 2)
+// ==========================================
 async function submitBooking() {
     const startDate = document.getElementById('book-start').value;
     const endDate = document.getElementById('book-end').value;
-    const category = document.getElementById('book-category').value;
+    const category = document.getElementById('book-category-select').value; 
+    const artistSelect = document.getElementById('book-artist-select').value; 
     const details = document.getElementById('book-details').value.trim();
 
-    if (!startDate || !endDate || !category) {
-        return alert("Please fill in the dates and select an event category.");
+    if (!startDate || !endDate || !category || !artistSelect) {
+        return alert("Please fill in the dates, select an event category, and choose an artist.");
     }
 
     if (new Date(startDate) > new Date(endDate)) {
@@ -508,7 +512,7 @@ async function submitBooking() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 customerId: user.id,
-                photographerName: currentSelectedPhotographer,
+                photographerName: artistSelect, // Pulling securely from the dropdown
                 startDate: startDate,
                 endDate: endDate,
                 category: category,
@@ -521,19 +525,19 @@ async function submitBooking() {
         if (data.success) {
             closeModal('modal-booking');
             
-            // Insert the ticket ID into our new premium modal and open it
+            // Insert the ticket ID into our success modal and open it
             document.getElementById('success-ticket-id').innerText = data.ticketId;
             openModal('modal-booking-success');
             
             // Reset form
             document.getElementById('book-start').value = "";
             document.getElementById('book-end').value = "";
-            document.getElementById('book-category').value = "";
+            document.getElementById('book-category-select').value = "";
+            document.getElementById('book-artist-select').value = "";
             document.getElementById('book-details').value = "";
-            document.getElementById('book-category-display').innerText = "Select Event Category";
-            document.getElementById('book-category-display').style.color = "";
         } else {
-            alert("Error: " + data.error);
+            // This will catch the "already booked" error from our updated backend
+            alert(data.error);
         }
     } catch (error) {
         alert("Failed to submit booking. Please check your connection.");
