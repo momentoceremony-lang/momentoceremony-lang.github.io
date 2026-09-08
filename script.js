@@ -170,7 +170,7 @@ window.onclick = function(event) {
 // 5. AUTHENTICATION LOGIC (API INTEGRATION)
 // ==========================================
 // This points directly to your live Railway server
-const API_BASE_URL = "https://momento-backend-production-8b55.up.railway.app/api/auth";
+const API_BASE_URL = "https://api.momentoo.in/api/auth";
 
 // Open Auth Modal when "Sign In" is clicked in Navbar
 const signInBtn = document.querySelector('.btn-login');
@@ -558,7 +558,7 @@ async function submitBooking() {
     submitBtn.disabled = true;
 
     try {
-        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/bookings', {
+        const res = await fetch('https://api.momentoo.in/api/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -779,7 +779,7 @@ let allPhotographers = [];
 // Fetch data from database on page load
 async function fetchAndRenderPhotographers() {
     try {
-        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/photographers');
+        const res = await fetch('https://api.momentoo.in/api/photographers');
         const data = await res.json();
         
         if (data.success && data.data.length > 0) {
@@ -1504,7 +1504,7 @@ let currentProfileGallery = [];
 
 async function loadDedicatedProfile(proId) {
     try {
-        const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/profile/${proId}`);
+        const res = await fetch(`https://api.momentoo.in/api/pro/profile/${proId}`);
         const data = await res.json();
         
         if (data.success && data.data) {
