@@ -2,7 +2,7 @@
 // PHOTOGRAPHER DASHBOARD LOGIC
 // ==========================================
 
-const API_BASE_URL = "https://momento-backend-production-8b55.up.railway.app/api/auth";
+const API_BASE_URL = "https://api.momentoo.in/api/auth";
 
 document.addEventListener("DOMContentLoaded", () => {
     checkProAuth();
@@ -28,7 +28,7 @@ function checkProAuth() {
 
 async function loadProfileData(proId) {
     try {
-        const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/profile/${proId}`);
+        const res = await fetch(`https://api.momentoo.in/api/pro/profile/${proId}`);
         const data = await res.json();
         
         if (data.success && data.data) {
@@ -386,7 +386,7 @@ async function savePortfolioUrls(btnElement) {
     btnElement.disabled = true;
 
     try {
-        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/pro/profile', {
+        const res = await fetch('https://api.momentoo.in/api/pro/profile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -470,7 +470,7 @@ async function acceptQuitTerms() {
 
     try {
         // 1. Check for pending bookings
-        const res = await fetch(`https://momento-backend-production-8b55.up.railway.app/api/pro/check-bookings/${user.id}`);
+        const res = await fetch(`https://api.momentoo.in/api/pro/check-bookings/${user.id}`);
         const data = await res.json();
 
         if (data.success && data.pendingCount > 0) {
@@ -479,7 +479,7 @@ async function acceptQuitTerms() {
         } else {
             // 2. If clear, send OTP
             btn.innerText = "Sending OTP...";
-            await fetch('https://momento-backend-production-8b55.up.railway.app/api/auth/send-otp', {
+            await fetch('https://api.momentoo.in/api/auth/send-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: user.email })
@@ -507,7 +507,7 @@ async function confirmQuit(btnElement) {
     btnElement.disabled = true;
 
     try {
-        const res = await fetch('https://momento-backend-production-8b55.up.railway.app/api/pro/quit', {
+        const res = await fetch('https://api.momentoo.in/api/pro/quit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
