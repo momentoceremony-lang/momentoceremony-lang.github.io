@@ -1183,7 +1183,8 @@ const galleryData = {
     birthday: [ 'Stock/bday-banner-1.jpeg', 'Stock/bday-banner-2.jpeg', 'Stock/bday-shot-1.jpeg', 'Stock/bday-shot-2.jpeg' ],
     baby: [ 'Stock/baby-banner-1.jpeg', 'Stock/baby-banner-2.jpeg', 'Stock/baby-shot-1.jpeg' ],
     anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ],
-    mehndi: [ 'Stock/mehndi-banner-1.jpeg', 'Stock/mehndi-banner-2.jpeg' ] // Mehndi is included here!
+    mehndi: [ 'Stock/mehndi-banner-1.jpeg', 'Stock/mehndi-banner-2.jpeg' ],
+    makeup: [ 'Stock/makeup1.jpeg', 'Stock/makeup2.jpeg' ]
 };
 
 // Dictionary mapping database tags to beautiful display names
