@@ -36,31 +36,26 @@ async function loadProfileData(proId) {
             
             if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
             
-            // NEW: Dashboard Adaptation Logic based on Profession
-            // NEW: Dashboard Adaptation Logic based on Profession
             const specGroup = document.getElementById('specialties-selection-group');
-            const pricingContainer = document.getElementById('pricing-container');
-
+            
+            // 1. MEHNDI ARTIST FLOW (Single Checkbox)
             if (pro.proType === 'Mehndi Artist') {
-                // Hide checkboxes for Mehndi
-                if (specGroup) specGroup.style.display = 'none';
-                
-                // Inject single Mehndi pricing field
-                const existingValue = (pro.pricing && pro.pricing['Mehndi Design']) ? pro.pricing['Mehndi Design'] : '';
-                if (pricingContainer) {
-                    pricingContainer.innerHTML = `
-                        <div class="form-group" style="grid-column: 1 / -1;">
-                            <label style="color: var(--primary-color); font-weight: bold;">Mehndi Design Cost (Starting At)</label>
-                            <input type="number" id="cost-MehndiDesign" class="auth-input" placeholder="₹ Amount" value="${existingValue}">
-                        </div>
-                    `;
-                }
-            } else if (pro.proType === 'Makeup Artist') {
-                // Dynamically build Makeup Occasions based on your spreadsheet
                 if (specGroup) {
                     specGroup.style.display = 'block';
                     specGroup.innerHTML = `
-                        <label>Select Makeup Occasions (Choose all that apply)</label>
+                        <label>Select Specialty</label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <label><input type="checkbox" value="Mehndi Design" onchange="updateDynamicFields()"> Mehndi Design</label>
+                        </div>
+                    `;
+                }
+            } 
+            // 2. MAKEUP ARTIST FLOW (Spreadsheet Categories)
+            else if (pro.proType === 'Makeup Artist') {
+                if (specGroup) {
+                    specGroup.style.display = 'block';
+                    specGroup.innerHTML = `
+                        <label>Select Occasions (Choose all that apply)</label>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 10px;">
                             <label><input type="checkbox" value="Bridal" onchange="updateDynamicFields()"> Bridal</label>
                             <label><input type="checkbox" value="Engagement" onchange="updateDynamicFields()"> Engagement</label>
@@ -69,32 +64,15 @@ async function loadProfileData(proId) {
                             <label><input type="checkbox" value="Reception" onchange="updateDynamicFields()"> Reception</label>
                             <label><input type="checkbox" value="Party" onchange="updateDynamicFields()"> Party</label>
                             <label><input type="checkbox" value="Photoshoot" onchange="updateDynamicFields()"> Photoshoot</label>
+                            <label><input type="checkbox" value="Something Else" onchange="updateDynamicFields()"> Something Else</label>
                         </div>
                     `;
                 }
-                
-                // Restore Checked Boxes
-                if(pro.specialties) {
-                    pro.specialties.forEach(spec => {
-                        const cb = document.querySelector(`input[value="${spec}"]`);
-                        if(cb) cb.checked = true;
-                    });
-                    updateDynamicFields(); 
-                }
-                
-                // Restore Pricing
-                if(pro.pricing) {
-                    Object.keys(pro.pricing).forEach(spec => {
-                        const idSafe = spec.replace(/\s+/g, '').replace(/\//g, '');
-                        const input = document.getElementById(`cost-${idSafe}`);
-                        if(input) input.value = pro.pricing[spec];
-                    });
-                }
-            } else {
-                // Normal Photographer Flow
+            } 
+            // 3. PHOTOGRAPHER FLOW
+            else {
                 if (specGroup) {
                     specGroup.style.display = 'block';
-                    // Ensure the default photographer options are present in case the DOM was altered
                     specGroup.innerHTML = `
                         <label>Select Specialties (Choose all that apply)</label>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 10px;">
@@ -106,28 +84,28 @@ async function loadProfileData(proId) {
                         </div>
                     `;
                 }
+            }
 
-                if(pro.specialties) {
-                    pro.specialties.forEach(spec => {
-                        const cb = document.querySelector(`input[value="${spec}"]`);
-                        if(cb) cb.checked = true;
-                    });
-                    updateDynamicFields(); 
-                }
-                
-                if(pro.pricing) {
-                    Object.keys(pro.pricing).forEach(spec => {
-                        const idSafe = spec.replace(/\s+/g, '');
-                        const input = document.getElementById(`cost-${idSafe}`);
-                        if(input) input.value = pro.pricing[spec];
-                    });
-                }
+            // Restore Checked Boxes
+            if(pro.specialties) {
+                pro.specialties.forEach(spec => {
+                    const cb = document.querySelector(`input[value="${spec}"]`);
+                    if(cb) cb.checked = true;
+                });
+                updateDynamicFields(); 
+            }
+            
+            // Restore Pricing
+            if(pro.pricing) {
+                Object.keys(pro.pricing).forEach(spec => {
+                    const idSafe = spec.replace(/[\s\/]+/g, ''); // Safely handles slashes
+                    const input = document.getElementById(`cost-${idSafe}`);
+                    if(input) input.value = pro.pricing[spec];
+                });
             }
 
             if(pro.dp_url) { uploadedImages.dp = pro.dp_url; document.getElementById('preview-dp').src = pro.dp_url; document.getElementById('preview-dp').style.display = 'block'; }
             if(pro.banner_url) { uploadedImages.banner = pro.banner_url; document.getElementById('preview-banner').src = pro.banner_url; document.getElementById('preview-banner').style.display = 'block'; }
-            
-            // Best Shots logic completely removed from database loader
             
             if(pro.gallery) {
                 uploadedImages.gallery = pro.gallery;
@@ -138,7 +116,6 @@ async function loadProfileData(proId) {
         console.error("Failed to load profile data", e); 
     }
 }
-
 
 // ==========================================
 // MODAL POPUP LOGIC FOR DASHBOARD
@@ -425,7 +402,7 @@ async function savePortfolioUrls(btnElement) {
     document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
         const val = cb.value;
         specialties.push(val);
-        const idSafe = val.replace(/\s+/g, '');
+        const idSafe = val.replace(/[\s\/]+/g, ''); // Identical regex to match the inputs
         const costInput = document.getElementById(`cost-${idSafe}`);
         if(costInput && costInput.value) pricing[val] = costInput.value;
     });
@@ -487,7 +464,7 @@ function updateDynamicFields() {
     
     checkboxes.forEach(cb => {
         const val = cb.value;
-        // Strip spaces and special characters for a safe HTML ID
+        // Strip spaces AND special characters (like slashes) for a safe HTML ID
         const idSafe = val.replace(/[\s\/]+/g, '');
         const costId = `cost-${idSafe}`;
         const existingValue = currentPricing[costId] || '';
