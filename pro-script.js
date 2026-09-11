@@ -37,13 +37,15 @@ async function loadProfileData(proId) {
             if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
             
             // NEW: Dashboard Adaptation Logic based on Profession
+            // NEW: Dashboard Adaptation Logic based on Profession
+            const specGroup = document.getElementById('specialties-selection-group');
+            const pricingContainer = document.getElementById('pricing-container');
+
             if (pro.proType === 'Mehndi Artist') {
-                // Hide the checkboxes
-                const specGroup = document.getElementById('specialties-selection-group');
+                // Hide checkboxes for Mehndi
                 if (specGroup) specGroup.style.display = 'none';
                 
-                // Automatically inject a single pricing field for Mehndi
-                const pricingContainer = document.getElementById('pricing-container');
+                // Inject single Mehndi pricing field
                 const existingValue = (pro.pricing && pro.pricing['Mehndi Design']) ? pro.pricing['Mehndi Design'] : '';
                 if (pricingContainer) {
                     pricingContainer.innerHTML = `
@@ -53,8 +55,25 @@ async function loadProfileData(proId) {
                         </div>
                     `;
                 }
-            } else {
-                // Normal Photographer Flow
+            } else if (pro.proType === 'Makeup Artist') {
+                // Dynamically build Makeup Occasions based on your spreadsheet
+                if (specGroup) {
+                    specGroup.style.display = 'block';
+                    specGroup.innerHTML = `
+                        <label>Select Makeup Occasions (Choose all that apply)</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                            <label><input type="checkbox" value="Bridal" onchange="updateDynamicFields()"> Bridal</label>
+                            <label><input type="checkbox" value="Engagement" onchange="updateDynamicFields()"> Engagement</label>
+                            <label><input type="checkbox" value="Haldi / Mehndi" onchange="updateDynamicFields()"> Haldi / Mehndi</label>
+                            <label><input type="checkbox" value="Sangeet" onchange="updateDynamicFields()"> Sangeet</label>
+                            <label><input type="checkbox" value="Reception" onchange="updateDynamicFields()"> Reception</label>
+                            <label><input type="checkbox" value="Party" onchange="updateDynamicFields()"> Party</label>
+                            <label><input type="checkbox" value="Photoshoot" onchange="updateDynamicFields()"> Photoshoot</label>
+                        </div>
+                    `;
+                }
+                
+                // Restore Checked Boxes
                 if(pro.specialties) {
                     pro.specialties.forEach(spec => {
                         const cb = document.querySelector(`input[value="${spec}"]`);
@@ -63,7 +82,39 @@ async function loadProfileData(proId) {
                     updateDynamicFields(); 
                 }
                 
-                // Restore Pricing for standard photographers
+                // Restore Pricing
+                if(pro.pricing) {
+                    Object.keys(pro.pricing).forEach(spec => {
+                        const idSafe = spec.replace(/\s+/g, '').replace(/\//g, '');
+                        const input = document.getElementById(`cost-${idSafe}`);
+                        if(input) input.value = pro.pricing[spec];
+                    });
+                }
+            } else {
+                // Normal Photographer Flow
+                if (specGroup) {
+                    specGroup.style.display = 'block';
+                    // Ensure the default photographer options are present in case the DOM was altered
+                    specGroup.innerHTML = `
+                        <label>Select Specialties (Choose all that apply)</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                            <label><input type="checkbox" value="Wedding" onchange="updateDynamicFields()"> Wedding</label>
+                            <label><input type="checkbox" value="Pre-Wedding" onchange="updateDynamicFields()"> Pre-Wedding</label>
+                            <label><input type="checkbox" value="Birthday" onchange="updateDynamicFields()"> Birthday</label>
+                            <label><input type="checkbox" value="Anniversary" onchange="updateDynamicFields()"> Anniversary</label>
+                            <label><input type="checkbox" value="Baby Shoot" onchange="updateDynamicFields()"> Baby Shoot</label>
+                        </div>
+                    `;
+                }
+
+                if(pro.specialties) {
+                    pro.specialties.forEach(spec => {
+                        const cb = document.querySelector(`input[value="${spec}"]`);
+                        if(cb) cb.checked = true;
+                    });
+                    updateDynamicFields(); 
+                }
+                
                 if(pro.pricing) {
                     Object.keys(pro.pricing).forEach(spec => {
                         const idSafe = spec.replace(/\s+/g, '');
@@ -433,18 +484,18 @@ function updateDynamicFields() {
     });
     
     pricingContainer.innerHTML = '';
-    // Removed bestShotsContainer logic entirely
     
     checkboxes.forEach(cb => {
         const val = cb.value;
-        const idSafe = val.replace(/\s+/g, '');
+        // Strip spaces and special characters for a safe HTML ID
+        const idSafe = val.replace(/[\s\/]+/g, '');
         const costId = `cost-${idSafe}`;
         const existingValue = currentPricing[costId] || '';
         
         // Generate Pricing Input 
         pricingContainer.innerHTML += `
             <div class="form-group">
-                <label style="color: var(--primary-color); font-weight: bold;">${val} Cost (Per Day)</label>
+                <label style="color: var(--primary-color); font-weight: bold;">${val} (Starting Cost)</label>
                 <input type="number" id="${costId}" class="auth-input" placeholder="₹ Amount" value="${existingValue}">
             </div>
         `;
