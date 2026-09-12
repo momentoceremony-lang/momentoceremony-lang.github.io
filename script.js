@@ -578,7 +578,7 @@ function handleBookNow(photographerName = null) {
 }
 
 // ==========================================
-// INTERACTIVE MAP LOGIC (LEAFLET)
+// INTERACTIVE MAP LOGIC (LEAFLET + GEOLOCATION)
 // ==========================================
 function openLocationMap() {
     // Hide booking modal temporarily, open map modal
@@ -589,6 +589,7 @@ function openLocationMap() {
     if (!bookingMap) {
         // Must delay slightly so the modal has time to render its dimensions
         setTimeout(() => {
+            // Initialize with default coordinates so the map appears immediately
             bookingMap = L.map('booking-map').setView([currentLat, currentLng], 12);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -611,9 +612,38 @@ function openLocationMap() {
                 currentLat = e.latlng.lat;
                 currentLng = e.latlng.lng;
             });
+
+            // NEW: Request User's Real-Time Location
+            if (navigator.geolocation) {
+                // Change the button text temporarily so the user knows it is searching
+                const locBtn = document.querySelector('#modal-location .btn-book-now');
+                const originalText = locBtn.innerText;
+                locBtn.innerText = "Finding you...";
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Success: Update variables with exact GPS location
+                        currentLat = position.coords.latitude;
+                        currentLng = position.coords.longitude;
+                        
+                        // Smoothly "fly" the map to their real location and zoom in closer (level 15)
+                        bookingMap.flyTo([currentLat, currentLng], 15);
+                        mapMarker.setLatLng([currentLat, currentLng]);
+                        
+                        locBtn.innerText = originalText;
+                    },
+                    (error) => {
+                        // Denied or failed: Fail gracefully and stay on default map
+                        console.warn("Geolocation access denied or failed.", error);
+                        locBtn.innerText = originalText;
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            }
+
         }, 300);
     } else {
-        // If map exists, just fix the size on reopening
+        // If map already exists, just fix the size on reopening
         setTimeout(() => { bookingMap.invalidateSize(); }, 300);
     }
 }
