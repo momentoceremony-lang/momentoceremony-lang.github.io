@@ -2641,3 +2641,36 @@ textarea.auth-input {
     content: '◉';
     color: var(--accent-color);
 }
+
+/* =========================================================
+   HORIZONTAL SCROLL TRACK (FOR 'ALL PROFESSIONALS' VIEW)
+========================================================= */
+.horizontal-scroll-track {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    padding-bottom: 30px; /* Room for the hover shadow */
+    padding-top: 10px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+/* Hides scrollbar in Chrome/Safari/Brave */
+.horizontal-scroll-track::-webkit-scrollbar {
+    display: none; 
+}
+
+/* Wraps the existing premium card to enforce width during a horizontal scroll */
+.horizontal-card-slide {
+    flex: 0 0 auto;
+    width: 85vw; /* Fills most of the screen on mobile, peeking the next card */
+    max-width: 480px; /* Slightly narrower on desktop so multiple cards fit in the row */
+    display: flex;
+}
+
+/* Forces the original card design to adapt perfectly to the new slide wrapper */
+.horizontal-card-slide .premium-pro-card {
+    width: 100%;
+    margin: 0;
+}
