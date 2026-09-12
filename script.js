@@ -11,7 +11,8 @@ const serviceData = [
     { text: "Birthdays", image: "Stock/hero_banner_Birthdays.jpeg" },
     { text: "Baby Shoots", image: "Stock/hero_banner_BabyShoots.jpeg" },
     { text: "Anniversaries", image: "Stock/hero_banner_Anniversaries.jpeg" },
-    { text: "Mehndi", image: "Stock/hero_banner_Mehndi.jpeg" }
+    { text: "Mehndi", image: "Stock/hero_banner_Mehndi.jpeg" },
+    { text: "Makeup", image: "Stock/hero_banner_makeup.jpeg" }
 ];
 
 let serviceIndex = 0;
