@@ -319,10 +319,29 @@ function startGalleryUpload(category) {
 }
 
 function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
+    // 1. Show the loading screen immediately upon clicking
+    const loader = document.getElementById('dashboard-loader');
+    if (loader) {
+        const loaderText = loader.querySelector('p');
+        if (loaderText) loaderText.innerText = "Loading Uploader...";
+        loader.style.display = 'flex';
+        
+        // Force browser to register the display change before fading in
+        void loader.offsetWidth; 
+        loader.style.opacity = '1';
+    }
+
+    // 2. Failsafe: Hide loader after 5 seconds just in case the network drops
+    const loaderFallback = setTimeout(() => {
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.display = 'none'; }, 500);
+        }
+    }, 5000); 
+
     let maxFiles = allowMultiple ? 20 : 1;
     let aspectRatio = null;
 
-    // Set Banner and DP to exactly 1:1 ratio
     if (imageType === 'dp' || imageType === 'banner') { 
         aspectRatio = 1; 
     } 
@@ -336,7 +355,6 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
         cropping: true, 
         croppingAspectRatio: aspectRatio,
         showSkipCropButton: true, 
-        showCompletedButton: true, // FIXED: Forces the widget to ask for final "Done" confirmation
         folder: `momento_pro/${imageType}`, 
         clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
         maxFileSize: 5000000,
@@ -348,17 +366,19 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
             }
         }
     }, (error, result) => {
-        if (!error && result && result.event === "success") {
-            let secureUrl = result.info.secure_url;
-            
-            // FIXED: Detect if the user cropped the image, extract coordinates, and apply them to the URL
-            if (result.info.coordinates && result.info.coordinates.custom && result.info.coordinates.custom.length > 0) {
-                const crop = result.info.coordinates.custom[0];
-                // crop array is: [x, y, width, height]
-                const cropTransform = `c_crop,x_${crop[0]},y_${crop[1]},w_${crop[2]},h_${crop[3]}`;
-                // Inject the crop command directly into the Cloudinary URL
-                secureUrl = secureUrl.replace('/upload/', `/upload/${cropTransform}/`);
+        
+        // 3. Hide the loader the exact millisecond Cloudinary finishes loading on screen
+        if (result && result.event === "display-changed" && result.info === "shown") {
+            clearTimeout(loaderFallback); // Cancel the failsafe
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
             }
+        }
+
+        // 4. Handle the successful image upload
+        if (!error && result && result.event === "success") {
+            const secureUrl = result.info.secure_url;
             
             if (imageType === 'dp') {
                 uploadedImages.dp = secureUrl;
@@ -371,7 +391,7 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
                 document.getElementById('preview-banner').style.display = 'block';
             } 
             else if (imageType === 'gallery') {
-                // Save both the newly cropped URL and the Category as an object
+                // Save both the URL and the Category as an object
                 uploadedImages.gallery.push({ url: secureUrl, category: specialtyTag });
                 renderGalleryPreviews(); 
             }
