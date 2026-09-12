@@ -587,7 +587,6 @@ function openLocationMap() {
 
     // Initialize Map only once
     if (!bookingMap) {
-        // Must delay slightly so the modal has time to render its dimensions
         setTimeout(() => {
             // Initialize with default coordinates so the map appears immediately
             bookingMap = L.map('booking-map').setView([currentLat, currentLng], 12);
@@ -613,7 +612,7 @@ function openLocationMap() {
                 currentLng = e.latlng.lng;
             });
 
-            // NEW: Request User's Real-Time Location
+            // Request User's Real-Time Location
             if (navigator.geolocation) {
                 // Change the button text temporarily so the user knows it is searching
                 const locBtn = document.querySelector('#modal-location .btn-book-now');
@@ -626,9 +625,11 @@ function openLocationMap() {
                         currentLat = position.coords.latitude;
                         currentLng = position.coords.longitude;
                         
-                        // Smoothly "fly" the map to their real location and zoom in closer (level 15)
-                        bookingMap.flyTo([currentLat, currentLng], 15);
-                        mapMarker.setLatLng([currentLat, currentLng]);
+                        // Smoothly "fly" the map to their real location
+                        if (bookingMap) {
+                            bookingMap.flyTo([currentLat, currentLng], 15);
+                            mapMarker.setLatLng([currentLat, currentLng]);
+                        }
                         
                         locBtn.innerText = originalText;
                     },
@@ -637,7 +638,8 @@ function openLocationMap() {
                         console.warn("Geolocation access denied or failed.", error);
                         locBtn.innerText = originalText;
                     },
-                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                    // FIXED: Removed the 5-second timeout so the user has unlimited time to click "Allow"
+                    { enableHighAccuracy: true, maximumAge: 0 }
                 );
             }
 
