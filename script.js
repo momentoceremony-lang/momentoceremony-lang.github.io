@@ -1824,3 +1824,23 @@ function shareProfile() {
         });
     }
 }
+
+// ==========================================
+// FULLSCREEN LIGHTBOX LOGIC
+// ==========================================
+function openFullscreen() {
+    // Grab the source of the currently displayed image
+    const currentImgSrc = document.getElementById('main-gallery-img').src;
+    
+    // Inject it into the fullscreen modal
+    document.getElementById('fullscreen-img-display').src = currentImgSrc;
+    
+    // Show the modal and stop background scrolling
+    document.getElementById('modal-fullscreen-image').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFullscreen() {
+    document.getElementById('modal-fullscreen-image').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
