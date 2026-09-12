@@ -211,10 +211,18 @@
 
     <!-- FULLSCREEN IMAGE LIGHTBOX -->
     <div id="modal-fullscreen-image" class="modal" style="z-index: 3000; background-color: rgba(15, 15, 16, 0.98);" onclick="closeFullscreen()">
-        <span class="close-btn" style="top: 20px; right: 30px; color: white; background: transparent; font-size: 2.5rem; box-shadow: none;">&times;</span>
+        <!-- ADDED z-index: 4000; to keep it above the image -->
+        <span class="close-btn" style="top: 20px; right: 30px; color: white; background: transparent; font-size: 2.5rem; box-shadow: none; z-index: 4000;">&times;</span>
         
         <img id="fullscreen-img-display" src="" alt="Fullscreen View" style="max-width: 90vw; max-height: 90vh; margin: auto; display: block; position: relative; top: 50%; transform: translateY(-50%); object-fit: contain; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
     </div>
+
+    <!-- Minimal Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top" onclick="scrollToTop()">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
     
     <script src="pro-script.js"></script>
 </body>
