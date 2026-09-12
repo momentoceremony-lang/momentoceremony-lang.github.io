@@ -1789,7 +1789,8 @@ function renderProfileGallery(filterCategory) {
 
     filteredImages.forEach(item => {
         const imgUrl = typeof item === 'string' ? item : item.url;
-        galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim">`;
+        // Added cursor: pointer and the onclick event passing the specific imgUrl
+        galleryGrid.innerHTML += `<img src="${imgUrl}" alt="Gallery Image" class="portfolio-img-anim" style="cursor: pointer;" onclick="openFullscreen('${imgUrl}')">`;
     });
 
     // 3. Re-attach Scroll Observer
@@ -1828,12 +1829,9 @@ function shareProfile() {
 // ==========================================
 // FULLSCREEN LIGHTBOX LOGIC
 // ==========================================
-function openFullscreen() {
-    // Grab the source of the currently displayed image
-    const currentImgSrc = document.getElementById('main-gallery-img').src;
-    
-    // Inject it into the fullscreen modal
-    document.getElementById('fullscreen-img-display').src = currentImgSrc;
+function openFullscreen(imageSrc) {
+    // Inject the specific image source into the fullscreen modal
+    document.getElementById('fullscreen-img-display').src = imageSrc;
     
     // Show the modal and stop background scrolling
     document.getElementById('modal-fullscreen-image').style.display = 'block';
@@ -1843,4 +1841,8 @@ function openFullscreen() {
 function closeFullscreen() {
     document.getElementById('modal-fullscreen-image').style.display = 'none';
     document.body.style.overflow = 'auto';
+    // Clear the src so it doesn't flash the old image next time it opens
+    setTimeout(() => {
+        document.getElementById('fullscreen-img-display').src = "";
+    }, 300);
 }
