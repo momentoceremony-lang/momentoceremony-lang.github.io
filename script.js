@@ -944,11 +944,8 @@ window.addEventListener('click', function(event) {
 });
 
 // ==========================================
-// 10. DYNAMIC PHOTOGRAPHER RENDERING
+// DYNAMIC PHOTOGRAPHER RENDERING & HORIZONTAL SCROLL
 // ==========================================
-let allPhotographers = [];
-
-// Fetch data from database on page load
 async function fetchAndRenderPhotographers() {
     try {
         const res = await fetch('https://api.momentoo.in/api/photographers');
@@ -957,34 +954,163 @@ async function fetchAndRenderPhotographers() {
         if (data.success && data.data.length > 0) {
             allPhotographers = data.data;
             
-            // Check if URL specifies a type (Photographer or Mehndi Artist)
             const urlParams = new URLSearchParams(window.location.search);
-            const proTypeFilter = urlParams.get('type');
+            const proTypeFilter = urlParams.get('type') || 'all'; // Defaults to 'all' if no parameter is provided
             
             let filteredPros = allPhotographers;
+            const mainTitle = document.getElementById('page-main-title');
+            const subTitle = document.getElementById('page-sub-title');
             
+            // Set dynamic titles based on the category
             if (proTypeFilter === 'mehndi') {
-                // Filter only Mehndi Artists
                 filteredPros = allPhotographers.filter(pro => pro.proType === 'Mehndi Artist');
-                
-                // Dynamically change the text on the page!
-                const mainTitle = document.getElementById('page-main-title');
-                const subTitle = document.getElementById('page-sub-title');
                 if (mainTitle) mainTitle.innerText = "The Artists Behind the Art";
                 if (subTitle) subTitle.innerText = "Discover the passionate professionals who bring their creativity and unique style to every stroke.";
-                
+            } else if (proTypeFilter === 'makeup') {
+                filteredPros = allPhotographers.filter(pro => pro.proType === 'Makeup Artist');
+                if (mainTitle) mainTitle.innerText = "The Artists Behind the Beauty";
+                if (subTitle) subTitle.innerText = "Meet the skilled makeup artists who transform their vision into beautiful, confident expressions of style.";
             } else if (proTypeFilter === 'photographer') {
-                // Filter only Photographers
                 filteredPros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType); 
+                if (mainTitle) mainTitle.innerText = "The Artists Behind the Lens";
+                if (subTitle) subTitle.innerText = "Discover the passionate professionals who turn your fleeting seconds into timeless stories.";
+            } else {
+                // The 'All' View
+                if (mainTitle) mainTitle.innerText = "Our Professional Artists";
+                if (subTitle) subTitle.innerText = "Discover the passionate professionals who bring your moments to life.";
             }
 
-            renderMasterPhotographerList(filteredPros); // Pass the filtered array!
-            renderCategoryStacks(); 
-            renderCategoryModals(); 
+            renderPremiumPhotographersPage(filteredPros); 
         }
     } catch (error) {
         console.error("Failed to load professionals from DB:", error);
     }
+}
+
+// Active Search Filter Function
+function filterPhotographers() {
+    const searchInput = document.getElementById('pro-search-bar');
+    if (!searchInput) return;
+
+    const query = searchInput.value.toLowerCase().trim();
+    const urlParams = new URLSearchParams(window.location.search);
+    const proTypeFilter = urlParams.get('type') || 'all';
+    
+    let basePros = allPhotographers;
+    if (proTypeFilter === 'mehndi') {
+        basePros = allPhotographers.filter(pro => pro.proType === 'Mehndi Artist');
+    } else if (proTypeFilter === 'makeup') {
+        basePros = allPhotographers.filter(pro => pro.proType === 'Makeup Artist');
+    } else if (proTypeFilter === 'photographer') {
+        basePros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType);
+    }
+    
+    const filteredPros = basePros.filter(pro => {
+        const matchesName = pro.name.toLowerCase().includes(query);
+        const matchesSpecialty = pro.specialties && pro.specialties.some(spec => spec.toLowerCase().includes(query));
+        return matchesName || matchesSpecialty;
+    });
+
+    renderPremiumPhotographersPage(filteredPros);
+}
+
+// Central Renderer handling both Vertical Grid and Horizontal Rows
+function renderPremiumPhotographersPage(photographersToRender) {
+    const grid = document.getElementById('premium-photographers-grid');
+    if (!grid) return;
+
+    grid.innerHTML = ''; 
+    
+    if (!photographersToRender || photographersToRender.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.6; font-size: 1.1rem; padding: 40px 0;">No professionals found matching your search.</p>';
+        return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const proTypeFilter = urlParams.get('type') || 'all';
+
+    // FEATURE 2: Horizontal Scrolling Rows for 'All' View
+    if (proTypeFilter === 'all') {
+        const photographers = photographersToRender.filter(pro => pro.proType === 'Photographer' || !pro.proType);
+        const makeupArtists = photographersToRender.filter(pro => pro.proType === 'Makeup Artist');
+        const mehndiArtists = photographersToRender.filter(pro => pro.proType === 'Mehndi Artist');
+
+        // Render distinct rows if they have professionals
+        if (photographers.length > 0) renderHorizontalRow(grid, "Photographers", photographers);
+        if (makeupArtists.length > 0) renderHorizontalRow(grid, "Makeup Artists", makeupArtists);
+        if (mehndiArtists.length > 0) renderHorizontalRow(grid, "Mehndi Artists", mehndiArtists);
+
+    } else {
+        // STANDARD FEATURE: Vertical Grid for specific categories
+        photographersToRender.forEach((pro) => {
+            grid.innerHTML += generateProCardHTML(pro, false);
+        });
+    }
+
+    // Attach scroll reveal observers to the newly injected cards
+    const cards = grid.querySelectorAll('.premium-pro-card');
+    const cardObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('scroll-visible');
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, { threshold: 0.1 }); 
+
+    cards.forEach(card => cardObserver.observe(card));
+}
+
+// Helper: Renders the track wrapper and injects slides
+function renderHorizontalRow(container, title, prosArray) {
+    let cardsHTML = '';
+    prosArray.forEach(pro => {
+        cardsHTML += generateProCardHTML(pro, true);
+    });
+
+    const viewAllLink = title === 'Photographers' ? 'photographer' : title === 'Makeup Artists' ? 'makeup' : 'mehndi';
+
+    container.innerHTML += `
+        <div style="width: 100%; margin-bottom: 60px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid rgba(200, 169, 106, 0.3); padding-bottom: 10px; margin-bottom: 20px;">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--primary-color); margin: 0;">${title}</h2>
+                <a href="photographers.html?type=${viewAllLink}" style="color: var(--accent-color); font-weight: bold; text-decoration: none; font-size: 0.95rem; white-space: nowrap; margin-bottom: 5px;">View All &rarr;</a>
+            </div>
+            <div class="horizontal-scroll-track">
+                ${cardsHTML}
+            </div>
+        </div>
+    `;
+}
+
+// Helper: Generates the exact HTML structure for a single premium card
+function generateProCardHTML(pro, isHorizontalSlide) {
+    const displayImg = pro.banner_url || pro.dp_url; 
+    const specsText = (pro.specialties || []).join(' • ');
+    const bioText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
+
+    const cardContent = `
+        <div class="premium-pro-card">
+            <div class="pro-card-header" style="cursor: pointer;" onclick="window.location.href='profile.html?id=${pro.id}'">
+                <img src="${displayImg}" class="pro-card-banner" alt="Banner">
+                <div class="pro-card-dp-wrapper">
+                    <img src="${pro.dp_url}" alt="DP">
+                </div>
+            </div>
+            <div class="pro-card-body">
+                <h3 class="pro-card-name">${pro.name}</h3>
+                <p class="pro-card-specs">${specsText}</p>
+                <p class="pro-card-bio">${bioText}</p>
+                <div class="pro-card-actions">
+                    <button class="btn-view-profile" onclick="window.location.href='profile.html?id=${pro.id}'">View Profile</button>
+                    <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Wrap the card in a slide container if it is being placed in a horizontal track
+    return isHorizontalSlide ? `<div class="horizontal-card-slide">${cardContent}</div>` : cardContent;
 }
 
 // Update the master renderer to accept the filtered array
@@ -1577,89 +1703,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function renderPremiumPhotographersPage(photographersToRender) {
-    const grid = document.getElementById('premium-photographers-grid');
-    if (!grid) return;
-
-    grid.innerHTML = ''; 
-    
-    if (!photographersToRender || photographersToRender.length === 0) {
-        grid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1 / -1; opacity: 0.6; font-size: 1.1rem; padding: 40px 0;">No professionals found matching your search.</p>';
-        return;
-    }
-
-    photographersToRender.forEach((pro) => {
-        const displayImg = pro.banner_url || pro.dp_url; 
-        const specsText = pro.specialties.join(' • ');
-        const bioText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
-
-        const cardHTML = `
-            <div class="premium-pro-card">
-                <!-- FIXED: Clicking the banner now routes to the new page -->
-                <div class="pro-card-header" style="cursor: pointer;" onclick="window.location.href='profile.html?id=${pro.id}'">
-                    <img src="${displayImg}" class="pro-card-banner" alt="Banner">
-                    <div class="pro-card-dp-wrapper">
-                        <img src="${pro.dp_url}" alt="DP">
-                    </div>
-                </div>
-                
-                <div class="pro-card-body">
-                    <h3 class="pro-card-name">${pro.name}</h3>
-                    <p class="pro-card-specs">${specsText}</p>
-                    <p class="pro-card-bio">${bioText}</p>
-                    
-                    <div class="pro-card-actions">
-                        <!-- FIXED: Clicking the button now routes to the new page -->
-                        <button class="btn-view-profile" onclick="window.location.href='profile.html?id=${pro.id}'">View Profile</button>
-                        <button class="btn-book-now" onclick="handleBookNow('${pro.name}')">Book Now</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        grid.innerHTML += cardHTML;
-    });
-
-    // SET UP SCROLL ANIMATION OBSERVER
-    const cards = grid.querySelectorAll('.premium-pro-card');
-    
-    const cardObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('scroll-visible');
-                observer.unobserve(entry.target); 
-            }
-        });
-    }, { threshold: 0.1 }); 
-
-    cards.forEach(card => cardObserver.observe(card));
-}
-
-// Active Search Filter Function
-function filterPhotographers() {
-    const searchInput = document.getElementById('pro-search-bar');
-    if (!searchInput) return;
-
-    const query = searchInput.value.toLowerCase().trim();
-    
-    // Ensure we only search within the CURRENTLY loaded type
-    const urlParams = new URLSearchParams(window.location.search);
-    const proTypeFilter = urlParams.get('type');
-    
-    let basePros = allPhotographers;
-    if (proTypeFilter === 'mehndi') {
-        basePros = allPhotographers.filter(pro => pro.proType === 'Mehndi Artist');
-    } else if (proTypeFilter === 'photographer') {
-        basePros = allPhotographers.filter(pro => pro.proType === 'Photographer' || !pro.proType);
-    }
-    
-    const filteredPros = basePros.filter(pro => {
-        const matchesName = pro.name.toLowerCase().includes(query);
-        const matchesSpecialty = pro.specialties && pro.specialties.some(spec => spec.toLowerCase().includes(query));
-        return matchesName || matchesSpecialty;
-    });
-
-    renderPremiumPhotographersPage(filteredPros);
-}
 
 // ==========================================
 // DEDICATED PROFILE PAGE LOGIC
