@@ -676,17 +676,25 @@ window.addEventListener('click', function(event) {
 });
 
 // ==========================================
-// SUBMIT BOOKING (UPDATED FOR STEP 2)
+// SUBMIT BOOKING 
 // ==========================================
 async function submitBooking() {
     const startDate = document.getElementById('book-start').value;
     const endDate = document.getElementById('book-end').value;
+    const artistType = document.getElementById('book-type-select').value; 
     const category = document.getElementById('book-category-select').value; 
     const artistSelect = document.getElementById('book-artist-select').value; 
+    const latitude = document.getElementById('book-lat').value;
+    const longitude = document.getElementById('book-lng').value;
+    const landmark = document.getElementById('book-landmark').value.trim();
     const details = document.getElementById('book-details').value.trim();
 
-    if (!startDate || !endDate || !category || !artistSelect) {
-        return alert("Please fill in the dates, select an event category, and choose an artist.");
+    if (!startDate || !endDate || !artistType || !category || !artistSelect) {
+        return alert("Please fill in the dates, select an artist type, category, and choose an artist.");
+    }
+
+    if (!latitude || !longitude) {
+        return alert("Please click 'Choose your location' to pin your event venue on the map.");
     }
 
     if (new Date(startDate) > new Date(endDate)) {
@@ -699,7 +707,7 @@ async function submitBooking() {
 
     const submitBtn = document.querySelector('#modal-booking .btn-book-now');
     const originalText = submitBtn.innerText;
-    submitBtn.innerText = "Processing...";
+    submitBtn.innerText = "Sending Request...";
     submitBtn.disabled = true;
 
     try {
@@ -708,10 +716,14 @@ async function submitBooking() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 customerId: user.id,
-                photographerName: artistSelect, // Pulling securely from the dropdown
+                photographerName: artistSelect,
+                artistType: artistType,
+                category: category,
                 startDate: startDate,
                 endDate: endDate,
-                category: category,
+                latitude: latitude,
+                longitude: longitude,
+                landmark: landmark,
                 details: details
             })
         });
@@ -721,18 +733,31 @@ async function submitBooking() {
         if (data.success) {
             closeModal('modal-booking');
             
-            // Insert the ticket ID into our success modal and open it
             document.getElementById('success-ticket-id').innerText = data.ticketId;
             openModal('modal-booking-success');
             
-            // Reset form
+            // Heavy Reset on the Form
             document.getElementById('book-start').value = "";
             document.getElementById('book-end').value = "";
+            document.getElementById('book-type-select').value = "";
+            document.getElementById('book-type-display').innerText = "What kind of artist do you need?";
             document.getElementById('book-category-select').value = "";
+            document.getElementById('book-category-display').innerText = "Select Event Category";
             document.getElementById('book-artist-select').value = "";
+            document.getElementById('book-artist-display').innerText = "Select an Artist";
+            
+            // Location Reset
+            document.getElementById('book-lat').value = "";
+            document.getElementById('book-lng').value = "";
+            document.getElementById('book-landmark').value = "";
+            document.getElementById('landmark-container').style.display = "none";
+            const locBtn = document.getElementById('btn-choose-location');
+            locBtn.innerHTML = "📍 Choose your location";
+            locBtn.style.backgroundColor = "transparent";
+            locBtn.style.color = "var(--primary-color)";
+            
             document.getElementById('book-details').value = "";
         } else {
-            // This will catch the "already booked" error from our updated backend
             alert(data.error);
         }
     } catch (error) {
