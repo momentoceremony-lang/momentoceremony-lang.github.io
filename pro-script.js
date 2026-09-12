@@ -388,7 +388,7 @@ function renderGalleryPreviews() {
                 <span style="position: absolute; top: 25px; right: 25px; background: var(--accent-color); color: #0f0f10; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">${imgCat}</span>
                 
                 <!-- UPDATED: object-fit: contain, dark background, cursor pointer, and onclick event -->
-                <img src="${imgUrl}" onclick="openFullscreen('${imgUrl}')" style="width: 100%; height: 450px; object-fit: contain; background: #0f0f10; border-radius: 8px; margin-bottom: 15px; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="${imgUrl}" onclick="openFullscreen('${imgUrl}')" style="width: 100%; height: 450px; object-fit: contain; background: transparent; border-radius: 8px; margin-bottom: 15px; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                 
                 <button onclick="removeGalleryImage(${index})" style="background: white; color: #e74c3c; border: 1px solid #e74c3c; padding: 10px 25px; border-radius: 25px; font-family: 'Lato', sans-serif; font-weight: bold; cursor: pointer; width: 100%; max-width: 250px; transition: 0.3s;" onmouseover="this.style.background='#e74c3c'; this.style.color='white';" onmouseout="this.style.background='white'; this.style.color='#e74c3c';">🗑️ Remove Image</button>
             </div>
