@@ -384,12 +384,15 @@ function openDashboard() {
 // MASTER BOOKING ENGINE & PREMIUM DROPDOWNS
 // ==========================================
 let currentSelectedPhotographer = null;
+let bookingMap = null;
+let mapMarker = null;
+let currentLat = 22.5726; // Default to Kolkata
+let currentLng = 88.3639;
 
 function togglePremiumDropdown(id) {
     const target = document.getElementById(id);
     if (!target) return;
     
-    // Close all other custom dropdowns
     document.querySelectorAll('.custom-select-options').forEach(opt => {
         if (opt.id !== id) opt.classList.remove('show');
     });
@@ -397,38 +400,102 @@ function togglePremiumDropdown(id) {
     target.classList.toggle('show');
 }
 
+// 1. Cascading Step 1: Select Artist Type
+function selectPremiumType(event, val, element) {
+    if (event) event.stopPropagation();
+    
+    document.getElementById('book-type-display').innerText = val;
+    document.getElementById('book-type-display').style.color = "var(--primary-color)";
+    document.getElementById('book-type-display').style.opacity = "1";
+    document.getElementById('book-type-select').value = val;
+    
+    document.querySelectorAll('#type-options .custom-select-option').forEach(el => el.classList.remove('selected-option'));
+    element.classList.add('selected-option');
+    document.getElementById('type-options').classList.remove('show');
+
+    // Reset downstream selections
+    document.getElementById('book-category-display').innerText = "Select Event Category";
+    document.getElementById('book-category-select').value = "";
+    document.getElementById('book-artist-display').innerText = "Select an Artist";
+    document.getElementById('book-artist-select').value = "";
+    document.getElementById('artist-options').innerHTML = '';
+
+    // Populate Categories based on Type
+    populateEventCategories(val);
+}
+
+// 2. Cascading Step 2: Populate Categories
+function populateEventCategories(artistType) {
+    const catOptions = document.getElementById('category-options');
+    catOptions.innerHTML = '';
+    
+    let categories = [];
+    if (artistType === 'Photographer') {
+        categories = ['Wedding', 'Pre-Wedding', 'Birthday', 'Anniversary', 'Baby Shoot', 'Other Event'];
+    } else if (artistType === 'Makeup Artist') {
+        categories = ['Bridal', 'Engagement', 'Haldi / Mehndi', 'Sangeet', 'Reception', 'Party', 'Photoshoot', 'Something Else'];
+    } else if (artistType === 'Mehndi Artist') {
+        categories = ['Mehndi Design', 'Other Event'];
+    }
+
+    categories.forEach(cat => {
+        catOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumCategory(event, '${cat}', this)">${cat}</div>`;
+    });
+}
+
+// 3. Cascading Step 3: Select Category & Populate Artists
 function selectPremiumCategory(event, val, element) {
-    if (event) event.stopPropagation(); // Stops the click from bubbling up to the wrapper
+    if (event) event.stopPropagation();
 
     document.getElementById('book-category-display').innerText = val;
     document.getElementById('book-category-display').style.color = "var(--primary-color)";
     document.getElementById('book-category-display').style.opacity = "1";
     document.getElementById('book-category-select').value = val;
     
-    // Manage visual selected state
     document.querySelectorAll('#category-options .custom-select-option').forEach(el => el.classList.remove('selected-option'));
     element.classList.add('selected-option');
-    
     document.getElementById('category-options').classList.remove('show');
 
-    // Filter artists based on category (if not locked to a specific profile)
+    // Filter artists if not locked
     if (!currentSelectedPhotographer) {
-        populateArtistDropdown(val);
+        populateArtistDropdown(document.getElementById('book-type-select').value, val);
+    }
+}
+
+// 4. Cascading Step 4: Populate Artists
+function populateArtistDropdown(proType, filterCategory) {
+    const artistOptions = document.getElementById('artist-options');
+    artistOptions.innerHTML = '';
+    
+    document.getElementById('book-artist-display').innerText = "Select an Artist";
+    document.getElementById('book-artist-select').value = "";
+
+    // Default to Photographer if null in DB
+    let prosToShow = allPhotographers.filter(pro => (pro.proType || 'Photographer') === proType);
+
+    if (filterCategory && filterCategory !== 'Other Event' && filterCategory !== 'Something Else') {
+        prosToShow = prosToShow.filter(pro => pro.specialties && pro.specialties.includes(filterCategory));
+    }
+
+    if (prosToShow.length === 0) {
+        artistOptions.innerHTML = `<div class="custom-select-option" style="opacity: 0.5;">No artists available</div>`;
+    } else {
+        prosToShow.forEach(pro => {
+            artistOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumArtist(event, '${pro.name}', this)">${pro.name}</div>`;
+        });
     }
 }
 
 function selectPremiumArtist(event, val, element) {
-    if (event) event.stopPropagation(); // Stops the click from bubbling up to the wrapper
+    if (event) event.stopPropagation();
 
     document.getElementById('book-artist-display').innerText = val;
     document.getElementById('book-artist-display').style.color = "var(--primary-color)";
     document.getElementById('book-artist-display').style.opacity = "1";
     document.getElementById('book-artist-select').value = val;
     
-    // Manage visual selected state
     document.querySelectorAll('#artist-options .custom-select-option').forEach(el => el.classList.remove('selected-option'));
     element.classList.add('selected-option');
-    
     document.getElementById('artist-options').classList.remove('show');
 }
 
@@ -445,40 +512,51 @@ function handleBookNow(photographerName = null) {
 
     currentSelectedPhotographer = photographerName;
     const title = document.getElementById('booking-modal-title');
-    const catOptions = document.getElementById('category-options');
-    const artistOptions = document.getElementById('artist-options');
     const artistContainer = document.getElementById('booking-artist-container');
     
     // Reset Form Defaults
-    catOptions.innerHTML = '';
-    artistOptions.innerHTML = '';
-    document.getElementById('book-category-display').innerText = "Select Event Category";
-    document.getElementById('book-category-display').style.opacity = "0.8";
-    document.getElementById('book-category-select').value = "";
-    document.getElementById('book-artist-display').innerText = "Select an Artist";
-    document.getElementById('book-artist-display').style.opacity = "0.8";
-    document.getElementById('book-artist-select').value = "";
     document.getElementById('book-start').value = "";
     document.getElementById('book-end').value = "";
+    document.getElementById('book-type-display').innerText = "What kind of artist do you need?";
+    document.getElementById('book-type-select').value = "";
+    document.getElementById('book-category-display').innerText = "Select Event Category";
+    document.getElementById('book-category-select').value = "";
+    document.getElementById('category-options').innerHTML = "";
+    document.getElementById('book-artist-display').innerText = "Select an Artist";
+    document.getElementById('book-artist-select').value = "";
+    document.getElementById('artist-options').innerHTML = "";
+    
+    // Reset Location UI
+    document.getElementById('book-lat').value = "";
+    document.getElementById('book-lng').value = "";
+    document.getElementById('book-landmark').value = "";
+    document.getElementById('landmark-container').style.display = "none";
+    document.getElementById('btn-choose-location').innerHTML = "📍 Choose your location";
+    document.getElementById('btn-choose-location').style.backgroundColor = "transparent";
+    document.getElementById('btn-choose-location').style.color = "var(--primary-color)";
+    
     document.getElementById('book-details').value = "";
 
-    let availableCategories = ['Wedding', 'Pre-Wedding', 'Birthday', 'Anniversary', 'Baby Shoot', 'Mehndi', 'Other Event'];
-
-    // CONTEXT A: Triggered directly from profile.html or a specific card
+    // CONTEXT A: Triggered directly from a specific profile
     if (photographerName) {
         title.innerText = `Requesting: ${photographerName}`;
-        
-        // Lock the artist input
-        document.getElementById('book-artist-display').innerText = photographerName;
-        document.getElementById('book-artist-display').style.opacity = "1";
-        document.getElementById('book-artist-select').value = photographerName;
-        artistContainer.style.pointerEvents = "none";
-        artistContainer.style.opacity = "0.6"; 
-
-        // Filter categories based on this specific artist
         const pro = allPhotographers.find(p => p.name === photographerName);
-        if (pro && pro.specialties && pro.specialties.length > 0) {
-            availableCategories = pro.specialties;
+        
+        if (pro) {
+            // Lock Artist Type
+            const lockType = pro.proType || 'Photographer';
+            document.getElementById('book-type-display').innerText = lockType;
+            document.getElementById('book-type-select').value = lockType;
+            document.getElementById('type-options').innerHTML = `<div class="custom-select-option selected-option">${lockType}</div>`;
+            
+            // Populate Categories for this specific artist
+            populateEventCategories(lockType);
+            
+            // Lock Artist Name
+            document.getElementById('book-artist-display').innerText = photographerName;
+            document.getElementById('book-artist-select').value = photographerName;
+            artistContainer.style.pointerEvents = "none";
+            artistContainer.style.opacity = "0.6"; 
         }
     } 
     // CONTEXT B: Triggered generically from the Navbar
@@ -486,41 +564,76 @@ function handleBookNow(photographerName = null) {
         title.innerText = "Book an Artist";
         artistContainer.style.pointerEvents = "auto";
         artistContainer.style.opacity = "1";
-        populateArtistDropdown(null); 
+        
+        // Restore Type Options
+        document.getElementById('type-options').innerHTML = `
+            <div class="custom-select-option" onclick="selectPremiumType(event, 'Photographer', this)">Photographer</div>
+            <div class="custom-select-option" onclick="selectPremiumType(event, 'Makeup Artist', this)">Makeup Artist</div>
+            <div class="custom-select-option" onclick="selectPremiumType(event, 'Mehndi Artist', this)">Mehndi Artist</div>
+        `;
     }
-
-    // Populate Category UI (Added 'event' parameter)
-    availableCategories.forEach(cat => {
-        catOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumCategory(event, '${cat}', this)">${cat}</div>`;
-    });
 
     document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
     openModal('modal-booking');
 }
 
-function populateArtistDropdown(filterCategory) {
-    const artistOptions = document.getElementById('artist-options');
-    artistOptions.innerHTML = '';
-    
-    // Reset selection text
-    document.getElementById('book-artist-display').innerText = "Select an Artist";
-    document.getElementById('book-artist-display').style.opacity = "0.8";
-    document.getElementById('book-artist-select').value = "";
+// ==========================================
+// INTERACTIVE MAP LOGIC (LEAFLET)
+// ==========================================
+function openLocationMap() {
+    // Hide booking modal temporarily, open map modal
+    document.getElementById('modal-booking').style.display = 'none';
+    openModal('modal-location');
 
-    let prosToShow = allPhotographers;
+    // Initialize Map only once
+    if (!bookingMap) {
+        // Must delay slightly so the modal has time to render its dimensions
+        setTimeout(() => {
+            bookingMap = L.map('booking-map').setView([currentLat, currentLng], 12);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(bookingMap);
 
-    if (filterCategory && filterCategory !== 'Other Event') {
-        prosToShow = allPhotographers.filter(pro => pro.specialties && pro.specialties.includes(filterCategory));
-    }
-
-    if (prosToShow.length === 0) {
-        artistOptions.innerHTML = `<div class="custom-select-option" style="opacity: 0.5;">No artists available</div>`;
+            // Add Draggable Marker
+            mapMarker = L.marker([currentLat, currentLng], { draggable: true }).addTo(bookingMap);
+            
+            // Update coordinates when marker is dragged
+            mapMarker.on('dragend', function(e) {
+                const position = mapMarker.getLatLng();
+                currentLat = position.lat;
+                currentLng = position.lng;
+            });
+            
+            // Update marker position if map is clicked
+            bookingMap.on('click', function(e) {
+                mapMarker.setLatLng(e.latlng);
+                currentLat = e.latlng.lat;
+                currentLng = e.latlng.lng;
+            });
+        }, 300);
     } else {
-        // Populate Artist UI (Added 'event' parameter)
-        prosToShow.forEach(pro => {
-            artistOptions.innerHTML += `<div class="custom-select-option" onclick="selectPremiumArtist(event, '${pro.name}', this)">${pro.name}</div>`;
-        });
+        // If map exists, just fix the size on reopening
+        setTimeout(() => { bookingMap.invalidateSize(); }, 300);
     }
+}
+
+function confirmLocation() {
+    // Save to hidden inputs
+    document.getElementById('book-lat').value = currentLat;
+    document.getElementById('book-lng').value = currentLng;
+    
+    // Update Button UI to show success
+    const locBtn = document.getElementById('btn-choose-location');
+    locBtn.innerHTML = "✅ Location Selected";
+    locBtn.style.backgroundColor = "var(--bg-color)";
+    
+    // Show Landmark input
+    document.getElementById('landmark-container').style.display = "block";
+    
+    // Close Map, Reopen Booking Form
+    closeModal('modal-location');
+    document.getElementById('modal-booking').style.display = 'block';
 }
 
 // Close custom dropdowns if clicked outside
