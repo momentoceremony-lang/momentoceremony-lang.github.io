@@ -132,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCategorySlideshow("prewed-slideshow");
     initCategorySlideshow("baby-slideshow");
     initCategorySlideshow("mehndi-slideshow");
+    initCategorySlideshow("makeup-slideshow");
 
     // 4. Initialize Custom Premium Date Pickers SAFELY (Only if the library is loaded)
     if (typeof flatpickr !== 'undefined') {
