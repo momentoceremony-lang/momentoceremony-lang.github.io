@@ -292,7 +292,7 @@
         </div>
     </div>
 
-            <!-- BOOKING CALENDAR MODAL (PREMIUM UI) -->
+    <!-- BOOKING CALENDAR MODAL (PREMIUM UI) -->
     <div id="modal-booking" class="modal">
         <div class="modal-content auth-box" style="max-width: 500px !important;">
             <span class="close-btn" onclick="closeModal('modal-booking')">&times; Close</span>
@@ -300,6 +300,7 @@
             <h2 id="booking-modal-title">Book an Artist</h2>
             
             <div id="booking-form-section">
+                <!-- 1. Dates -->
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <div style="flex: 1;">
                         <label style="font-size: 0.85rem; opacity: 0.8;">Start Date</label>
@@ -310,29 +311,70 @@
                         <input type="text" id="book-end" class="auth-input" placeholder="Select date..." style="margin-bottom: 0; background-color: white;">
                     </div>
                 </div>
+
+                <!-- 2. Artist Type -->
+                <div class="custom-select-wrapper" onclick="togglePremiumDropdown('type-options')" style="margin-bottom: 15px;">
+                    <div class="custom-select-display auth-input" id="book-type-display" style="text-align: left; opacity: 0.8;">What kind of artist do you need?</div>
+                    <div class="custom-select-options dark-premium-dropdown" id="type-options">
+                        <div class="custom-select-option" onclick="selectPremiumType(event, 'Photographer', this)">Photographer</div>
+                        <div class="custom-select-option" onclick="selectPremiumType(event, 'Makeup Artist', this)">Makeup Artist</div>
+                        <div class="custom-select-option" onclick="selectPremiumType(event, 'Mehndi Artist', this)">Mehndi Artist</div>
+                    </div>
+                </div>
+                <input type="hidden" id="book-type-select" value="">
                 
-                <!-- Custom Category Dropdown -->
+                <!-- 3. Event Category -->
                 <div class="custom-select-wrapper" onclick="togglePremiumDropdown('category-options')" style="margin-bottom: 15px;">
                     <div class="custom-select-display auth-input" id="book-category-display" style="text-align: left; opacity: 0.8;">Select Event Category</div>
                     <div class="custom-select-options dark-premium-dropdown" id="category-options">
-                        <!-- JS will populate -->
+                        <!-- JS will populate based on Artist Type -->
                     </div>
                 </div>
                 <input type="hidden" id="book-category-select" value="">
     
-                <!-- Custom Artist Dropdown -->
+                <!-- 4. Select Artist -->
                 <div class="custom-select-wrapper" id="booking-artist-container" onclick="togglePremiumDropdown('artist-options')" style="margin-bottom: 15px;">
                     <div class="custom-select-display auth-input" id="book-artist-display" style="text-align: left; opacity: 0.8;">Select an Artist</div>
                     <div class="custom-select-options dark-premium-dropdown" id="artist-options">
-                        <!-- JS will populate -->
+                        <!-- JS will populate based on Category -->
                     </div>
                 </div>
                 <input type="hidden" id="book-artist-select" value="">
+
+                <!-- 5. Location Button & Hidden Coordinates -->
+                <div style="margin-bottom: 15px;">
+                    <button type="button" class="btn-view-all" onclick="openLocationMap()" id="btn-choose-location" style="width: 100%; border: 1px solid var(--accent-color); color: var(--primary-color); display: flex; justify-content: center; align-items: center; gap: 8px;">
+                        📍 Choose your location
+                    </button>
+                    <input type="hidden" id="book-lat" value="">
+                    <input type="hidden" id="book-lng" value="">
+                </div>
+
+                <!-- 6. Landmark (Hidden until map is used) -->
+                <div id="landmark-container" style="display: none; margin-bottom: 15px;">
+                    <input type="text" id="book-landmark" class="auth-input" placeholder="House No, Building, or nearby Landmark" style="margin-bottom: 0;">
+                </div>
                 
-                <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (location, timings...)" rows="4" style="resize: none;"></textarea>
+                <!-- 7. Details -->
+                <textarea id="book-details" class="auth-input" placeholder="Briefly describe your ceremony (timings, specific requirements...)" rows="3" style="resize: none; margin-bottom: 15px;"></textarea>
     
-                <button class="btn-book-now" onclick="submitBooking()" style="width: 100%; margin-top: 10px;">Request Quotation</button>
-                <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">No payment required yet. Our team will confirm availability and send you a custom payment quotation.</p>
+                <button class="btn-book-now" onclick="submitBooking()" style="width: 100%;">Send Request</button>
+                <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7; text-align: center;">No payment required yet. We will confirm availability and share your custom quotation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCATION MAP MODAL -->
+    <div id="modal-location" class="modal" style="z-index: 2500;">
+        <div class="modal-content auth-box" style="max-width: 600px !important; padding: 20px !important;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 10px; color: var(--primary-color); text-align: center;">Pin Your Location</h2>
+            <p style="font-size: 0.9rem; opacity: 0.8; text-align: center; margin-bottom: 15px;">Drag the map to place the pin exactly on your venue.</p>
+            
+            <div id="booking-map" style="height: 350px; width: 100%; border-radius: 12px; border: 2px solid var(--accent-color); margin-bottom: 15px;"></div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-view-all" onclick="closeModal('modal-location')" style="flex: 1;">Cancel</button>
+                <button class="btn-book-now" onclick="confirmLocation()" style="flex: 1;">Confirm Location</button>
             </div>
         </div>
     </div>
