@@ -34,11 +34,14 @@ async function loadProfileData(proId) {
         if (data.success && data.data) {
             const pro = data.data;
             
+            // 1. INJECT THE CATEGORY TEXT INTO THE HEADER
+            document.getElementById('dashboard-category').innerText = pro.proType || 'Photographer';
+            
             if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
             
             const specGroup = document.getElementById('specialties-selection-group');
             
-            // 1. MEHNDI ARTIST FLOW (Single Checkbox)
+            // 2. MEHNDI ARTIST FLOW (Single Checkbox)
             if (pro.proType === 'Mehndi Artist') {
                 if (specGroup) {
                     specGroup.style.display = 'block';
@@ -50,7 +53,7 @@ async function loadProfileData(proId) {
                     `;
                 }
             } 
-            // 2. MAKEUP ARTIST FLOW (Spreadsheet Categories)
+            // 3. MAKEUP ARTIST FLOW (Spreadsheet Categories)
             else if (pro.proType === 'Makeup Artist') {
                 if (specGroup) {
                     specGroup.style.display = 'block';
@@ -69,7 +72,7 @@ async function loadProfileData(proId) {
                     `;
                 }
             } 
-            // 3. PHOTOGRAPHER FLOW
+            // 4. PHOTOGRAPHER FLOW
             else {
                 if (specGroup) {
                     specGroup.style.display = 'block';
@@ -111,9 +114,19 @@ async function loadProfileData(proId) {
                 uploadedImages.gallery = pro.gallery;
                 renderGalleryPreviews();
             }
+
+            // 5. FADE OUT AND REMOVE THE LOADER ONCE EVERYTHING IS RENDERED
+            const loader = document.getElementById('dashboard-loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
         }
     } catch (e) { 
         console.error("Failed to load profile data", e); 
+        // Hide loader even if there is an error so they aren't stuck forever
+        const loader = document.getElementById('dashboard-loader');
+        if (loader) loader.style.display = 'none';
     }
 }
 
