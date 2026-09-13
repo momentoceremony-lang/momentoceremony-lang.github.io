@@ -37,22 +37,24 @@ async function loadProfileData(proId) {
             // 1. INJECT THE CATEGORY TEXT INTO THE HEADER
             document.getElementById('dashboard-category').innerText = pro.proType || 'Photographer';
 
-            // NEW: UPDATE VERIFICATION STATUS UI
+            // VERIFICATION STATUS UI FIX
             const statusIndicator = document.querySelector('.status-indicator');
             const statusText = document.getElementById('pro-verification-status');
-            // Look for the new backend column (account_status) or the old boolean (is_verified)
+            const warningBanner = document.querySelector('.setup-alert'); 
+            
             if (pro.account_status === 'approved' || pro.is_verified === true) {
-                statusIndicator.style.backgroundColor = '#27ae60'; // Green
-                statusText.innerText = 'Status: Live & Verified';
-                statusText.style.color = '#27ae60';
-                
-                // FIXED: Now targets the exact class used in your HTML
-                const warningBanner = document.querySelector('.setup-alert');
-                if (warningBanner) warningBanner.style.display = 'none';
+                if (statusIndicator) statusIndicator.style.backgroundColor = '#27ae60'; 
+                if (statusText) {
+                    statusText.innerText = 'Status: Live & Verified';
+                    statusText.style.color = '#27ae60';
+                }
+                if (warningBanner) warningBanner.style.display = 'none'; 
             } else if (pro.account_status === 'rejected') {
-                statusIndicator.style.backgroundColor = '#e74c3c'; // Red
-                statusText.innerText = 'Status: Action Required';
-                statusText.style.color = '#e74c3c';
+                if (statusIndicator) statusIndicator.style.backgroundColor = '#e74c3c'; 
+                if (statusText) {
+                    statusText.innerText = 'Status: Action Required';
+                    statusText.style.color = '#e74c3c';
+                }
             }
             
             // 2. MEHNDI ARTIST FLOW (Single Checkbox)
