@@ -338,13 +338,14 @@ function checkLoginState() {
         if (mobileMenu) {
             const roleText = isPro === 'true' ? 'Professional Partner' : 'Customer';
             const mobileProfileHTML = `
-                <div id="mobile-profile-card-view" class="mobile-profile-card">
+                <!-- FIXED: Now a clickable link that triggers the 'Coming Soon' alert -->
+                <a href="#" onclick="openDashboard(); toggleMenu(); return false;" id="mobile-profile-card-view" class="mobile-profile-card" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px; padding: 10px 20px 20px 20px; border-bottom: 1px solid rgba(200, 169, 106, 0.2); margin-bottom: 15px;">
                     <div class="user-avatar-badge">${initials}</div>
                     <div class="mobile-profile-details">
-                        <span class="mobile-profile-name">${user.name}</span>
-                        <span class="mobile-profile-role">${roleText}</span>
+                        <span class="mobile-profile-name" style="font-family: 'Playfair Display', serif; color: var(--accent-color); margin: 0; font-size: 1.3rem; display: block;">${user.name}</span>
+                        <span class="mobile-profile-role" style="font-size: 0.8rem; opacity: 0.8; margin: 0; font-family: 'Lato', sans-serif; display: block;">${roleText}</span>
                     </div>
-                </div>
+                </a>
             `;
             // Insert it right after the 'X' close button
             const closeBtn = mobileMenu.querySelector('.close-menu');
