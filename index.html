@@ -106,6 +106,15 @@
         <!-- MOBILE DROPDOWN MENU (DARK - FOR INDEX) -->
         <div id="mobile-menu" class="mobile-dropdown">
             <span class="close-menu" onclick="toggleMenu()">&times;</span>
+
+                <!-- NEW: Clickable User Profile Header (Hidden by default, shown via JS) -->
+            <a href="customer-dashboard.html" id="mobile-user-profile-link" style="display: none; text-decoration: none; color: #f5efe6; align-items: center; gap: 15px; padding: 10px 20px 20px 20px; border-bottom: 1px solid rgba(200, 169, 106, 0.2); margin-bottom: 15px;">
+                <div id="mobile-user-initials" style="width: 45px; height: 45px; border-radius: 50%; background: transparent; border: 1px solid #d19a8a; color: #f5efe6; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; letter-spacing: 1px;">DC</div>
+                <div>
+                    <h3 id="mobile-user-name-display" style="font-family: 'Playfair Display', serif; color: #d19a8a; margin: 0; font-size: 1.3rem;">Dipun Chakraborty</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.8; margin: 0; font-family: 'Lato', sans-serif;">Customer</p>
+                </div>
+            </a>
             
             <a href="index.html" onclick="toggleMenu()">Home</a>
             
