@@ -461,30 +461,51 @@ async function savePortfolioUrls(btnElement) {
     document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
         const val = cb.value;
         specialties.push(val);
-        const idSafe = val.replace(/[\s\/]+/g, ''); // Identical regex to match the inputs
+        const idSafe = val.replace(/[\s\/]+/g, ''); 
         const costInput = document.getElementById(`cost-${idSafe}`);
         if(costInput && costInput.value) pricing[val] = costInput.value;
     });
 
-    if (!uploadedImages.dp) return alert("You must upload a Display Picture (DP) to save your profile.");
-
     const originalText = btnElement.innerText;
-    btnElement.innerText = "Saving...";
+    btnElement.innerText = "Securing Data...";
     btnElement.disabled = true;
 
     try {
+        // RECOVERY SHIELD: Fetch the current database state right before saving
+        const currentRes = await fetch(`https://api.momentoo.in/api/pro/profile/${user.id}`);
+        const currentData = await currentRes.json();
+        const dbProfile = currentData.success ? currentData.data : {};
+
+        // MERGE: If the dashboard memory is empty, pull the photos back from the database
+        const safeDp = uploadedImages.dp || dbProfile.dp_url || "";
+        const safeBanner = uploadedImages.banner || dbProfile.banner_url || "";
+        const safeGallery = (uploadedImages.gallery && uploadedImages.gallery.length > 0) ? uploadedImages.gallery : (dbProfile.gallery || []);
+
+        if (!safeDp) {
+            btnElement.innerText = originalText;
+            btnElement.disabled = false;
+            return alert("You must upload a Display Picture (DP) to save your profile.");
+        }
+
+        // Send the safely merged data back to Railway
         const res = await fetch('https://api.momentoo.in/api/pro/profile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                proId: user.id, bio: bio, dp_url: uploadedImages.dp, banner_url: uploadedImages.banner,
-                specialties: specialties, pricing: pricing, best_shots: {}, gallery: uploadedImages.gallery
+                proId: user.id, 
+                bio: bio, 
+                dp_url: safeDp, 
+                banner_url: safeBanner,
+                specialties: specialties, 
+                pricing: pricing, 
+                best_shots: {}, // 3D animation abandoned, safely passing empty object
+                gallery: safeGallery
             })
         });
 
         const data = await res.json();
         if (data.success) {
-            btnElement.innerText = "Saved! ✓";
+            btnElement.innerText = "Saved Securely! ✓";
             btnElement.style.backgroundColor = "#27ae60"; 
             btnElement.style.borderColor = "#27ae60";
             
