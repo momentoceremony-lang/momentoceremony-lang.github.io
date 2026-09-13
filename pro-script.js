@@ -40,15 +40,14 @@ async function loadProfileData(proId) {
             // NEW: UPDATE VERIFICATION STATUS UI
             const statusIndicator = document.querySelector('.status-indicator');
             const statusText = document.getElementById('pro-verification-status');
-            
             // Look for the new backend column (account_status) or the old boolean (is_verified)
             if (pro.account_status === 'approved' || pro.is_verified === true) {
                 statusIndicator.style.backgroundColor = '#27ae60'; // Green
                 statusText.innerText = 'Status: Live & Verified';
                 statusText.style.color = '#27ae60';
                 
-                // Hide the yellow setup warning banner
-                const warningBanner = document.querySelector('div[style*="background: #fff3cd"]');
+                // FIXED: Now targets the exact class used in your HTML
+                const warningBanner = document.querySelector('.setup-alert');
                 if (warningBanner) warningBanner.style.display = 'none';
             } else if (pro.account_status === 'rejected') {
                 statusIndicator.style.backgroundColor = '#e74c3c'; // Red
