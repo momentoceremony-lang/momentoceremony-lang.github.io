@@ -36,10 +36,25 @@ async function loadProfileData(proId) {
             
             // 1. INJECT THE CATEGORY TEXT INTO THE HEADER
             document.getElementById('dashboard-category').innerText = pro.proType || 'Photographer';
+
+            // NEW: UPDATE VERIFICATION STATUS UI
+            const statusIndicator = document.querySelector('.status-indicator');
+            const statusText = document.getElementById('pro-verification-status');
             
-            if(pro.bio) document.getElementById('pro-bio').value = pro.bio;
-            
-            const specGroup = document.getElementById('specialties-selection-group');
+            // Look for the new backend column (account_status) or the old boolean (is_verified)
+            if (pro.account_status === 'approved' || pro.is_verified === true) {
+                statusIndicator.style.backgroundColor = '#27ae60'; // Green
+                statusText.innerText = 'Status: Live & Verified';
+                statusText.style.color = '#27ae60';
+                
+                // Hide the yellow setup warning banner
+                const warningBanner = document.querySelector('div[style*="background: #fff3cd"]');
+                if (warningBanner) warningBanner.style.display = 'none';
+            } else if (pro.account_status === 'rejected') {
+                statusIndicator.style.backgroundColor = '#e74c3c'; // Red
+                statusText.innerText = 'Status: Action Required';
+                statusText.style.color = '#e74c3c';
+            }
             
             // 2. MEHNDI ARTIST FLOW (Single Checkbox)
             if (pro.proType === 'Mehndi Artist') {
