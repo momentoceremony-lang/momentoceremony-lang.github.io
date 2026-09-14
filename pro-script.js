@@ -125,6 +125,9 @@ async function loadProfileData(proId) {
 
             if(pro.dp_url) { uploadedImages.dp = pro.dp_url; document.getElementById('preview-dp').src = pro.dp_url; document.getElementById('preview-dp').style.display = 'block'; }
             if(pro.banner_url) { uploadedImages.banner = pro.banner_url; document.getElementById('preview-banner').src = pro.banner_url; document.getElementById('preview-banner').style.display = 'block'; }
+            // Restore Bank Details
+            if (pro.bank_account) document.getElementById('pro-bank-acc').value = pro.bank_account;
+            if (pro.ifsc_code) document.getElementById('pro-ifsc').value = pro.ifsc_code;
             
             if(pro.gallery) {
                 uploadedImages.gallery = pro.gallery;
@@ -471,12 +474,16 @@ async function savePortfolioUrls(btnElement) {
     btnElement.disabled = true;
 
     try {
-        // RECOVERY SHIELD: Fetch the current database state right before saving
+        // RECOVERY SHIELD: Fetch current database state
         const currentRes = await fetch(`https://api.momentoo.in/api/pro/profile/${user.id}`);
         const currentData = await currentRes.json();
         const dbProfile = currentData.success ? currentData.data : {};
 
-        // MERGE: If the dashboard memory is empty, pull the photos back from the database
+        // Grabbing Bank Details
+        const bankAccount = document.getElementById('pro-bank-acc').value.trim();
+        const ifscCode = document.getElementById('pro-ifsc').value.trim();
+
+        // MERGE: Protect existing images
         const safeDp = uploadedImages.dp || dbProfile.dp_url || "";
         const safeBanner = uploadedImages.banner || dbProfile.banner_url || "";
         const safeGallery = (uploadedImages.gallery && uploadedImages.gallery.length > 0) ? uploadedImages.gallery : (dbProfile.gallery || []);
@@ -487,7 +494,7 @@ async function savePortfolioUrls(btnElement) {
             return alert("You must upload a Display Picture (DP) to save your profile.");
         }
 
-        // Send the safely merged data back to Railway
+        // Send safely merged data + new Bank Details
         const res = await fetch('https://api.momentoo.in/api/pro/profile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -498,8 +505,10 @@ async function savePortfolioUrls(btnElement) {
                 banner_url: safeBanner,
                 specialties: specialties, 
                 pricing: pricing, 
-                best_shots: {}, // 3D animation abandoned, safely passing empty object
-                gallery: safeGallery
+                best_shots: {}, 
+                gallery: safeGallery,
+                bank_account: bankAccount, // NEW
+                ifsc_code: ifscCode        // NEW
             })
         });
 
