@@ -37,10 +37,10 @@ async function loadProfileData(proId) {
             // 1. INJECT THE CATEGORY TEXT INTO THE HEADER
             document.getElementById('dashboard-category').innerText = pro.proType || 'Photographer';
 
-            // VERIFICATION STATUS UI FIX
+            // 2. VERIFICATION STATUS UI
             const statusIndicator = document.querySelector('.status-indicator');
             const statusText = document.getElementById('pro-verification-status');
-            const warningBanner = document.querySelector('.setup-alert'); 
+            const warningBanner = document.querySelector('.setup-alert');
             
             if (pro.account_status === 'approved' || pro.is_verified === true) {
                 if (statusIndicator) statusIndicator.style.backgroundColor = '#27ae60'; 
@@ -57,9 +57,10 @@ async function loadProfileData(proId) {
                 }
             }
             
-            // 2. MEHNDI ARTIST FLOW (Single Checkbox)
-            if (pro.proType === 'Mehndi Artist') {
-                if (specGroup) {
+            // 3. SPECIALTIES SELECTOR (FIXED: Declaring specGroup so it never crashes)
+            const specGroup = document.getElementById('specialties-selection-group');
+            if (specGroup) {
+                if (pro.proType === 'Mehndi Artist') {
                     specGroup.style.display = 'block';
                     specGroup.innerHTML = `
                         <label>Select Specialty</label>
@@ -67,11 +68,7 @@ async function loadProfileData(proId) {
                             <label><input type="checkbox" value="Mehndi Design" onchange="updateDynamicFields()"> Mehndi Design</label>
                         </div>
                     `;
-                }
-            } 
-            // 3. MAKEUP ARTIST FLOW (Spreadsheet Categories)
-            else if (pro.proType === 'Makeup Artist') {
-                if (specGroup) {
+                } else if (pro.proType === 'Makeup Artist') {
                     specGroup.style.display = 'block';
                     specGroup.innerHTML = `
                         <label>Select Occasions (Choose all that apply)</label>
@@ -86,11 +83,7 @@ async function loadProfileData(proId) {
                             <label><input type="checkbox" value="Something Else" onchange="updateDynamicFields()"> Something Else</label>
                         </div>
                     `;
-                }
-            } 
-            // 4. PHOTOGRAPHER FLOW
-            else {
-                if (specGroup) {
+                } else {
                     specGroup.style.display = 'block';
                     specGroup.innerHTML = `
                         <label>Select Specialties (Choose all that apply)</label>
@@ -105,36 +98,57 @@ async function loadProfileData(proId) {
                 }
             }
 
-            // Restore Checked Boxes
-            if(pro.specialties) {
+            // 4. RESTORE SPECIALTIES & PRICING
+            if (pro.specialties && Array.isArray(pro.specialties)) {
                 pro.specialties.forEach(spec => {
                     const cb = document.querySelector(`input[value="${spec}"]`);
-                    if(cb) cb.checked = true;
+                    if (cb) cb.checked = true;
                 });
                 updateDynamicFields(); 
             }
             
-            // Restore Pricing
-            if(pro.pricing) {
+            if (pro.pricing) {
                 Object.keys(pro.pricing).forEach(spec => {
-                    const idSafe = spec.replace(/[\s\/]+/g, ''); // Safely handles slashes
+                    const idSafe = spec.replace(/[\s\/]+/g, ''); 
                     const input = document.getElementById(`cost-${idSafe}`);
-                    if(input) input.value = pro.pricing[spec];
+                    if (input) input.value = pro.pricing[spec];
                 });
             }
 
-            if(pro.dp_url) { uploadedImages.dp = pro.dp_url; document.getElementById('preview-dp').src = pro.dp_url; document.getElementById('preview-dp').style.display = 'block'; }
-            if(pro.banner_url) { uploadedImages.banner = pro.banner_url; document.getElementById('preview-banner').src = pro.banner_url; document.getElementById('preview-banner').style.display = 'block'; }
-            // Restore Bank Details
-            if (pro.bank_account) document.getElementById('pro-bank-acc').value = pro.bank_account;
-            if (pro.ifsc_code) document.getElementById('pro-ifsc').value = pro.ifsc_code;
-            
-            if(pro.gallery) {
+            // 5. RESTORE BIO & BANK DETAILS
+            if (pro.bio && document.getElementById('pro-bio')) {
+                document.getElementById('pro-bio').value = pro.bio;
+            }
+            if (pro.bank_account && document.getElementById('pro-bank-acc')) {
+                document.getElementById('pro-bank-acc').value = pro.bank_account;
+            }
+            if (pro.ifsc_code && document.getElementById('pro-ifsc')) {
+                document.getElementById('pro-ifsc').value = pro.ifsc_code;
+            }
+
+            // 6. RESTORE IMAGES INTO MEMORY AND SCREEN
+            if (pro.dp_url) { 
+                uploadedImages.dp = pro.dp_url; 
+                const previewDp = document.getElementById('preview-dp');
+                if (previewDp) {
+                    previewDp.src = pro.dp_url; 
+                    previewDp.style.display = 'block'; 
+                }
+            }
+            if (pro.banner_url) { 
+                uploadedImages.banner = pro.banner_url; 
+                const previewBanner = document.getElementById('preview-banner');
+                if (previewBanner) {
+                    previewBanner.src = pro.banner_url; 
+                    previewBanner.style.display = 'block'; 
+                }
+            }
+            if (pro.gallery && Array.isArray(pro.gallery)) {
                 uploadedImages.gallery = pro.gallery;
                 renderGalleryPreviews();
             }
 
-            // 5. FADE OUT AND REMOVE THE LOADER ONCE EVERYTHING IS RENDERED
+            // 7. REMOVE LOADER
             const loader = document.getElementById('dashboard-loader');
             if (loader) {
                 loader.style.opacity = '0';
@@ -142,8 +156,7 @@ async function loadProfileData(proId) {
             }
         }
     } catch (e) { 
-        console.error("Failed to load profile data", e); 
-        // Hide loader even if there is an error so they aren't stuck forever
+        console.error("Failed to load profile data:", e); 
         const loader = document.getElementById('dashboard-loader');
         if (loader) loader.style.display = 'none';
     }
