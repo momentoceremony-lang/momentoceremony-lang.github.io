@@ -963,8 +963,11 @@ textarea.auth-input {
 /* =========================================================
    13. PRO DASHBOARD MOBILE RESPONSIVENESS (APP VIEW)
 ========================================================= */
-@media (max-width: 850px) {
+@media (min-width: 851px) {
     .desktop-hide { display: none !important; }
+}
+
+@media (max-width: 850px) {
     
     .dashboard-body { flex-direction: column; }
 
