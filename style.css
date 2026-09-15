@@ -965,6 +965,7 @@ textarea.auth-input {
 ========================================================= */
 @media (min-width: 851px) {
     .desktop-hide { display: none !important; }
+   .mobile-nav-toggle { display: none !important; }
 }
 
 @media (max-width: 850px) {
