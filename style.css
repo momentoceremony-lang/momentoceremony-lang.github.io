@@ -964,12 +964,14 @@ textarea.auth-input {
    13. PRO DASHBOARD MOBILE RESPONSIVENESS (APP VIEW)
 ========================================================= */
 @media (max-width: 850px) {
+    .desktop-hide { display: none !important; }
+    
     .dashboard-body { flex-direction: column; }
 
     /* Remove bottom padding since the bottom bar is gone */
     .dashboard-main { margin-left: 0; padding: 20px 15px; }
 
-    /* Keep header items in a row so 3-dots stay on the right */
+    /* Keep header items in a row so hamburger stays on the right */
     .dashboard-header {
         flex-direction: row;
         align-items: flex-start;
@@ -981,59 +983,109 @@ textarea.auth-input {
 
     #dashboard-title { font-size: 1.8rem; margin: 0; }
 
-    /* Show the 3-dot icon */
+    /* Show the Hamburger Menu Icon */
     .mobile-nav-toggle {
         display: block;
-        font-size: 2.5rem;
-        color: var(--primary-color);
-        cursor: pointer;
-        line-height: 0.8;
         padding: 5px 10px;
     }
 
-    /* Transform Sidebar into a Top-Right Dropdown Menu */
-    .sidebar {
-        display: none; /* Hidden until 3-dots are clicked */
-        width: 220px;
-        height: auto;
-        position: absolute;
-        top: 80px; /* Sits right below the header */
-        right: 20px;
-        left: auto;
-        background: white;
-        padding: 10px 0;
-        z-index: 2000;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    /* THE DARK OVERLAY */
+    .mobile-drawer-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+    }
+    .mobile-drawer-overlay.show {
+        opacity: 1;
+        visibility: visible;
     }
 
-    /* JavaScript will add this class when toggled */
-    .sidebar.show-menu { display: block; }
+    /* THE SLIDING SIDE-DRAWER */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        right: -120% !important; /* Hidden off-screen to the right */
+        width: 280px !important;
+        height: 100vh !important;
+        background: #ffffff !important;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.3) !important;
+        transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        z-index: 10000 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        border-radius: 25px 0 0 25px !important;
+    }
 
-    .sidebar-brand { display: none; }
+    .sidebar.show-menu { 
+        right: 0 !important; /* Slide in smoothly */
+    }
 
-    .sidebar-menu { display: flex; flex-direction: column; }
+    /* Profile Header inside Drawer */
+    .drawer-profile-header {
+        padding: 40px 20px 20px 20px;
+        background: #fcf9f6;
+        border-radius: 25px 0 0 0;
+        border-bottom: 1px solid rgba(200, 169, 106, 0.2);
+        margin-bottom: 10px;
+        text-align: center;
+        position: relative;
+    }
+    .drawer-close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 2.2rem;
+        color: #3C3633;
+        cursor: pointer;
+        line-height: 1;
+    }
+    .drawer-profile-header .avatar {
+        width: 65px; height: 65px;
+        background: var(--primary-color); color: white;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem; margin: 0 auto 12px auto;
+        font-family: 'Playfair Display', serif;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .drawer-profile-header h3 {
+        color: var(--primary-color); margin: 0 0 5px 0;
+        font-size: 1.3rem; font-family: 'Playfair Display', serif;
+    }
 
-    /* Style the dropdown links */
+    .sidebar-brand { display: none !important; }
+
+    /* Drawer Menu Links */
+    .sidebar-menu { 
+        display: flex; flex-direction: column; 
+        padding: 10px 20px !important; 
+        flex: 1; overflow-y: auto;
+    }
+
     .sidebar-menu li {
-        padding: 15px 20px;
-        font-size: 1rem; 
+        padding: 15px 10px !important;
+        font-size: 1.05rem !important; 
         text-align: left;
-        color: var(--primary-color);
-        border-bottom: 1px solid #f0f0f0;
-        border-left: none;
+        color: #3C3633 !important;
+        border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+        border-left: none !important;
+        font-weight: bold;
     }
 
     .sidebar-menu li:last-child {
-        border-bottom: none;
-        color: var(--accent-color) !important;
-        margin-top: 5px !important;
+        border-bottom: none !important;
+        margin-top: auto !important; /* Pushes logout to the bottom */
     }
 
     .sidebar-menu li:hover, .sidebar-menu li.active {
-        border-left: 4px solid var(--accent-color);
-        background: var(--bg-color);
-        color: var(--accent-color);
+        background: rgba(200, 169, 106, 0.1) !important;
+        border-radius: 12px !important;
+        color: var(--primary-color) !important;
+        border-left: none !important;
     }
 
     /* Stack Grids vertically */
