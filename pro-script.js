@@ -23,7 +23,7 @@ function checkProAuth() {
     if (document.getElementById('pro-name')) document.getElementById('pro-name').value = user.name;
     if (document.getElementById('pro-phone')) document.getElementById('pro-phone').value = user.phone;
 
-    // INJECT MOBILE PROFILE HEADER INTO DRAWER (Fixed restriction)
+    // INJECT MOBILE PROFILE HEADER INTO DRAWER (With DP Support)
     const sidebarBrand = document.querySelector('.sidebar-brand');
     if (sidebarBrand && !document.getElementById('pro-drawer-profile')) {
         const nameParts = user.name.trim().split(' ');
@@ -32,7 +32,10 @@ function checkProAuth() {
         sidebarBrand.insertAdjacentHTML('afterend', `
             <div id="pro-drawer-profile" class="drawer-profile-header desktop-hide">
                 <span class="drawer-close-btn" onclick="toggleProNav()">&times;</span>
-                <div class="avatar">${initials}</div>
+                <div class="avatar" style="padding:0; overflow:hidden;">
+                    <span id="drawer-initials">${initials}</span>
+                    <img id="drawer-dp-img" src="" style="display:none; width: 100%; height: 100%; object-fit: cover;">
+                </div>
                 <h3>${user.name}</h3>
                 <p style="font-size: 0.85rem; opacity: 0.8; margin: 0; font-family: 'Lato', sans-serif;">Professional Partner</p>
             </div>
@@ -150,7 +153,16 @@ async function loadProfileData(proId) {
                     previewDp.src = pro.dp_url; 
                     previewDp.style.display = 'block'; 
                 }
+                // NEW: Sync directly to the sliding drawer avatar
+                const drawerDpImg = document.getElementById('drawer-dp-img');
+                const drawerInitials = document.getElementById('drawer-initials');
+                if (drawerDpImg) {
+                    drawerDpImg.src = pro.dp_url;
+                    drawerDpImg.style.display = 'block';
+                    if (drawerInitials) drawerInitials.style.display = 'none';
+                }
             }
+            
             if (pro.banner_url) { 
                 uploadedImages.banner = pro.banner_url; 
                 const previewBanner = document.getElementById('preview-banner');
