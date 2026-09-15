@@ -23,8 +23,9 @@ function checkProAuth() {
     if (document.getElementById('pro-name')) document.getElementById('pro-name').value = user.name;
     if (document.getElementById('pro-phone')) document.getElementById('pro-phone').value = user.phone;
 
-    // INJECT MOBILE PROFILE HEADER INTO DRAWER (With DP Support)
+    // INJECT MOBILE PROFILE HEADER INTO DRAWER (Fixed Injection)
     const sidebarBrand = document.querySelector('.sidebar-brand');
+    // We removed the 'window.innerWidth' check here so it always loads!
     if (sidebarBrand && !document.getElementById('pro-drawer-profile')) {
         const nameParts = user.name.trim().split(' ');
         const initials = nameParts.length > 1 ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() : nameParts[0].substring(0, 2).toUpperCase();
@@ -462,6 +463,15 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
                 uploadedImages.dp = secureUrl;
                 document.getElementById('preview-dp').src = secureUrl;
                 document.getElementById('preview-dp').style.display = 'block';
+                
+                // NEW: Update the sliding drawer avatar instantly
+                const drawerDpImg = document.getElementById('drawer-dp-img');
+                const drawerInitials = document.getElementById('drawer-initials');
+                if (drawerDpImg) {
+                    drawerDpImg.src = secureUrl;
+                    drawerDpImg.style.display = 'block';
+                    if (drawerInitials) drawerInitials.style.display = 'none';
+                }
             } 
             else if (imageType === 'banner') {
                 uploadedImages.banner = secureUrl;
