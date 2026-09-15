@@ -23,10 +23,9 @@ function checkProAuth() {
     if (document.getElementById('pro-name')) document.getElementById('pro-name').value = user.name;
     if (document.getElementById('pro-phone')) document.getElementById('pro-phone').value = user.phone;
 
-    // INJECT MOBILE PROFILE HEADER INTO DRAWER
+    // INJECT MOBILE PROFILE HEADER INTO DRAWER (Fixed restriction)
     const sidebarBrand = document.querySelector('.sidebar-brand');
-    if (!document.getElementById('pro-drawer-profile') && window.innerWidth <= 850) {
-        // Grab first letter of first and last name safely
+    if (sidebarBrand && !document.getElementById('pro-drawer-profile')) {
         const nameParts = user.name.trim().split(' ');
         const initials = nameParts.length > 1 ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() : nameParts[0].substring(0, 2).toUpperCase();
         
@@ -233,10 +232,14 @@ function switchTab(tabName) {
 
 // Handles the actual visual hiding/showing of elements
 function executeVisualTabSwitch(tabName) {
-    // Close the mobile menu if it is open
     const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('mobile-drawer-overlay');
+    
+    // FIXED: Properly close the sidebar, hide the dark overlay, and unlock scrolling
     if (sidebar && sidebar.classList.contains('show-menu')) {
         sidebar.classList.remove('show-menu');
+        if (overlay) overlay.classList.remove('show');
+        document.body.style.overflow = 'auto';
     }
     
     // Safety feature: Close any open pop-up modals when navigating tabs
