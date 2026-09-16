@@ -1890,3 +1890,99 @@ function closeFullscreen() {
         document.getElementById('fullscreen-img-display').src = "";
     }, 300);
 }
+
+// ==========================================
+// PUBLIC TICKET TRACKING ENGINE
+// ==========================================
+async function fetchTrackingData() {
+    const ticketInput = document.getElementById('ticket-input').value.trim().toUpperCase();
+    
+    if (!ticketInput) {
+        return alert("Please enter a valid Ticket ID.");
+    }
+
+    const btn = document.querySelector('.btn-signup-gold');
+    const originalText = btn.innerText;
+    btn.innerText = "Searching...";
+    btn.disabled = true;
+
+    try {
+        // Pointing to the new public read-only endpoint you just created
+        const res = await fetch(`https://api.momentoo.in/api/track/${ticketInput}`);
+        const data = await res.json();
+
+        if (data.success) {
+            // 1. Reveal the timeline box
+            document.getElementById('timeline-box').style.display = 'block';
+            
+            const track = data.data;
+
+            // 2. Format the Timestamps beautifully
+            const formatTime = (isoString) => {
+                if (!isoString) return 'Pending...';
+                const d = new Date(isoString);
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + 
+                       ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            };
+
+            document.getElementById('time-requested').innerText = formatTime(track.created_at);
+            document.getElementById('time-quoted').innerText = track.quoted_at ? formatTime(track.quoted_at) : 'Pending...';
+            document.getElementById('time-confirmed').innerText = track.confirmed_at ? formatTime(track.confirmed_at) : 'Pending...';
+            
+            // For the final step, inject the tracking ID if it exists
+            let completedText = track.completed_at ? formatTime(track.completed_at) : 'Pending...';
+            if (track.status === 'completed' && track.tracking_id) {
+                completedText += `<br><span style="color: var(--primary-color); font-weight: bold; display: inline-block; margin-top: 5px;">Shipped via ${track.courier_partner} (Tracking: ${track.tracking_id})</span>`;
+            }
+            document.getElementById('time-completed').innerHTML = completedText;
+
+            // 3. UI Matrix: Determine which dots are active or completed
+            const steps = ['requested', 'quoted', 'confirmed', 'completed'];
+            const statusMap = {
+                'pending': 0,
+                'quotation_sent': 1,
+                'confirmed': 2,
+                'completed': 3
+            };
+            
+            const currentLevel = statusMap[track.status] || 0;
+
+            // Loop through the steps and paint the UI
+            steps.forEach((step, index) => {
+                const el = document.getElementById(`step-${step}`);
+                el.classList.remove('active', 'completed');
+                
+                if (index < currentLevel) {
+                    // Past steps turn solid green
+                    el.classList.add('completed');
+                } else if (index === currentLevel) {
+                    // Current step turns accent color and pulses
+                    el.classList.add('active');
+                }
+            });
+
+        } else {
+            alert(data.error || "Ticket not found.");
+            document.getElementById('timeline-box').style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Tracking Error:", error);
+        alert("Network error. Please try again later.");
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+
+// Allow pressing "Enter" in the input box to trigger the search
+document.addEventListener("DOMContentLoaded", () => {
+    const trackInput = document.getElementById('ticket-input');
+    if (trackInput) {
+        trackInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                fetchTrackingData();
+            }
+        });
+    }
+});
