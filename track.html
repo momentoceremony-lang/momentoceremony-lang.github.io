@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Booking | Momento</title>
+    <link rel="icon" type="image/png" href="Stock/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        .tracker-container { max-width: 600px; margin: 150px auto 100px; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(90, 64, 73, 0.08); text-align: center; }
+        .track-input { width: 100%; padding: 15px; margin: 20px 0; border: 2px solid var(--accent-color); border-radius: 10px; font-size: 1.1rem; text-align: center; letter-spacing: 2px; text-transform: uppercase; }
+        
+        /* Timeline CSS */
+        .timeline { margin-top: 40px; text-align: left; position: relative; display: none; }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; height: 100%; width: 2px; background: #eee; }
+        .timeline-step { position: relative; padding-left: 50px; margin-bottom: 30px; opacity: 0.4; transition: 0.3s; }
+        .timeline-step::before { content: ''; position: absolute; left: 10px; top: 5px; width: 20px; height: 20px; border-radius: 50%; background: #eee; border: 3px solid white; box-shadow: 0 0 0 2px #ddd; z-index: 2; }
+        
+        /* Active States */
+        .timeline-step.active { opacity: 1; }
+        .timeline-step.active::before { background: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-color); }
+        .timeline-step.completed::before { background: #27ae60; box-shadow: 0 0 0 2px #27ae60; }
+        
+        .step-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--primary-color); margin-bottom: 5px; }
+        .step-time { font-size: 0.85rem; color: gray; font-family: monospace; }
+    </style>
+</head>
+<body class="about-page">
+    
+    <!-- Include your Light Navbar here -->
+
+    <main class="tracker-container">
+        <h1 style="color: var(--primary-color);">Track Your Booking</h1>
+        <p style="opacity: 0.8; margin-top: 10px;">Enter your TKT- ID to view live updates.</p>
+        
+        <input type="text" id="ticket-input" class="track-input" placeholder="e.g. TKT-ABC123">
+        <button class="btn-signup-gold" style="width: 100%; padding: 15px; font-size: 1.1rem;" onclick="fetchTrackingData()">Track Now</button>
+
+        <div id="timeline-box" class="timeline">
+            <div class="timeline-step" id="step-requested">
+                <div class="step-title">Booking Requested</div>
+                <div class="step-time" id="time-requested">Waiting for request...</div>
+            </div>
+            <div class="timeline-step" id="step-quoted">
+                <div class="step-title">Quotation Sent</div>
+                <div class="step-time" id="time-quoted">Pending...</div>
+            </div>
+            <div class="timeline-step" id="step-confirmed">
+                <div class="step-title">Advance Paid & Dates Locked</div>
+                <div class="step-time" id="time-confirmed">Pending...</div>
+            </div>
+            <div class="timeline-step" id="step-completed">
+                <div class="step-title">Deliverables Dispatched</div>
+                <div class="step-time" id="time-completed">Pending...</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
