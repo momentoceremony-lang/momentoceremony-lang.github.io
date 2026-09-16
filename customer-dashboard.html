@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | Momento</title>
+    <link rel="icon" type="image/png" href="Stock/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-wrapper { max-width: 800px; margin: 120px auto 100px; padding: 0 5vw; }
+        .ticket-card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(90, 64, 73, 0.05); border: 1px solid rgba(200, 169, 106, 0.2); }
+        .ticket-header { display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .ticket-id-badge { font-family: monospace; color: var(--accent-color); font-weight: bold; font-size: 1.1rem; background: #fcf9f6; padding: 5px 10px; border-radius: 6px; }
+        
+        /* Timeline CSS */
+        .timeline { position: relative; margin-top: 20px; padding-left: 20px; }
+        .timeline::before { content: ''; position: absolute; left: 24px; top: 0; height: 100%; width: 2px; background: #eee; }
+        .timeline-step { position: relative; padding-left: 30px; margin-bottom: 25px; opacity: 0.4; transition: 0.3s; }
+        .timeline-step::before { content: ''; position: absolute; left: -2px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #eee; border: 3px solid white; box-shadow: 0 0 0 2px #ddd; z-index: 2; }
+        
+        /* Active States */
+        .timeline-step.active { opacity: 1; }
+        .timeline-step.active::before { background: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-color); }
+        .timeline-step.completed { opacity: 1; }
+        .timeline-step.completed::before { background: #27ae60; box-shadow: 0 0 0 2px #27ae60; }
+        
+        .step-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--primary-color); margin-bottom: 2px; font-weight: bold; }
+        .step-time { font-size: 0.8rem; color: gray; font-family: monospace; }
+        .step-info { background: #fcf9f6; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; border-left: 3px solid var(--accent-color); }
+    </style>
+</head>
+<body class="about-page">
+    
+    <!-- Use your existing Light Navbar from index.html here -->
+
+    <main class="dashboard-wrapper">
+        <h1 style="color: var(--primary-color); margin-bottom: 10px;">My Bookings</h1>
+        <p style="opacity: 0.8; margin-bottom: 30px;">Track the status of your upcoming events.</p>
+        
+        <div id="customer-bookings-container">
+            <p style="text-align: center; opacity: 0.6;">Loading your moments...</p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const userString = localStorage.getItem('momentoUser');
+            if (!userString) {
+                window.location.href = "index.html";
+                return;
+            }
+            
+            const user = JSON.parse(userString);
+            const container = document.getElementById('customer-bookings-container');
+            
+            try {
+                const res = await fetch(`https://api.momentoo.in/api/customer/bookings/${user.id}`);
+                const data = await res.json();
+                
+                if (data.success && data.data.length > 0) {
+                    container.innerHTML = '';
+                    
+                    data.data.forEach(ticket => {
+                        const formatDate = (isoString) => {
+                            if (!isoString) return 'Pending...';
+                            const d = new Date(isoString);
+                            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        };
+
+                        const statusMap = { 'pending': 0, 'quotation_sent': 1, 'confirmed': 2, 'completed': 3 };
+                        const currentLvl = statusMap[ticket.status] || 0;
+
+                        // Check which steps are completed or active
+                        const getStepClass = (lvl) => {
+                            if (currentLvl > lvl) return 'completed';
+                            if (currentLvl === lvl) return 'active';
+                            return '';
+                        };
+
+                        let paymentInfo = '';
+                        if (currentLvl === 1 && ticket.quotation_amount) {
+                            paymentInfo = `
+                                <div class="step-info">
+                                    <strong>Quotation Ready:</strong> ₹${ticket.quotation_amount}<br>
+                                    <span style="color: #e74c3c;">Advance Due: ₹${ticket.advance_amount}</span><br>
+                                    <em>Our team will contact you shortly for payment.</em>
+                                </div>`;
+                        }
+
+                        let dispatchInfo = '';
+                        if (currentLvl === 3 && ticket.tracking_id) {
+                            dispatchInfo = `
+                                <div class="step-info" style="border-left-color: #8e44ad;">
+                                    <strong>Dispatched via ${ticket.courier_partner}</strong><br>
+                                    Tracking ID: ${ticket.tracking_id}
+                                </div>`;
+                        }
+
+                        container.innerHTML += `
+                            <div class="ticket-card">
+                                <div class="ticket-header">
+                                    <div>
+                                        <h3 style="color: var(--primary-color);">${ticket.pro_name}</h3>
+                                        <p style="opacity: 0.8; font-size: 0.9rem;">${ticket.category} (${ticket.artist_type})</p>
+                                    </div>
+                                    <div class="ticket-id-badge">${ticket.ticket_id}</div>
+                                </div>
+                                
+                                <div class="timeline">
+                                    <div class="timeline-step ${getStepClass(0)}">
+                                        <div class="step-title">Booking Requested</div>
+                                        <div class="step-time">${formatDate(ticket.created_at)}</div>
+                                    </div>
+                                    <div class="timeline-step ${getStepClass(1)}">
+                                        <div class="step-title">Quotation Sent</div>
+                                        <div class="step-time">${formatDate(ticket.quoted_at)}</div>
+                                        ${paymentInfo}
+                                    </div>
+                                    <div class="timeline-step ${getStepClass(2)}">
+                                        <div class="step-title">Advance Paid & Dates Locked</div>
+                                        <div class="step-time">${formatDate(ticket.confirmed_at)}</div>
+                                    </div>
+                                    <div class="timeline-step ${getStepClass(3)}">
+                                        <div class="step-title">Deliverables Dispatched</div>
+                                        <div class="step-time">${formatDate(ticket.completed_at)}</div>
+                                        ${dispatchInfo}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = '<p style="text-align: center; opacity: 0.6;">You have no active bookings.</p>';
+                }
+            } catch (err) {
+                container.innerHTML = '<p style="text-align: center; color: red;">Failed to load bookings. Please try again.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
