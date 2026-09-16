@@ -90,7 +90,9 @@ async function loadProBookings(proId) {
                         
                         <div style="line-height: 1.6; color: var(--primary-color); font-size: 0.95rem;">
                             <p style="margin-bottom: 5px;"><strong>Client Name:</strong> ${job.customer_name}</p>
-                            <p style="margin-bottom: 5px;"><strong>Location:</strong> ${job.landmark || 'Not specified'}</p>
+                            <p style="margin-bottom: 5px;"><strong>Location:</strong> ${job.landmark || 'Not specified'} 
+                                ${job.latitude && job.longitude ? `<a href="https://www.google.com/maps?q=${job.latitude},${job.longitude}" target="_blank" style="color: var(--accent-color); font-weight: bold; text-decoration: none; margin-left: 5px;">(Open Map)</a>` : ''}
+                            </p>
                             <p style="margin-bottom: 15px;"><strong>Requirements:</strong> ${job.event_details || 'No specific notes provided.'}</p>
                         </div>
                         
