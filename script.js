@@ -380,7 +380,8 @@ function logoutUser() {
 }
 
 function openDashboard() {
-    alert("Dashboard coming soon! Here you will see your active bookings.");
+    // Redirects the user to their dedicated tracking page
+    window.location.href = "customer-dashboard.html";
 }
 
 // ==========================================
