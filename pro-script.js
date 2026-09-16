@@ -46,6 +46,68 @@ function checkProAuth() {
     loadProfileData(user.id);
 }
 
+// Fetch and render confirmed bookings for the artist
+async function loadProBookings(proId) {
+    const container = document.querySelector('.bookings-list');
+    if (!container) return;
+    
+    container.innerHTML = '<div style="text-align: center; padding: 40px 0;"><div style="width: 30px; height: 30px; border: 3px solid #ddd; border-top: 3px solid var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px auto;"></div><p style="opacity: 0.6;">Syncing your schedule...</p></div>';
+
+    try {
+        const res = await fetch(`https://api.momentoo.in/api/pro/bookings/${proId}`);
+        const data = await res.json();
+
+        if (data.success && data.data.length > 0) {
+            container.innerHTML = ''; // Clear loader
+            
+            // Update the "Total Bookings" number on the Overview Tab dynamically
+            const totalBookingsStat = document.querySelectorAll('.stat-card h3')[0];
+            if (totalBookingsStat) totalBookingsStat.innerText = data.data.length;
+
+            data.data.forEach(job => {
+                const startDate = new Date(job.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const endDate = new Date(job.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                // Color code based on if it's coming up (Confirmed) or finished (Completed)
+                const borderColor = job.status === 'completed' ? '#8e44ad' : '#27ae60';
+                const statusLabel = job.status === 'completed' ? 'Job Completed' : 'Upcoming Event';
+                
+                container.innerHTML += `
+                    <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 4px solid ${borderColor};">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div>
+                                <h3 style="color: var(--primary-color); margin-bottom: 5px;">${job.category} Event</h3>
+                                <p style="opacity: 0.8; font-size: 0.9rem; margin: 0; font-weight: bold;">${startDate} to ${endDate}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-family: monospace; background: #fcf9f6; color: var(--accent-color); padding: 5px 10px; border-radius: 6px; font-weight: bold; display: inline-block; margin-bottom: 5px;">${job.ticket_id}</span><br>
+                                <span style="font-size: 0.75rem; color: ${borderColor}; font-weight: bold; text-transform: uppercase;">${statusLabel}</span>
+                            </div>
+                        </div>
+                        
+                        <hr style="border: 0; border-top: 1px dashed #ddd; margin: 15px 0;">
+                        
+                        <div style="line-height: 1.6; color: var(--primary-color); font-size: 0.95rem;">
+                            <p style="margin-bottom: 5px;"><strong>Client Name:</strong> ${job.customer_name}</p>
+                            <p style="margin-bottom: 5px;"><strong>Location:</strong> ${job.landmark || 'Not specified'}</p>
+                            <p style="margin-bottom: 15px;"><strong>Requirements:</strong> ${job.event_details || 'No specific notes provided.'}</p>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <a href="tel:${job.customer_phone}" style="flex: 1; text-align: center; background: #fcf9f6; color: var(--primary-color); border: 1px solid var(--accent-color); text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; transition: 0.3s;" onmouseover="this.style.background='var(--accent-color)'; this.style.color='#fff';" onmouseout="this.style.background='#fcf9f6'; this.style.color='var(--primary-color)';">📞 Contact Client</a>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            container.innerHTML = '<p style="opacity: 0.6; text-align: center; padding: 40px 0;">No active bookings yet. Keep your portfolio updated to attract clients!</p>';
+        }
+    } catch (err) {
+        container.innerHTML = '<p style="color: red; text-align: center; padding: 40px 0;">Failed to load bookings. Please try again.</p>';
+    }
+}
+
 async function loadProfileData(proId) {
     try {
         const res = await fetch(`https://api.momentoo.in/api/pro/profile/${proId}`);
@@ -183,6 +245,10 @@ async function loadProfileData(proId) {
                 loader.style.opacity = '0';
                 setTimeout(() => { loader.style.display = 'none'; }, 500);
             }
+            
+            // 8. FETCH SCHEDULED BOOKINGS
+            loadProBookings(pro.id);
+
         }
     } catch (e) { 
         console.error("Failed to load profile data:", e); 
