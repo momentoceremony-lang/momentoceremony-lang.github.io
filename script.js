@@ -118,14 +118,12 @@ function initCategorySlideshow(slideshowId) {
 // ==========================================
 // 4. INITIALIZE EVERYTHING ON PAGE LOAD
 // ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Check Login State IMMEDIATELY before anything else can cause an error
-    checkLoginState();
+let fpStart, fpEnd; // NEW: Global calendar variables
 
-    // 2. Start Hero Typing
+document.addEventListener("DOMContentLoaded", () => {
+    checkLoginState();
     setTimeout(typeEffect, 1000); 
 
-    // 3. Initialize Category Image Slideshows
     initCategorySlideshow("wedding-slideshow");
     initCategorySlideshow("birthday-slideshow");
     initCategorySlideshow("anni-slideshow");
@@ -134,10 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initCategorySlideshow("mehndi-slideshow");
     initCategorySlideshow("makeup-slideshow");
 
-    // 4. Initialize Custom Premium Date Pickers SAFELY (Only if the library is loaded)
     if (typeof flatpickr !== 'undefined') {
-        flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
-        flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+        // NEW: Assign to the global variables
+        fpStart = flatpickr("#book-start", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
+        fpEnd = flatpickr("#book-end", { minDate: "today", dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y", disableMobile: true });
     }
 });
 
@@ -501,6 +499,9 @@ function selectPremiumArtist(event, val, element) {
     document.querySelectorAll('#artist-options .custom-select-option').forEach(el => el.classList.remove('selected-option'));
     element.classList.add('selected-option');
     document.getElementById('artist-options').classList.remove('show');
+
+    // NEW: Lock the calendar the moment they click the artist's name
+    lockCalendarForArtist(val);
 }
 
 function handleBookNow(photographerName = null) {
@@ -561,6 +562,9 @@ function handleBookNow(photographerName = null) {
             document.getElementById('book-artist-select').value = photographerName;
             artistContainer.style.pointerEvents = "none";
             artistContainer.style.opacity = "0.6"; 
+            
+            // NEW: Lock the calendar dates immediately for this artist
+            lockCalendarForArtist(photographerName);
         }
     } 
     // CONTEXT B: Triggered generically from the Navbar
@@ -575,6 +579,12 @@ function handleBookNow(photographerName = null) {
             <div class="custom-select-option" onclick="selectPremiumType(event, 'Makeup Artist', this)">Makeup Artist</div>
             <div class="custom-select-option" onclick="selectPremiumType(event, 'Mehndi Artist', this)">Mehndi Artist</div>
         `;
+
+        // NEW: Clear any previously blocked dates from the calendar
+        if (fpStart && fpEnd) {
+            fpStart.set('disable', []);
+            fpEnd.set('disable', []);
+        }
     }
 
     document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
@@ -1987,3 +1997,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+async function lockCalendarForArtist(artistName) {
+    if (!fpStart || !fpEnd) return;
+    
+    // Temporarily disable the calendar while fetching to prevent fast clicking
+    document.getElementById('book-start').placeholder = "Loading dates...";
+    
+    try {
+        const res = await fetch(`https://api.momentoo.in/api/pro/${encodeURIComponent(artistName)}/blocked-dates`);
+        const data = await res.json();
+        
+        if (data.success) {
+            const blockedRanges = data.data.map(b => ({
+                from: b.start_date.split('T')[0], // Cleans the ISO string
+                to: b.end_date.split('T')[0]
+            }));
+            
+            // Inject the blocked dates directly into the UI
+            fpStart.set('disable', blockedRanges);
+            fpEnd.set('disable', blockedRanges);
+            document.getElementById('book-start').placeholder = "Select date...";
+        }
+    } catch (e) {
+        console.error("Failed to lock dates:", e);
+        document.getElementById('book-start').placeholder = "Select date...";
+    }
+}
