@@ -117,7 +117,7 @@
 
                         // --- NEW: FEEDBACK UI GENERATOR ---
                         let feedbackUI = '';
-                        if (currentLvl >= 4) { // Triggered only after the Artist leaves (artist_left is level 4+)
+                        if (currentLvl >= 5) { // FIXED: Triggered ONLY after Artist Left (level 5+)
                             if (!ticket.feedback_submitted) {
                                 feedbackUI = `
                                     <div style="margin-top: 15px; padding: 20px; background: #fffdfa; border: 1px solid #eaddd7; border-radius: 12px; text-align: center;">
