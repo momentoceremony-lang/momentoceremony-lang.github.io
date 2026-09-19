@@ -1932,7 +1932,7 @@ async function fetchTrackingData() {
                        ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             };
 
-            // 1. Bind all 7 timestamps safely
+            // Bind all 7 timestamps securely
             document.getElementById('time-requested').innerText = formatTime(track.created_at);
             document.getElementById('time-quoted').innerText = track.quoted_at ? formatTime(track.quoted_at) : 'Pending...';
             document.getElementById('time-confirmed').innerText = track.confirmed_at ? formatTime(track.confirmed_at) : 'Pending...';
@@ -1946,21 +1946,20 @@ async function fetchTrackingData() {
             }
             document.getElementById('time-completed').innerHTML = completedText;
 
-            // 2. Updated UI Matrix for 7 steps (Targets the currently 'Active' step)
+            // Clean 7-Step Matrix Mapping
             const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'left', 'final', 'completed'];
             const statusMap = {
-                'pending': 0,             // Step 0 (Requested) is active
-                'quotation_sent': 2,      // Step 2 (Advance Paid) is active
-                'confirmed': 3,           // Step 3 (Artist Arrived) is active
-                'artist_arrived': 4,      // Step 4 (Artist Left) is active
-                'artist_left': 5,         // Step 5 (Final Payment) is active
-                'final_paid': 6,          // Step 6 (Dispatch) is active
-                'completed': 7            // Index 7 means all steps 0-6 are completed
+                'pending': 0,             
+                'quotation_sent': 1,      
+                'confirmed': 2,           
+                'artist_arrived': 3,      
+                'artist_left': 4,         
+                'final_paid': 5,          
+                'completed': 6            
             };
             
             const currentLevel = statusMap[track.status] !== undefined ? statusMap[track.status] : 0;
 
-            // 3. Paint the UI dots
             steps.forEach((step, index) => {
                 const el = document.getElementById(`step-${step}`);
                 el.classList.remove('active', 'completed');
@@ -1971,8 +1970,6 @@ async function fetchTrackingData() {
                     el.classList.add('active');
                 }
             });
-
-        }
 
         } else {
             alert(data.error || "Ticket not found.");
