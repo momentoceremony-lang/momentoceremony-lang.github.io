@@ -1949,13 +1949,13 @@ async function fetchTrackingData() {
             // Clean 7-Step Matrix Mapping
             const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'left', 'final', 'completed'];
             const statusMap = {
-                'pending': 0,             
-                'quotation_sent': 1,      
-                'confirmed': 2,           
-                'artist_arrived': 3,      
-                'artist_left': 4,         
-                'final_paid': 5,          
-                'completed': 6            
+                'pending': 1,             
+                'quotation_sent': 2,      
+                'confirmed': 3,           
+                'artist_arrived': 4,      
+                'artist_left': 5,         
+                'final_paid': 6,          
+                'completed': 7            
             };
             
             const currentLevel = statusMap[track.status] !== undefined ? statusMap[track.status] : 0;
