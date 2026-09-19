@@ -79,8 +79,15 @@
                             return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                         };
 
-                        // Expanded Status Map
-                        const statusMap = { 'pending': 0, 'quotation_sent': 1, 'confirmed': 2, 'artist_arrived': 3, 'final_paid': 4, 'completed': 5 };
+                        // Updated UI Matrix for 6 steps
+                        const statusMap = {
+                            'pending': 1,             // Step 0 & 1 Green, Step 2 Brown
+                            'quotation_sent': 2,      
+                            'confirmed': 3,           // Advance Paid is Green, Artist Arrived is Brown
+                            'artist_arrived': 4,      // Arrived is Green, Final Paid is Brown
+                            'final_paid': 5,          
+                            'completed': 6            // All Green
+                        };
                         const currentLvl = statusMap[ticket.status] || 0;
 
                         // Check which steps are completed or active
