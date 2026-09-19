@@ -115,6 +115,42 @@
                                 </div>`;
                         }
 
+                        // --- NEW: FEEDBACK UI GENERATOR ---
+                        let feedbackUI = '';
+                        if (currentLvl >= 4) { // Triggered only after the Artist leaves (artist_left is level 4+)
+                            if (!ticket.feedback_submitted) {
+                                feedbackUI = `
+                                    <div style="margin-top: 15px; padding: 20px; background: #fffdfa; border: 1px solid #eaddd7; border-radius: 12px; text-align: center;">
+                                        <h4 style="color: var(--primary-color); margin-bottom: 5px;">Rate your experience</h4>
+                                        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 15px;">How was the artist's behavior, quality, and overall work?</p>
+                                        
+                                        <div id="stars-${ticket.ticket_id}" style="font-size: 2.2rem; color: #ddd; cursor: pointer; margin-bottom: 15px; user-select: none;">
+                                            <span onclick="setRating('${ticket.ticket_id}', 1)">★</span>
+                                            <span onclick="setRating('${ticket.ticket_id}', 2)">★</span>
+                                            <span onclick="setRating('${ticket.ticket_id}', 3)">★</span>
+                                            <span onclick="setRating('${ticket.ticket_id}', 4)">★</span>
+                                            <span onclick="setRating('${ticket.ticket_id}', 5)">★</span>
+                                        </div>
+                                        <input type="hidden" id="rating-val-${ticket.ticket_id}" value="0">
+                                        
+                                        <textarea id="review-${ticket.ticket_id}" placeholder="Write a short review..." style="width: 100%; height: 70px; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; margin-bottom: 15px; resize: none;"></textarea>
+                                        
+                                        <button onclick="submitFeedback('${ticket.ticket_id}')" style="background: var(--primary-color); color: white; border: none; padding: 10px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s;">Submit Review</button>
+                                    </div>
+                                `;
+                            } else {
+                                const ratingNum = ticket.rating || 5;
+                                const starsHtml = '<span style="color:#f39c12;">★</span>'.repeat(ratingNum) + '<span style="color:#ddd;">★</span>'.repeat(5 - ratingNum);
+                                feedbackUI = `
+                                    <div style="margin-top: 15px; padding: 15px; background: #fcf9f6; border: 1px solid #eaddd7; border-radius: 12px; text-align: center;">
+                                        <h4 style="color: var(--primary-color); margin-bottom: 5px;">Your Review</h4>
+                                        <div style="font-size: 1.5rem; margin-bottom: 10px;">${starsHtml}</div>
+                                        <p style="font-size: 0.9rem; font-style: italic; opacity: 0.8; margin: 0;">"${ticket.review_text || ''}"</p>
+                                    </div>
+                                `;
+                            }
+                        }
+
                         container.innerHTML += `
                             <div class="ticket-card">
                                 <div class="ticket-header" onclick="toggleTimeline('${ticket.ticket_id}')">
@@ -162,6 +198,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                ${feedbackUI} <!-- INJECTED HERE SO IT IS VISIBLE WITHOUT EXPANDING -->
                             </div>
                         `;
                     });
@@ -182,17 +219,45 @@
                 timeline.classList.remove('show');
                 chev.classList.remove('up');
             } else {
-                // Optional: Close all other open timelines first (uncomment if you only want one open at a time)
-                /*
-                document.querySelectorAll('.timeline-container').forEach(el => el.classList.remove('show'));
-                document.querySelectorAll('.chevron').forEach(el => el.classList.remove('up'));
-                */
-                
                 timeline.classList.add('show');
                 chev.classList.add('up');
             }
         };
-        
+
+        // Global function to handle Star Hover/Click
+        window.setRating = function(ticketId, rating) {
+            document.getElementById(`rating-val-${ticketId}`).value = rating;
+            const stars = document.getElementById(`stars-${ticketId}`).children;
+            for (let i = 0; i < 5; i++) {
+                stars[i].style.color = i < rating ? '#f39c12' : '#ddd';
+            }
+        };
+
+        // Global function to Submit Feedback to Backend
+        window.submitFeedback = async function(ticketId) {
+            const rating = document.getElementById(`rating-val-${ticketId}`).value;
+            const text = document.getElementById(`review-${ticketId}`).value.trim();
+            
+            if (rating == 0) return alert("Please select a star rating.");
+            if (!text) return alert("Please write a short review detailing your experience.");
+            
+            try {
+                const res = await fetch('https://api.momentoo.in/api/customer/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticketId, rating, reviewText: text })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert("Thank you! Your feedback has been submitted.");
+                    location.reload(); // Refresh the page to lock in the rating UI
+                } else {
+                    alert("Error submitting feedback.");
+                }
+            } catch (e) {
+                alert("Network error.");
+            }
+        };
     </script>
 </body>
 </html>
