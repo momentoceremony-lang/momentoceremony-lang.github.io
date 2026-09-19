@@ -1944,17 +1944,21 @@ async function fetchTrackingData() {
                 completedText += `<br><span style="color: var(--primary-color); font-weight: bold; display: inline-block; margin-top: 5px;">Shipped via ${track.courier_partner} (Tracking: ${track.tracking_id})</span>`;
             }
             document.getElementById('time-completed').innerHTML = completedText;
+            document.getElementById('time-left').innerText = track.artist_left_at ? formatTime(track.artist_left_at) : 'Pending...';
+            
 
             // Updated UI Matrix for 6 steps
             const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'final', 'completed'];
-            // Updated UI Matrix for 6 steps
+            // Updated UI Matrix for 7 steps
+            const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'left', 'final', 'completed'];
             const statusMap = {
-                'pending': 1,             // Step 0 & 1 Green, Step 2 Brown
+                'pending': 1,             
                 'quotation_sent': 2,      
-                'confirmed': 3,           // Advance Paid is Green, Artist Arrived is Brown
-                'artist_arrived': 4,      // Arrived is Green, Final Paid is Brown
-                'final_paid': 5,          
-                'completed': 6            // All Green
+                'confirmed': 3,           
+                'artist_arrived': 4,      
+                'artist_left': 5,         // NEW: Job finished, waiting for final payment
+                'final_paid': 6,          
+                'completed': 7            
             };
             
             const currentLevel = statusMap[track.status] || 0;
