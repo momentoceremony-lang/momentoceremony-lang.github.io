@@ -78,30 +78,28 @@
                             const d = new Date(isoString);
                             return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                         };
-                        document.getElementById('time-left').innerText = track.artist_left_at ? formatTime(track.artist_left_at) : 'Pending...';
 
-                                    // Updated UI Matrix for 7 steps
-                        const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'left', 'final', 'completed'];
+                        // 1. Expanded Status Map (Matches the exact logic of the public tracker)
                         const statusMap = {
-                            'pending': 1,             
+                            'pending': 0,             
                             'quotation_sent': 2,      
                             'confirmed': 3,           
                             'artist_arrived': 4,      
-                            'artist_left': 5,         // NEW: Job finished, waiting for final payment
+                            'artist_left': 5,         
                             'final_paid': 6,          
                             'completed': 7            
                         };
-                        const currentLvl = statusMap[ticket.status] || 0;
+                        const currentLvl = statusMap[ticket.status] !== undefined ? statusMap[ticket.status] : 0;
 
-                        // Check which steps are completed or active
-                        const getStepClass = (lvl) => {
-                            if (currentLvl > lvl) return 'completed';
-                            if (currentLvl === lvl) return 'active';
+                        // 2. Check which steps are completed or active
+                        const getStepClass = (stepIndex) => {
+                            if (currentLvl > stepIndex) return 'completed';
+                            if (currentLvl === stepIndex) return 'active';
                             return '';
                         };
 
                         let paymentInfo = '';
-                        if (currentLvl === 1 && ticket.quotation_amount) {
+                        if (currentLvl === 2 && ticket.quotation_amount) {
                             paymentInfo = `
                                 <div class="step-info">
                                     <strong>Quotation Ready:</strong> ₹${ticket.quotation_amount}<br>
@@ -111,7 +109,7 @@
                         }
 
                         let dispatchInfo = '';
-                        if (currentLvl === 5 && ticket.tracking_id) {
+                        if (currentLvl === 7 && ticket.tracking_id) {
                             dispatchInfo = `
                                 <div class="step-info" style="border-left-color: #8e44ad;">
                                     <strong>Dispatched via ${ticket.courier_partner}</strong><br>
@@ -119,6 +117,7 @@
                                 </div>`;
                         }
 
+                        // 3. Inject the HTML including all 7 steps
                         container.innerHTML += `
                             <div class="ticket-card">
                                 <!-- Clickable Header -->
@@ -154,10 +153,14 @@
                                             <div class="step-time">${formatDate(ticket.artist_arrived_at)}</div>
                                         </div>
                                         <div class="timeline-step ${getStepClass(4)}">
+                                            <div class="step-title">Job Finished (Artist Left)</div>
+                                            <div class="step-time">${formatDate(ticket.artist_left_at)}</div>
+                                        </div>
+                                        <div class="timeline-step ${getStepClass(5)}">
                                             <div class="step-title">Final Balance Paid</div>
                                             <div class="step-time">${formatDate(ticket.final_payment_at)}</div>
                                         </div>
-                                        <div class="timeline-step ${getStepClass(5)}">
+                                        <div class="timeline-step ${getStepClass(6)}">
                                             <div class="step-title">Deliverables Dispatched</div>
                                             <div class="step-time">${formatDate(ticket.completed_at)}</div>
                                             ${dispatchInfo}
