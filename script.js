@@ -1947,13 +1947,14 @@ async function fetchTrackingData() {
 
             // Updated UI Matrix for 6 steps
             const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'final', 'completed'];
+            // Updated UI Matrix for 6 steps
             const statusMap = {
-                'pending': 0,
-                'quotation_sent': 1,
-                'confirmed': 2,
-                'artist_arrived': 3,
-                'final_paid': 4,
-                'completed': 5
+                'pending': 0,             // Waiting for quote
+                'quotation_sent': 1,      // Waiting for advance
+                'confirmed': 3,           // Advance paid. Waiting for Artist Arrived (Index 3)
+                'artist_arrived': 4,      // Artist arrived. Waiting for Final Payment (Index 4)
+                'final_paid': 5,          // Final paid. Waiting for Dispatch (Index 5)
+                'completed': 6            // All done.
             };
             
             const currentLevel = statusMap[track.status] || 0;
