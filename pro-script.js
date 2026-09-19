@@ -72,6 +72,15 @@ async function loadProBookings(proId) {
                 const borderColor = job.status === 'completed' ? '#8e44ad' : '#27ae60';
                 const statusLabel = job.status === 'completed' ? 'Job Completed' : 'Upcoming Event';
                 
+                // --- NEW: Determine Artist Action Buttons ---
+                let artistActions = '';
+                if (job.status === 'confirmed') {
+                    artistActions = `<button onclick="markArtistArrived('${job.ticket_id}')" style="flex: 1; background: var(--accent-color); color: #0f0f10; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(200, 169, 106, 0.3);">📍 I Have Arrived</button>`;
+                } else if (job.status === 'artist_arrived') {
+                    artistActions = `<button onclick="alert('Feedback & Final Payment system coming next!')" style="flex: 1; background: #27ae60; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">✅ Mark Job Finished</button>`;
+                }
+                // ---------------------------------------------
+                
                 container.innerHTML += `
                     <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 4px solid ${borderColor};">
                         
@@ -98,6 +107,7 @@ async function loadProBookings(proId) {
                         
                         <div style="display: flex; gap: 10px;">
                             <a href="tel:${job.customer_phone}" style="flex: 1; text-align: center; background: #fcf9f6; color: var(--primary-color); border: 1px solid var(--accent-color); text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; transition: 0.3s;" onmouseover="this.style.background='var(--accent-color)'; this.style.color='#fff';" onmouseout="this.style.background='#fcf9f6'; this.style.color='var(--primary-color)';">📞 Contact Client</a>
+                            ${artistActions} <!-- INJECTED BUTTONS HERE -->
                         </div>
                     </div>
                 `;
