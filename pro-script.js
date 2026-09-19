@@ -75,7 +75,7 @@ async function loadProBookings(proId) {
                 // --- NEW: Determine Artist Action Buttons ---
                 let artistActions = '';
                 if (job.status === 'confirmed') {
-                    artistActions = `<button onclick="markArtistArrived('${job.ticket_id}')" style="flex: 1; background: var(--accent-color); color: #0f0f10; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(200, 169, 106, 0.3);">📍 I Have Arrived</button>`;
+                    artistActions = `<button onclick="triggerArrivalVerification('${job.ticket_id}')" style="flex: 1; background: var(--accent-color); color: #0f0f10; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(200, 169, 106, 0.3);">📸 Verify Arrival</button>`;
                 } else if (job.status === 'artist_arrived') {
                     artistActions = `<button onclick="alert('Feedback & Final Payment system coming next!')" style="flex: 1; background: #27ae60; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">✅ Mark Job Finished</button>`;
                 }
@@ -844,21 +844,36 @@ function scrollToTop() {
     });
 }
 
-async function markArtistArrived(ticketId) {
-    if (!confirm("Are you physically at the venue? This will update the customer's live tracker.")) return;
-    
-    try {
-        const res = await fetch('https://api.momentoo.in/api/pro/mark-arrived', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ticketId })
-        });
-        const data = await res.json();
-        if (data.success) {
-            const user = JSON.parse(localStorage.getItem('momentoUser'));
-            loadProBookings(user.id); // Refresh the dashboard instantly
+// Force the artist to upload a live photo to verify arrival
+function triggerArrivalVerification(ticketId) {
+    cloudinary.openUploadWidget({
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        sources: ['local', 'camera'], // Prioritizes the phone camera
+        multiple: false,
+        clientAllowedFormats: ["png", "jpeg", "jpg", "webp"],
+        maxFileSize: 5000000,
+        folder: "momento_pro/arrivals"
+    }, async (error, result) => {
+        if (!error && result && result.event === "success") {
+            const photoUrl = result.info.secure_url;
+            
+            // Send the photo securely to the backend
+            try {
+                const res = await fetch('https://api.momentoo.in/api/pro/mark-arrived', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticketId: ticketId, photoUrl: photoUrl })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert("Location verified! The CRM and Client have been notified.");
+                    const user = JSON.parse(localStorage.getItem('momentoUser'));
+                    loadProBookings(user.id); // Refresh dashboard instantly
+                }
+            } catch(e) {
+                alert("Failed to verify location. Check network.");
+            }
         }
-    } catch (e) {
-        alert("Network Error. Could not mark arrival.");
-    }
+    });
 }
