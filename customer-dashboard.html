@@ -79,27 +79,25 @@
                             return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                         };
 
-                        // 1. Expanded Status Map (Matches the exact logic of the public tracker)
                         const statusMap = {
                             'pending': 0,             
-                            'quotation_sent': 2,      
-                            'confirmed': 3,           
-                            'artist_arrived': 4,      
-                            'artist_left': 5,         
-                            'final_paid': 6,          
-                            'completed': 7            
+                            'quotation_sent': 1,      
+                            'confirmed': 2,           
+                            'artist_arrived': 3,      
+                            'artist_left': 4,         
+                            'final_paid': 5,          
+                            'completed': 6            
                         };
                         const currentLvl = statusMap[ticket.status] !== undefined ? statusMap[ticket.status] : 0;
 
-                        // 2. Check which steps are completed or active
-                        const getStepClass = (stepIndex) => {
-                            if (currentLvl > stepIndex) return 'completed';
-                            if (currentLvl === stepIndex) return 'active';
+                        const getStepClass = (lvl) => {
+                            if (currentLvl > lvl) return 'completed';
+                            if (currentLvl === lvl) return 'active';
                             return '';
                         };
 
                         let paymentInfo = '';
-                        if (currentLvl === 2 && ticket.quotation_amount) {
+                        if (currentLvl === 1 && ticket.quotation_amount) {
                             paymentInfo = `
                                 <div class="step-info">
                                     <strong>Quotation Ready:</strong> ₹${ticket.quotation_amount}<br>
@@ -109,7 +107,7 @@
                         }
 
                         let dispatchInfo = '';
-                        if (currentLvl === 7 && ticket.tracking_id) {
+                        if (currentLvl === 6 && ticket.tracking_id) {
                             dispatchInfo = `
                                 <div class="step-info" style="border-left-color: #8e44ad;">
                                     <strong>Dispatched via ${ticket.courier_partner}</strong><br>
@@ -117,10 +115,8 @@
                                 </div>`;
                         }
 
-                        // 3. Inject the HTML including all 7 steps
                         container.innerHTML += `
                             <div class="ticket-card">
-                                <!-- Clickable Header -->
                                 <div class="ticket-header" onclick="toggleTimeline('${ticket.ticket_id}')">
                                     <div style="flex: 1;">
                                         <h3 style="color: var(--primary-color); margin-bottom: 5px;">${ticket.pro_name}</h3>
@@ -132,7 +128,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Expandable Timeline Box -->
                                 <div id="timeline-${ticket.ticket_id}" class="timeline-container">
                                     <div class="timeline">
                                         <div class="timeline-step ${getStepClass(0)}">
