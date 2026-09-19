@@ -1932,11 +1932,12 @@ async function fetchTrackingData() {
                        ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             };
 
-            // Bind all 6 timestamps
+            // 1. Bind all 7 timestamps safely
             document.getElementById('time-requested').innerText = formatTime(track.created_at);
             document.getElementById('time-quoted').innerText = track.quoted_at ? formatTime(track.quoted_at) : 'Pending...';
             document.getElementById('time-confirmed').innerText = track.confirmed_at ? formatTime(track.confirmed_at) : 'Pending...';
             document.getElementById('time-arrived').innerText = track.artist_arrived_at ? formatTime(track.artist_arrived_at) : 'Pending...';
+            document.getElementById('time-left').innerText = track.artist_left_at ? formatTime(track.artist_left_at) : 'Pending...';
             document.getElementById('time-final').innerText = track.final_payment_at ? formatTime(track.final_payment_at) : 'Pending...';
             
             let completedText = track.completed_at ? formatTime(track.completed_at) : 'Pending...';
@@ -1944,25 +1945,22 @@ async function fetchTrackingData() {
                 completedText += `<br><span style="color: var(--primary-color); font-weight: bold; display: inline-block; margin-top: 5px;">Shipped via ${track.courier_partner} (Tracking: ${track.tracking_id})</span>`;
             }
             document.getElementById('time-completed').innerHTML = completedText;
-            document.getElementById('time-left').innerText = track.artist_left_at ? formatTime(track.artist_left_at) : 'Pending...';
-            
 
-            // Updated UI Matrix for 6 steps
-            const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'final', 'completed'];
-            // Updated UI Matrix for 7 steps
+            // 2. Updated UI Matrix for 7 steps (Targets the currently 'Active' step)
             const steps = ['requested', 'quoted', 'confirmed', 'arrived', 'left', 'final', 'completed'];
             const statusMap = {
-                'pending': 1,             
-                'quotation_sent': 2,      
-                'confirmed': 3,           
-                'artist_arrived': 4,      
-                'artist_left': 5,         // NEW: Job finished, waiting for final payment
-                'final_paid': 6,          
-                'completed': 7            
+                'pending': 0,             // Step 0 (Requested) is active
+                'quotation_sent': 2,      // Step 2 (Advance Paid) is active
+                'confirmed': 3,           // Step 3 (Artist Arrived) is active
+                'artist_arrived': 4,      // Step 4 (Artist Left) is active
+                'artist_left': 5,         // Step 5 (Final Payment) is active
+                'final_paid': 6,          // Step 6 (Dispatch) is active
+                'completed': 7            // Index 7 means all steps 0-6 are completed
             };
             
-            const currentLevel = statusMap[track.status] || 0;
+            const currentLevel = statusMap[track.status] !== undefined ? statusMap[track.status] : 0;
 
+            // 3. Paint the UI dots
             steps.forEach((step, index) => {
                 const el = document.getElementById(`step-${step}`);
                 el.classList.remove('active', 'completed');
@@ -1973,6 +1971,8 @@ async function fetchTrackingData() {
                     el.classList.add('active');
                 }
             });
+
+        }
 
         } else {
             alert(data.error || "Ticket not found.");
