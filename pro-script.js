@@ -833,3 +833,22 @@ function scrollToTop() {
         behavior: "smooth"
     });
 }
+
+async function markArtistArrived(ticketId) {
+    if (!confirm("Are you physically at the venue? This will update the customer's live tracker.")) return;
+    
+    try {
+        const res = await fetch('https://api.momentoo.in/api/pro/mark-arrived', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ticketId })
+        });
+        const data = await res.json();
+        if (data.success) {
+            const user = JSON.parse(localStorage.getItem('momentoUser'));
+            loadProBookings(user.id); // Refresh the dashboard instantly
+        }
+    } catch (e) {
+        alert("Network Error. Could not mark arrival.");
+    }
+}
