@@ -79,7 +79,8 @@
                             return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                         };
 
-                        const statusMap = { 'pending': 0, 'quotation_sent': 1, 'confirmed': 2, 'completed': 3 };
+                        // Expanded Status Map
+                        const statusMap = { 'pending': 0, 'quotation_sent': 1, 'confirmed': 2, 'artist_arrived': 3, 'final_paid': 4, 'completed': 5 };
                         const currentLvl = statusMap[ticket.status] || 0;
 
                         // Check which steps are completed or active
@@ -100,7 +101,7 @@
                         }
 
                         let dispatchInfo = '';
-                        if (currentLvl === 3 && ticket.tracking_id) {
+                        if (currentLvl === 5 && ticket.tracking_id) {
                             dispatchInfo = `
                                 <div class="step-info" style="border-left-color: #8e44ad;">
                                     <strong>Dispatched via ${ticket.courier_partner}</strong><br>
@@ -139,6 +140,14 @@
                                             <div class="step-time">${formatDate(ticket.confirmed_at)}</div>
                                         </div>
                                         <div class="timeline-step ${getStepClass(3)}">
+                                            <div class="step-title">Artist Arrived</div>
+                                            <div class="step-time">${formatDate(ticket.artist_arrived_at)}</div>
+                                        </div>
+                                        <div class="timeline-step ${getStepClass(4)}">
+                                            <div class="step-title">Final Balance Paid</div>
+                                            <div class="step-time">${formatDate(ticket.final_payment_at)}</div>
+                                        </div>
+                                        <div class="timeline-step ${getStepClass(5)}">
                                             <div class="step-title">Deliverables Dispatched</div>
                                             <div class="step-time">${formatDate(ticket.completed_at)}</div>
                                             ${dispatchInfo}
