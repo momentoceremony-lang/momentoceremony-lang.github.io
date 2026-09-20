@@ -1751,17 +1751,10 @@ async function loadDedicatedProfile(proId) {
             let ratingBadge = '';
             if (pro.review_count && pro.review_count > 0) {
                 const avg = Number(pro.avg_rating).toFixed(1);
-                // Wrap in a flex div to force it perfectly centered on a new line
-                ratingBadge = `
-                    <div style="display: flex; justify-content: center; margin-top: 8px;">
-                        <span style="font-size: 1rem; background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-weight: bold; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">
-                            ⭐ ${avg} (${pro.review_count} Reviews)
-                        </span>
-                    </div>`;
+                ratingBadge = `<span style="font-size: 1.1rem; vertical-align: middle; background: #fcf9f6; color: #f39c12; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(243, 156, 18, 0.3); margin-left: 10px; font-family: 'Lato', sans-serif; display: inline-block; white-space: nowrap;">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
             }
             
-            // Inject with a block display so it breaks cleanly
-            document.getElementById('page-name').innerHTML = `<span style="display: block;">${pro.name}</span> ${ratingBadge}`;
+            document.getElementById('page-name').innerHTML = `${pro.name} ${ratingBadge}`;
             document.getElementById('page-specs').innerText = (pro.specialties || []).join(' • ');
             document.getElementById('page-bio').innerText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
             document.getElementById('page-dp').src = pro.dp_url;
