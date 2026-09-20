@@ -150,6 +150,26 @@ async function loadProfileData(proId) {
                     statusText.style.color = '#e74c3c';
                 }
             }
+
+            // --- NEW: INJECT ARTIST RATING BADGE ---
+            let ratingContainer = document.getElementById('pro-self-rating');
+            
+            // If the container doesn't exist yet, build it right under the status indicator
+            if (!ratingContainer && statusText) {
+                ratingContainer = document.createElement('div');
+                ratingContainer.id = 'pro-self-rating';
+                ratingContainer.style.marginTop = '15px';
+                statusText.parentNode.appendChild(ratingContainer);
+            }
+            
+            if (ratingContainer) {
+                if (pro.review_count && pro.review_count > 0) {
+                    const avg = Number(pro.avg_rating).toFixed(1);
+                    ratingContainer.innerHTML = `<span style="background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
+                } else {
+                    ratingContainer.innerHTML = `<span style="background: #f4f4f4; color: #777; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; border: 1px solid #ddd;">⭐ No Reviews Yet</span>`;
+                }
+            }
             
             // 3. SPECIALTIES SELECTOR (FIXED: Declaring specGroup so it never crashes)
             const specGroup = document.getElementById('specialties-selection-group');
