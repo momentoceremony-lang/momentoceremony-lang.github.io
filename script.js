@@ -1105,7 +1105,7 @@ function generateProCardHTML(pro, isHorizontalSlide) {
     let ratingHTML = '';
     if (pro.review_count && pro.review_count > 0) {
         const avg = Number(pro.avg_rating).toFixed(1);
-        ratingHTML = `<div style="display:inline-block; background:#fcf9f6; color:#f39c12; padding:4px 10px; border-radius:15px; font-weight:bold; font-size:0.85rem; margin-top:5px; border:1px solid rgba(243, 156, 18, 0.3);">⭐ ${avg} (${pro.review_count})</div>`;
+        ratingHTML = `<div style="display:inline-block; background:#fcf9f6; color:#f39c12; padding:4px 10px; border-radius:15px; font-weight:bold; font-size:0.85rem; margin-top:5px; border:1px solid rgba(243, 156, 18, 0.3); white-space: nowrap;">⭐ ${avg} (${pro.review_count})</div>`;
     }
 
     const cardContent = `
@@ -1751,7 +1751,8 @@ async function loadDedicatedProfile(proId) {
             let ratingBadge = '';
             if (pro.review_count && pro.review_count > 0) {
                 const avg = Number(pro.avg_rating).toFixed(1);
-                ratingBadge = `<span style="font-size:1.1rem; vertical-align:middle; background:#fcf9f6; color:#f39c12; padding:4px 12px; border-radius:20px; border:1px solid rgba(243, 156, 18, 0.3); margin-left:15px; font-family: 'Lato', sans-serif;">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
+                // FIXED: Wrapped in a div to push it to the next line, added white-space: nowrap to prevent splitting
+                ratingBadge = `<div style="margin-top: 12px; line-height: 1;"><span style="display: inline-block; font-size: 1rem; background: #fcf9f6; color: #f39c12; padding: 6px 16px; border-radius: 20px; border: 1px solid rgba(243, 156, 18, 0.3); font-family: 'Lato', sans-serif; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span></div>`;
             }
             
             document.getElementById('page-name').innerHTML = `${pro.name} ${ratingBadge}`;
