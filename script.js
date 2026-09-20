@@ -1751,11 +1751,17 @@ async function loadDedicatedProfile(proId) {
             let ratingBadge = '';
             if (pro.review_count && pro.review_count > 0) {
                 const avg = Number(pro.avg_rating).toFixed(1);
-                // FIXED: Wrapped in a div to push it to the next line, added white-space: nowrap to prevent splitting
-                ratingBadge = `<div style="margin-top: 12px; line-height: 1;"><span style="display: inline-block; font-size: 1rem; background: #fcf9f6; color: #f39c12; padding: 6px 16px; border-radius: 20px; border: 1px solid rgba(243, 156, 18, 0.3); font-family: 'Lato', sans-serif; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span></div>`;
+                // Wrap in a flex div to force it perfectly centered on a new line
+                ratingBadge = `
+                    <div style="display: flex; justify-content: center; margin-top: 8px;">
+                        <span style="font-size: 1rem; background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-weight: bold; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">
+                            ⭐ ${avg} (${pro.review_count} Reviews)
+                        </span>
+                    </div>`;
             }
             
-            document.getElementById('page-name').innerHTML = `${pro.name} ${ratingBadge}`;
+            // Inject with a block display so it breaks cleanly
+            document.getElementById('page-name').innerHTML = `<span style="display: block;">${pro.name}</span> ${ratingBadge}`;
             document.getElementById('page-specs').innerText = (pro.specialties || []).join(' • ');
             document.getElementById('page-bio').innerText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
             document.getElementById('page-dp').src = pro.dp_url;
