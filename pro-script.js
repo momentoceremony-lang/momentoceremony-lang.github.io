@@ -151,23 +151,30 @@ async function loadProfileData(proId) {
                 }
             }
 
-            // --- NEW: INJECT ARTIST RATING BADGE ---
+            // --- NEW: INJECT ARTIST RATING BADGE (TOP) ---
             let ratingContainer = document.getElementById('pro-self-rating');
             
             // If the container doesn't exist yet, build it right under the status indicator
             if (!ratingContainer && statusText) {
+                // Force the parent container to flex and wrap so the badge doesn't get squished
+                statusText.parentNode.style.display = 'flex';
+                statusText.parentNode.style.justifyContent = 'space-between';
+                statusText.parentNode.style.alignItems = 'center';
+                statusText.parentNode.style.flexWrap = 'wrap';
+                statusText.parentNode.style.gap = '10px';
+
                 ratingContainer = document.createElement('div');
                 ratingContainer.id = 'pro-self-rating';
-                ratingContainer.style.marginTop = '15px';
                 statusText.parentNode.appendChild(ratingContainer);
             }
             
             if (ratingContainer) {
                 if (pro.review_count && pro.review_count > 0) {
                     const avg = Number(pro.avg_rating).toFixed(1);
-                    ratingContainer.innerHTML = `<span style="background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
+                    // Added white-space: nowrap so the text never breaks into two lines
+                    ratingContainer.innerHTML = `<span style="display: inline-block; white-space: nowrap; background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
                 } else {
-                    ratingContainer.innerHTML = `<span style="background: #f4f4f4; color: #777; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; border: 1px solid #ddd;">⭐ No Reviews Yet</span>`;
+                    ratingContainer.innerHTML = `<span style="display: inline-block; white-space: nowrap; background: #f4f4f4; color: #777; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; border: 1px solid #ddd;">⭐ No Reviews Yet</span>`;
                 }
             }
             
@@ -281,7 +288,7 @@ async function loadProfileData(proId) {
             // 8. FETCH SCHEDULED BOOKINGS
             loadProBookings(pro.id);
 
-            // --- NEW: INJECT RATING STAT CARD ---
+            // --- NEW: INJECT RATING STAT CARD (BOTTOM) ---
             const statsContainer = document.querySelector('.dashboard-stats') || document.querySelector('.stat-card').parentElement;
             
             if (statsContainer && !document.getElementById('rating-stat-card')) {
@@ -293,8 +300,9 @@ async function loadProfileData(proId) {
                     ratingColor = '#f39c12';
                 }
                 
+                // Removed the orange bottom border to match standard styling
                 statsContainer.innerHTML += `
-                    <div id="rating-stat-card" class="stat-card" style="background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 15px; border-bottom: 3px solid ${ratingColor};">
+                    <div id="rating-stat-card" class="stat-card" style="background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 15px;">
                         <h3 style="font-size: 2rem; color: ${ratingColor}; margin: 0 0 5px 0;">${ratingValue}</h3>
                         <p style="opacity: 0.8; font-size: 0.9rem; margin: 0; font-weight: bold;">Overall Client Rating</p>
                     </div>
