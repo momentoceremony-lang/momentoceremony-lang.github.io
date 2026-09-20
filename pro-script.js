@@ -281,6 +281,26 @@ async function loadProfileData(proId) {
             // 8. FETCH SCHEDULED BOOKINGS
             loadProBookings(pro.id);
 
+            // --- NEW: INJECT RATING STAT CARD ---
+            const statsContainer = document.querySelector('.dashboard-stats') || document.querySelector('.stat-card').parentElement;
+            
+            if (statsContainer && !document.getElementById('rating-stat-card')) {
+                let ratingValue = 'N/A';
+                let ratingColor = '#aaa';
+                
+                if (pro.review_count && pro.review_count > 0) {
+                    ratingValue = `⭐ ${Number(pro.avg_rating).toFixed(1)}`;
+                    ratingColor = '#f39c12';
+                }
+                
+                statsContainer.innerHTML += `
+                    <div id="rating-stat-card" class="stat-card" style="background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 15px; border-bottom: 3px solid ${ratingColor};">
+                        <h3 style="font-size: 2rem; color: ${ratingColor}; margin: 0 0 5px 0;">${ratingValue}</h3>
+                        <p style="opacity: 0.8; font-size: 0.9rem; margin: 0; font-weight: bold;">Overall Client Rating</p>
+                    </div>
+                `;
+            }
+
         }
     } catch (e) { 
         console.error("Failed to load profile data:", e); 
