@@ -1101,6 +1101,13 @@ function generateProCardHTML(pro, isHorizontalSlide) {
     const specsText = (pro.specialties || []).join(' • ');
     const bioText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
 
+    // NEW: Rating UI Generator
+    let ratingHTML = '';
+    if (pro.review_count && pro.review_count > 0) {
+        const avg = Number(pro.avg_rating).toFixed(1);
+        ratingHTML = `<div style="display:inline-block; background:#fcf9f6; color:#f39c12; padding:4px 10px; border-radius:15px; font-weight:bold; font-size:0.85rem; margin-top:5px; border:1px solid rgba(243, 156, 18, 0.3);">⭐ ${avg} (${pro.review_count})</div>`;
+    }
+
     const cardContent = `
         <div class="premium-pro-card">
             <div class="pro-card-header" style="cursor: pointer;" onclick="window.location.href='profile.html?id=${pro.id}'">
@@ -1110,8 +1117,9 @@ function generateProCardHTML(pro, isHorizontalSlide) {
                 </div>
             </div>
             <div class="pro-card-body">
-                <h3 class="pro-card-name">${pro.name}</h3>
-                <p class="pro-card-specs">${specsText}</p>
+                <h3 class="pro-card-name" style="margin-bottom: 2px;">${pro.name}</h3>
+                ${ratingHTML}
+                <p class="pro-card-specs" style="margin-top: 10px;">${specsText}</p>
                 <p class="pro-card-bio">${bioText}</p>
                 <div class="pro-card-actions">
                     <button class="btn-view-profile" onclick="window.location.href='profile.html?id=${pro.id}'">View Profile</button>
@@ -1740,7 +1748,13 @@ async function loadDedicatedProfile(proId) {
             const pro = data.data;
             
             // Populate Basic Data
-            document.getElementById('page-name').innerText = pro.name;
+            let ratingBadge = '';
+            if (pro.review_count && pro.review_count > 0) {
+                const avg = Number(pro.avg_rating).toFixed(1);
+                ratingBadge = `<span style="font-size:1.1rem; vertical-align:middle; background:#fcf9f6; color:#f39c12; padding:4px 12px; border-radius:20px; border:1px solid rgba(243, 156, 18, 0.3); margin-left:15px; font-family: 'Lato', sans-serif;">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
+            }
+            
+            document.getElementById('page-name').innerHTML = `${pro.name} ${ratingBadge}`;
             document.getElementById('page-specs').innerText = (pro.specialties || []).join(' • ');
             document.getElementById('page-bio').innerText = pro.bio || "This professional is currently updating their bio. View their portfolio to see their distinct photography style.";
             document.getElementById('page-dp').src = pro.dp_url;
