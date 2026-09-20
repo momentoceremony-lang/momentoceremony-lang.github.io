@@ -605,9 +605,21 @@ function openCloudinaryWidget(imageType, allowMultiple, specialtyTag = "") {
                 document.getElementById('preview-banner').style.display = 'block';
             } 
             else if (imageType === 'gallery') {
-                // Save both the URL and the Category as an object
+                // Save both the URL and the Category for their personal profile
                 uploadedImages.gallery.push({ url: secureUrl, category: specialtyTag });
                 renderGalleryPreviews(); 
+                
+                // NEW: Silently submit to the CRM Database Queue for the global view.html page
+                const user = JSON.parse(localStorage.getItem('momentoUser'));
+                fetch('https://api.momentoo.in/api/gallery/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        proId: user.id, 
+                        imageUrl: secureUrl, 
+                        category: specialtyTag 
+                    })
+                }).catch(err => console.error("Gallery CRM sync error:", err));
             }
         }
     });
