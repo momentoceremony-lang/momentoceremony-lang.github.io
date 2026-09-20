@@ -1499,15 +1499,57 @@ const categoryDisplayNames = {
     'baby': 'Baby Shoots', 'anni': 'Anniversaries', 'mehndi': 'Mehndi', 'makeup': 'Makeup'
 };
 
-// Start with empty arrays
-let galleryData = { wedding: [], prewed: [], birthday: [], baby: [], anni: [], mehndi: [], makeup: [] };
+// 1. PRE-LOAD STOCK IMAGES SO THE GALLERY IS NEVER EMPTY
+const stockGalleryData = {
+    wedding: [ 
+        { image_url: 'Stock/wedding-banner-1.jpeg', category: 'Wedding', isStock: true }, 
+        { image_url: 'Stock/wedding-banner-2.jpeg', category: 'Wedding', isStock: true },
+        { image_url: 'Stock/pro-shot-1.jpeg', category: 'Wedding', isStock: true },
+        { image_url: 'Stock/pro-shot-2.jpeg', category: 'Wedding', isStock: true },
+        { image_url: 'Stock/pro-shot-3.jpeg', category: 'Wedding', isStock: true }
+    ],
+    prewed: [ 
+        { image_url: 'Stock/prewed-banner-1.jpeg', category: 'Pre-Wedding', isStock: true },
+        { image_url: 'Stock/prewed-banner-2.jpeg', category: 'Pre-Wedding', isStock: true },
+        { image_url: 'Stock/prewed-shot-1.jpeg', category: 'Pre-Wedding', isStock: true },
+        { image_url: 'Stock/prewed-shot-2.jpeg', category: 'Pre-Wedding', isStock: true }
+    ],
+    birthday: [ 
+        { image_url: 'Stock/bday-banner-1.jpeg', category: 'Birthday', isStock: true }, 
+        { image_url: 'Stock/bday-banner-2.jpeg', category: 'Birthday', isStock: true }, 
+        { image_url: 'Stock/bday-shot-1.jpeg', category: 'Birthday', isStock: true }, 
+        { image_url: 'Stock/bday-shot-2.jpeg', category: 'Birthday', isStock: true } 
+    ],
+    baby: [ 
+        { image_url: 'Stock/baby-banner-1.jpeg', category: 'Baby Shoot', isStock: true }, 
+        { image_url: 'Stock/baby-banner-2.jpeg', category: 'Baby Shoot', isStock: true }, 
+        { image_url: 'Stock/baby-shot-1.jpeg', category: 'Baby Shoot', isStock: true } 
+    ],
+    anni: [ 
+        { image_url: 'Stock/anni-banner-1.jpeg', category: 'Anniversary', isStock: true }, 
+        { image_url: 'Stock/anni-banner-2.jpeg', category: 'Anniversary', isStock: true }, 
+        { image_url: 'Stock/anni-shot-1.jpeg', category: 'Anniversary', isStock: true }, 
+        { image_url: 'Stock/anni-shot-2.jpeg', category: 'Anniversary', isStock: true } 
+    ],
+    mehndi: [ 
+        { image_url: 'Stock/mehndi-banner-1.jpeg', category: 'Mehndi', isStock: true }, 
+        { image_url: 'Stock/mehndi-banner-2.jpeg', category: 'Mehndi', isStock: true } 
+    ],
+    makeup: [ 
+        { image_url: 'Stock/makeup-banner-1.jpeg', category: 'Makeup', isStock: true }, 
+        { image_url: 'Stock/makeup-banner-2.jpeg', category: 'Makeup', isStock: true } 
+    ]
+};
+
+// Clone the stock data into our active memory
+let galleryData = JSON.parse(JSON.stringify(stockGalleryData));
 let activeCategory = 'wedding';
 let activeImageIndex = 0;
 let isCategoryLoaded = false; 
 
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById('main-gallery-img')) {
-        fetchPublicGallery(); // Fetch real images immediately
+        fetchPublicGallery(); 
     }
 });
 
@@ -1517,7 +1559,6 @@ async function fetchPublicGallery() {
         const data = await res.json();
         
         if (data.success && data.data) {
-            // Sort database images into our UI categories
             data.data.forEach(item => {
                 const dbCat = item.category || '';
                 let catKey = 'wedding'; 
@@ -1530,10 +1571,10 @@ async function fetchPublicGallery() {
                 else if (dbCat.includes('Makeup') || dbCat.includes('Bridal') || dbCat.includes('Party')) catKey = 'makeup';
                 else if (dbCat.includes('Wedding')) catKey = 'wedding';
                 
-                galleryData[catKey].push(item);
+                // Add the real artist image to the TOP of the array so it shows first!
+                galleryData[catKey].unshift(item);
             });
             
-            // Build UI
             buildGalleryDropdown();
             const urlParams = new URLSearchParams(window.location.search);
             const categoryFromUrl = urlParams.get('category');
@@ -1580,7 +1621,6 @@ function buildGalleryDropdown() {
 
 function selectGalleryCategory(event, category) {
     if (event) event.stopPropagation(); 
-    
     activeCategory = category;
     activeImageIndex = 0; 
     isCategoryLoaded = false; 
@@ -1599,14 +1639,7 @@ function renderGalleryImages() {
     const mainImg = document.getElementById('main-gallery-img');
     const thumbContainer = document.getElementById('thumbnail-container');
     
-    if (items.length === 0) {
-        mainImg.src = 'Stock/placeholder.jpg'; // Failsafe image
-        thumbContainer.innerHTML = '<p style="opacity:0.6; padding: 20px;">No verified photos in this category yet.</p>';
-        
-        const existingOverlay = document.getElementById('gallery-artist-overlay');
-        if (existingOverlay) existingOverlay.style.display = 'none';
-        return;
-    }
+    if (items.length === 0) return;
 
     const activeItem = items[activeImageIndex];
 
@@ -1627,12 +1660,17 @@ function renderGalleryImages() {
         document.querySelector('.main-image-wrapper').appendChild(overlay);
     }
     
-    overlay.style.display = 'flex';
-    overlay.innerHTML = `
-        <img src="${activeItem.dp_url}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-        <span style="color: var(--primary-color); font-family: 'Playfair Display', serif; font-weight: bold; font-size: 1.1rem; margin-right: 5px;">${activeItem.pro_name}</span>
-    `;
-    overlay.onclick = () => window.location.href = `profile.html?id=${activeItem.pro_id}`;
+    // NEW: If it is a stock image, or the artist quit, hide the badge.
+    if (activeItem.isStock || (!activeItem.pro_name || !activeItem.dp_url)) {
+        overlay.style.display = 'none';
+    } else {
+        overlay.style.display = 'flex';
+        overlay.innerHTML = `
+            <img src="${activeItem.dp_url}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+            <span style="color: var(--primary-color); font-family: 'Playfair Display', serif; font-weight: bold; font-size: 1.1rem; margin-right: 5px;">${activeItem.pro_name}</span>
+        `;
+        overlay.onclick = () => window.location.href = `profile.html?id=${activeItem.pro_id}`;
+    }
 
     // Generate Thumbnails
     if (!isCategoryLoaded) {
