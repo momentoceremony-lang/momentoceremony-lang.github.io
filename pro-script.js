@@ -156,12 +156,12 @@ async function loadProfileData(proId) {
             
             // If the container doesn't exist yet, build it right under the status indicator
             if (!ratingContainer && statusText) {
-                // Force the parent container to flex and wrap so the badge doesn't get squished
+                // FIXED: Changed space-between to flex-start so the dot and text stay glued together
                 statusText.parentNode.style.display = 'flex';
-                statusText.parentNode.style.justifyContent = 'space-between';
+                statusText.parentNode.style.justifyContent = 'flex-start'; 
                 statusText.parentNode.style.alignItems = 'center';
                 statusText.parentNode.style.flexWrap = 'wrap';
-                statusText.parentNode.style.gap = '10px';
+                statusText.parentNode.style.gap = '8px';
 
                 ratingContainer = document.createElement('div');
                 ratingContainer.id = 'pro-self-rating';
@@ -171,10 +171,10 @@ async function loadProfileData(proId) {
             if (ratingContainer) {
                 if (pro.review_count && pro.review_count > 0) {
                     const avg = Number(pro.avg_rating).toFixed(1);
-                    // Added white-space: nowrap so the text never breaks into two lines
-                    ratingContainer.innerHTML = `<span style="display: inline-block; white-space: nowrap; background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
+                    // Added a 5px left margin to perfectly space it from the status text
+                    ratingContainer.innerHTML = `<span style="display: inline-block; white-space: nowrap; margin-left: 5px; background: #fff9e6; color: #f39c12; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; border: 1px solid rgba(243, 156, 18, 0.3); box-shadow: 0 2px 8px rgba(243, 156, 18, 0.1);">⭐ ${avg} (${pro.review_count} Reviews)</span>`;
                 } else {
-                    ratingContainer.innerHTML = `<span style="display: inline-block; white-space: nowrap; background: #f4f4f4; color: #777; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; border: 1px solid #ddd;">⭐ No Reviews Yet</span>`;
+                    ratingContainer.innerHTML = `<span style="display: inline-block; white-space: nowrap; margin-left: 5px; background: #f4f4f4; color: #777; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; border: 1px solid #ddd;">⭐ No Reviews Yet</span>`;
                 }
             }
             
