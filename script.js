@@ -1491,138 +1491,155 @@ if (revealSections.length > 0) {
 }
 
 // ==========================================
-// VIEW.HTML GALLERY ENGINE (PREMIUM CAROUSEL)
+// VIEW.HTML GALLERY ENGINE (DYNAMIC DB FETCH)
 // ==========================================
 
-// Add all your stock images for each category here
-const galleryData = {
-    wedding: [ 'Stock/wedding-banner-1.jpeg', 'Stock/wedding-banner-2.jpeg', 'Stock/pro-shot-1.jpeg', 'Stock/pro-shot-2.jpeg', 'Stock/pro-shot-3.jpeg' ],
-    prewed: [ 'Stock/prewed-banner-1.jpeg', 'Stock/prewed-banner-2.jpeg', 'Stock/prewed-shot-1.jpeg', 'Stock/prewed-shot-2.jpeg' ],
-    birthday: [ 'Stock/bday-banner-1.jpeg', 'Stock/bday-banner-2.jpeg', 'Stock/bday-shot-1.jpeg', 'Stock/bday-shot-2.jpeg' ],
-    baby: [ 'Stock/baby-banner-1.jpeg', 'Stock/baby-banner-2.jpeg', 'Stock/baby-shot-1.jpeg' ],
-    anni: [ 'Stock/anni-banner-1.jpeg', 'Stock/anni-banner-2.jpeg', 'Stock/anni-shot-1.jpeg', 'Stock/anni-shot-2.jpeg' ],
-    mehndi: [ 'Stock/mehndi-banner-1.jpeg', 'Stock/mehndi-banner-2.jpeg' ],
-    makeup: [ 'Stock/makeup-banner-1.jpeg', 'Stock/makeup-banner-2.jpeg' ]
-};
-
-// Dictionary mapping database tags to beautiful display names
 const categoryDisplayNames = {
-    'wedding': 'Weddings',
-    'prewed': 'Pre-Weddings',
-    'birthday': 'Birthdays',
-    'baby': 'Baby Shoots',
-    'anni': 'Anniversaries',
-    'mehndi': 'Mehndi',
-    'makeup': 'Makeup'
+    'wedding': 'Weddings', 'prewed': 'Pre-Weddings', 'birthday': 'Birthdays', 
+    'baby': 'Baby Shoots', 'anni': 'Anniversaries', 'mehndi': 'Mehndi', 'makeup': 'Makeup'
 };
 
+// Start with empty arrays
+let galleryData = { wedding: [], prewed: [], birthday: [], baby: [], anni: [], mehndi: [], makeup: [] };
 let activeCategory = 'wedding';
 let activeImageIndex = 0;
-let isCategoryLoaded = false; // NEW: Tracks if thumbnails are already built
+let isCategoryLoaded = false; 
 
-// Runs when view.html loads to check the URL (e.g. view.html?category=prewed)
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById('main-gallery-img')) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryFromUrl = urlParams.get('category');
-        
-        // 1. Build the dropdown UI first so it exists in the DOM
-        buildGalleryDropdown();
-
-        // 2. Load the category from the URL, or default to wedding
-        if (categoryFromUrl && galleryData[categoryFromUrl]) {
-            selectGalleryCategory(null, categoryFromUrl);
-        } else {
-            selectGalleryCategory(null, 'wedding');
-        }
+        fetchPublicGallery(); // Fetch real images immediately
     }
 });
 
-// Builds the HTML for the dropdown menu ONLY ONCE on page load
-function buildGalleryDropdown() {
-    const filterContainer = document.querySelector('.gallery-filters');
-    
-    if (filterContainer) {
-        // Strip flex classes and force left alignment
-        filterContainer.className = ''; 
-        filterContainer.style.margin = '0 auto 20px auto';
-        filterContainer.style.textAlign = 'left';
-        filterContainer.style.position = 'relative';
-        filterContainer.style.zIndex = '50';
+async function fetchPublicGallery() {
+    try {
+        const res = await fetch('https://api.momentoo.in/api/gallery/public');
+        const data = await res.json();
         
-        // Add dynamic padding so it lines up with the image viewer on both PC and Mobile
-        filterContainer.style.padding = window.innerWidth <= 850 ? '0 20px' : '0 5vw';
-        
-        let optionsHTML = '';
-        Object.keys(galleryData).forEach(catKey => {
-            // Pass 'event' so we can stop the click from breaking the menu
-            optionsHTML += `<div class="custom-select-option" onclick="selectGalleryCategory(event, '${catKey}')" style="text-align: left; font-weight: bold;">${categoryDisplayNames[catKey]}</div>`;
-        });
-
-        // Inject the identical left-aligned dropdown
-        filterContainer.innerHTML = `
-            <div class="custom-select-wrapper" style="width: fit-content; margin: 0;" onclick="this.querySelector('.custom-select-options').classList.toggle('show')">
-                <div class="custom-select-display auth-input" style="border-radius: 25px; padding: 8px 22px 8px 18px; border: 1px solid var(--accent-color); color: var(--primary-color); font-weight: bold; background: transparent; cursor: pointer; gap: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 0;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                    </svg>
-                    <span id="active-gallery-category-text" style="font-size: 0.95rem; margin-right: 5px;">${categoryDisplayNames[activeCategory]}</span>
-                </div>
-                <div class="custom-select-options" id="gallery-dropdown-options" style="width: 220px; left: 0; top: calc(100% + 5px);">
-                    ${optionsHTML}
-                </div>
-            </div>
-        `;
-    }
+        if (data.success && data.data) {
+            // Sort database images into our UI categories
+            data.data.forEach(item => {
+                const dbCat = item.category || '';
+                let catKey = 'wedding'; 
+                
+                if (dbCat.includes('Pre-Wed')) catKey = 'prewed';
+                else if (dbCat.includes('Birth')) catKey = 'birthday';
+                else if (dbCat.includes('Baby')) catKey = 'baby';
+                else if (dbCat.includes('Anni')) catKey = 'anni';
+                else if (dbCat.includes('Mehndi')) catKey = 'mehndi';
+                else if (dbCat.includes('Makeup') || dbCat.includes('Bridal') || dbCat.includes('Party')) catKey = 'makeup';
+                else if (dbCat.includes('Wedding')) catKey = 'wedding';
+                
+                galleryData[catKey].push(item);
+            });
+            
+            // Build UI
+            buildGalleryDropdown();
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryFromUrl = urlParams.get('category');
+            
+            if (categoryFromUrl && galleryData[categoryFromUrl]) {
+                selectGalleryCategory(null, categoryFromUrl);
+            } else {
+                selectGalleryCategory(null, 'wedding');
+            }
+        }
+    } catch (e) { console.error("Gallery fetch failed:", e); }
 }
 
-// Handles the logic when a user actually clicks a category in the list
+function buildGalleryDropdown() {
+    const filterContainer = document.querySelector('.gallery-filters');
+    if (!filterContainer) return;
+
+    filterContainer.className = ''; 
+    filterContainer.style.margin = '0 auto 20px auto';
+    filterContainer.style.textAlign = 'left';
+    filterContainer.style.position = 'relative';
+    filterContainer.style.zIndex = '50';
+    filterContainer.style.padding = window.innerWidth <= 850 ? '0 20px' : '0 5vw';
+    
+    let optionsHTML = '';
+    Object.keys(galleryData).forEach(catKey => {
+        optionsHTML += `<div class="custom-select-option" onclick="selectGalleryCategory(event, '${catKey}')" style="text-align: left; font-weight: bold;">${categoryDisplayNames[catKey]}</div>`;
+    });
+
+    filterContainer.innerHTML = `
+        <div class="custom-select-wrapper" style="width: fit-content; margin: 0;" onclick="this.querySelector('.custom-select-options').classList.toggle('show')">
+            <div class="custom-select-display auth-input" style="border-radius: 25px; padding: 8px 22px 8px 18px; border: 1px solid var(--accent-color); color: var(--primary-color); font-weight: bold; background: transparent; cursor: pointer; gap: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--accent-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                <span id="active-gallery-category-text" style="font-size: 0.95rem; margin-right: 5px;">${categoryDisplayNames[activeCategory]}</span>
+            </div>
+            <div class="custom-select-options" id="gallery-dropdown-options" style="width: 220px; left: 0; top: calc(100% + 5px);">
+                ${optionsHTML}
+            </div>
+        </div>
+    `;
+}
+
 function selectGalleryCategory(event, category) {
-    if (event) {
-        event.stopPropagation(); // Prevents the browser from destroying the menu mid-click
-    }
+    if (event) event.stopPropagation(); 
     
     activeCategory = category;
     activeImageIndex = 0; 
-    isCategoryLoaded = false; // Forces the thumbnail bar to rebuild for the new category
+    isCategoryLoaded = false; 
     
-    // Smoothly update just the text inside the button
     const textSpan = document.getElementById('active-gallery-category-text');
-    if (textSpan) {
-        textSpan.innerText = categoryDisplayNames[category];
-    }
+    if (textSpan) textSpan.innerText = categoryDisplayNames[category];
 
-    // Force the dropdown to close
     const optionsBox = document.getElementById('gallery-dropdown-options');
-    if (optionsBox) {
-        optionsBox.classList.remove('show');
-    }
+    if (optionsBox) optionsBox.classList.remove('show');
 
-    // Fetch the new photos
     renderGalleryImages();
 }
 
 function renderGalleryImages() {
-    const images = galleryData[activeCategory];
-    if (!images || images.length === 0) return;
-
+    const items = galleryData[activeCategory] || [];
     const mainImg = document.getElementById('main-gallery-img');
     const thumbContainer = document.getElementById('thumbnail-container');
+    
+    if (items.length === 0) {
+        mainImg.src = 'Stock/placeholder.jpg'; // Failsafe image
+        thumbContainer.innerHTML = '<p style="opacity:0.6; padding: 20px;">No verified photos in this category yet.</p>';
+        
+        const existingOverlay = document.getElementById('gallery-artist-overlay');
+        if (existingOverlay) existingOverlay.style.display = 'none';
+        return;
+    }
 
-    // Fade effect for the main image
+    const activeItem = items[activeImageIndex];
+
     mainImg.style.opacity = 0;
     setTimeout(() => {
-        mainImg.src = images[activeImageIndex];
+        mainImg.src = activeItem.image_url;
         mainImg.style.opacity = 1;
     }, 200);
 
-    // ONLY rebuild the HTML thumbnails if the category actually changed
-    // This stops the scroll bar from violently resetting to zero on every swipe
+    // INJECT THE ARTIST PROFILE OVERLAY (Clickable!)
+    let overlay = document.getElementById('gallery-artist-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'gallery-artist-overlay';
+        overlay.style.cssText = "position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.9); padding: 8px 15px 8px 8px; border-radius: 30px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.3s; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 1px solid var(--accent-color);";
+        overlay.onmouseover = () => overlay.style.transform = "scale(1.05)";
+        overlay.onmouseout = () => overlay.style.transform = "scale(1)";
+        document.querySelector('.main-image-wrapper').appendChild(overlay);
+    }
+    
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+        <img src="${activeItem.dp_url}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+        <span style="color: var(--primary-color); font-family: 'Playfair Display', serif; font-weight: bold; font-size: 1.1rem; margin-right: 5px;">${activeItem.pro_name}</span>
+    `;
+    overlay.onclick = () => window.location.href = `profile.html?id=${activeItem.pro_id}`;
+
+    // Generate Thumbnails
     if (!isCategoryLoaded) {
         thumbContainer.innerHTML = '';
-        images.forEach((src, index) => {
+        items.forEach((item, index) => {
             const thumb = document.createElement('img');
-            thumb.src = src;
+            thumb.src = item.image_url;
             thumb.onclick = () => {
                 activeImageIndex = index;
                 renderGalleryImages();
@@ -1632,15 +1649,12 @@ function renderGalleryImages() {
         isCategoryLoaded = true;
     }
 
-    // Update the active class and smoothly scroll the row!
+    // Handle Active Thumbnail Scrolling
     const allThumbs = thumbContainer.querySelectorAll('img');
     allThumbs.forEach((thumb, index) => {
         if (index === activeImageIndex) {
             thumb.classList.add('active-thumb');
-            
-            // The magic line: slides the container so the active thumb is always in the exact middle of the screen!
             thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            
         } else {
             thumb.classList.remove('active-thumb');
         }
@@ -1648,17 +1662,18 @@ function renderGalleryImages() {
 }
 
 function prevImage() {
-    const images = galleryData[activeCategory];
-    activeImageIndex = (activeImageIndex - 1 + images.length) % images.length;
+    const items = galleryData[activeCategory];
+    if (items.length === 0) return;
+    activeImageIndex = (activeImageIndex - 1 + items.length) % items.length;
     renderGalleryImages();
 }
 
 function nextImage() {
-    const images = galleryData[activeCategory];
-    activeImageIndex = (activeImageIndex + 1) % images.length;
+    const items = galleryData[activeCategory];
+    if (items.length === 0) return;
+    activeImageIndex = (activeImageIndex + 1) % items.length;
     renderGalleryImages();
 }
-
 // ==========================================
 // GALLERY NAVIGATION: KEYBOARD & SWIPE
 // ==========================================
