@@ -817,7 +817,7 @@ textarea.auth-input {
     color: white;
     position: fixed;
     height: 100vh;
-    padding: 20px 0;
+    padding: 0; /* FIXED: Removed padding so it's perfectly flush */
     box-shadow: 4px 0 15px rgba(0,0,0,0.1);
 }
 
@@ -1012,7 +1012,7 @@ textarea.auth-input {
     .sidebar {
         position: fixed !important;
         top: 0 !important;
-        left: auto !important; /* <--- THIS IS THE MAGIC FIX */
+        left: auto !important;
         right: -120% !important; /* Hidden off-screen to the right */
         width: 280px !important;
         height: 100vh !important;
@@ -1022,8 +1022,8 @@ textarea.auth-input {
         z-index: 10000 !important;
         display: flex !important;
         flex-direction: column !important;
-        padding: 0 !important;
-        border-radius: 25px 0 0 25px !important;
+        padding: 0 !important; /* FIXED: Enforces zero padding so it touches the absolute edge */
+        border-radius: 25px 0 0 25px !important; /* Premium rounded corner only on the left side */
     }
    
     .sidebar.show-menu { 
