@@ -30,8 +30,12 @@
             <li onclick="switchTab('profile')">👤 My Profile</li>
             <li onclick="switchTab('portfolio')">📸 Portfolio Images</li>
             <li onclick="switchTab('bookings')">📅 Active Bookings</li>
-            <li onclick="logoutPro()" style="color: #d19a8a; margin-top: auto;">🚪 Logout</li>
-            <li onclick="initiateQuit()" style="color: #e74c3c; margin-top: 10px; margin-bottom: 30px;">⚠️ Quit Platform</li>
+            
+            <!-- Logout stays with the main items -->
+            <li onclick="logoutPro()" style="color: #d19a8a; margin-top: 10px;">🚪 Logout</li>
+            
+            <!-- Quit button is slightly separated and has a large bottom margin so it never hides -->
+            <li onclick="initiateQuit()" style="color: #e74c3c; margin-top: 30px; margin-bottom: 40px;">⚠️ Quit Platform</li>
         </ul>
     </nav>
 
