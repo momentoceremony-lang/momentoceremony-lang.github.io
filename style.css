@@ -2731,3 +2731,26 @@ textarea.auth-input {
     width: 100%;
     margin: 0;
 }
+
+/* =========================================================
+   STRICT PRO DASHBOARD SIDEBAR OVERRIDES (SAFE)
+========================================================= */
+/* Desktop Flush Fix */
+body.dashboard-body .sidebar {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Mobile Flush Fix */
+@media (max-width: 850px) {
+    body.dashboard-body .sidebar.show-menu {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        height: 100% !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 25px 0 0 25px !important;
+    }
+}
